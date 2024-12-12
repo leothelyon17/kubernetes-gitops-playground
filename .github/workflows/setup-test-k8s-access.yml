@@ -26,7 +26,7 @@ jobs:
         else
           echo "kubectl already installed."
         fi
-        kubectl version --client --short
+        kubectl version --client
 
     # Set up kubeconfig
     - name: Set up kubeconfig
