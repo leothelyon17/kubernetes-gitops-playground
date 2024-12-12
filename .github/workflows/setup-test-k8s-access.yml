@@ -18,7 +18,7 @@ jobs:
     # Set up kubeconfig
     - name: Set up kubeconfig
       env:
-        KUBECONFIG_PATH: /home/runner/.kube/config
+        KUBECONFIG_PATH: /home/jeff/.kube/config
       run: |
         mkdir -p $(dirname $KUBECONFIG_PATH)
         echo ${{ secrets.KUBECONFIG_BASE64_LAB }} | base64 --decode > $KUBECONFIG_PATH
