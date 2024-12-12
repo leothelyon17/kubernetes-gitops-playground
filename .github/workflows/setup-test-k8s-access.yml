@@ -1,0 +1,31 @@
+name: Setup and Test Kubernetes Access
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+    # Checkout code
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Set up kubeconfig
+    - name: Set up kubeconfig
+      env:
+        KUBECONFIG_PATH: /home/runner/.kube/config
+      run: |
+        mkdir -p $(dirname $KUBECONFIG_PATH)
+        echo ${{ secrets.KUBECONFIG_BASE64_LAB }} | base64 --decode > $KUBECONFIG_PATH
+        chmod 600 $KUBECONFIG_PATH
+
+    # Verify kubectl is installed and cluster access
+    - name: Verify cluster access
+      run: |
+        kubectl version --short
+        kubectl get nodes
