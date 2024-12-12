@@ -40,5 +40,5 @@ jobs:
     # Verify kubectl is installed and cluster access
     - name: Verify cluster access
       run: |
-        kubectl version --short
+        kubectl version
         kubectl get nodes
