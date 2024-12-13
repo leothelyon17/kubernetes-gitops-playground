@@ -12,3 +12,11 @@ service:
     # -- (int) Node port for Nautobot https choose port in Kubernetes `--service-node-port-range` typically 30000-32767
     https:  31443
     # -- (int) Node port for Nautobot uwsgimetrics choose port in Kubernetes `--service-node-port-range` typically 30000-32767
+
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      size: "5Gi"
+      storageClass: "rook-cephfs"
+      accessModes: ['ReadWriteOnce']
