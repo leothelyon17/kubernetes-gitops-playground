@@ -1,0 +1,40 @@
+name: Install ArgoCD and CLI
+
+on:
+  # push:
+  #   branches:
+  #     - main
+  workflow_dispatch:
+
+jobs:
+  install-argocd:
+    runs-on: self-hosted
+
+    steps:
+    # Step 1: Checkout the repository
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Install Argo CD
+    - name: Install Argo CD on Kubernetes
+      run: |
+        kubectl create namespace argocd || true
+        kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+    # Install Argo CD CLI
+    - name: Install Argo CD CLI
+      run: |
+        curl -sSL -o argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+        chmod +x argocd
+        sudo mv argocd /usr/local/bin/
+
+    # Wait for Argo CD Server to be Ready
+    - name: Wait for Argo CD components
+      run: |
+        kubectl wait --for=condition=available --timeout=300s deployment/argocd-server -n argocd
+
+    # Expose Argo CD Server (Optional)
+    - name: Expose Argo CD Server
+      run: |
+        kubectl patch svc argocd-server -n argocd \
+          -p '{"spec": {"type": "NodePort"}}'
