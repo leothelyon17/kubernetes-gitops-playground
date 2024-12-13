@@ -20,3 +20,11 @@ postgresql:
       size: "5Gi"
       storageClass: "rook-cephfs"
       accessModes: ['ReadWriteOnce']
+
+redis:
+  master:
+    persistence:
+      enabled: true
+      size: "1Gi"
+      storageClass: "rook-cephfs"
+      accessModes: ['ReadWriteOnce']
