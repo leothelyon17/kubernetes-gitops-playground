@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nautobot-test-app
+  namespace: argocd
+spec:
+  project: home-lab
+  destination:
+    server: https://172.16.99.25:6443
+    namespace: nautobot-test
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+  sources:
+    - repoURL: https://nautobot.github.io/helm-charts/
+      targetRevision: 2.4.2
+      helm:
+        valueFiles:
+          - $values/apps/helm/nautobot/values.yml
+      chart: nautobot
+    - repoURL: https://github.com/leothelyon17/kubernetes-home-playground.git
+      targetRevision: HEAD
+      ref: values
