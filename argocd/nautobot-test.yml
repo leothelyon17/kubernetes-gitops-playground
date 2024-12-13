@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: nautobot-test-app
+  name: nautobot-test
   namespace: argocd
 spec:
   project: home-lab
