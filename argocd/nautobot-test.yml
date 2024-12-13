@@ -16,7 +16,7 @@ spec:
       targetRevision: 2.4.2
       helm:
         valueFiles:
-          - $values/apps/helm/nautobot/values.yml
+          - $values/apps/nautobot/test/values.yml
       chart: nautobot
     - repoURL: https://github.com/leothelyon17/kubernetes-home-playground.git
       targetRevision: HEAD
