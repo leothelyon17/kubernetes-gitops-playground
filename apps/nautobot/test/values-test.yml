@@ -35,7 +35,7 @@ redis:
       accessModes: ['ReadWriteOnce']
   auth:
     enabled: true
-    existingSecret: nautobot-secrets
+    existingSecret: nautobot-secrets-test
     usernameKey: REDIS_USER
     passwordKey: REDIS_PASSWORD
     #password: "nautobot-redis-pass"
