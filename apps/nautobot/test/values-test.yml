@@ -22,7 +22,7 @@ postgresql:
       accessModes: ['ReadWriteOnce']
   auth:
     #password: "nautobot-postgres-pass"
-    existingSecret: nautobot-secrets-test
+    existingSecret: nautobot-test-secrets
     usernameKey: POSTGRES_USER
     passwordKey: POSTGRES_PASSWORD
 
@@ -35,7 +35,7 @@ redis:
       accessModes: ['ReadWriteOnce']
   auth:
     enabled: true
-    existingSecret: nautobot-secrets-test
+    existingSecret: nautobot-test-secrets
     usernameKey: REDIS_USER
     passwordKey: REDIS_PASSWORD
     #password: "nautobot-redis-pass"
