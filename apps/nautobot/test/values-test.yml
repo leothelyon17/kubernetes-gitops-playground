@@ -23,8 +23,8 @@ postgresql:
   auth:
     #password: "nautobot-postgres-pass"
     existingSecret: nautobot-test-secrets
-    usernameKey: POSTGRES_USER
-    passwordKey: POSTGRES_PASSWORD
+    #usernameKey: POSTGRES_USER
+    #passwordKey: POSTGRES_PASSWORD
 
 redis:
   master:
@@ -36,6 +36,6 @@ redis:
   auth:
     enabled: true
     existingSecret: nautobot-test-secrets
-    usernameKey: REDIS_USER
-    passwordKey: REDIS_PASSWORD
+    #usernameKey: REDIS_USER
+    #passwordKey: REDIS_PASSWORD
     #password: "nautobot-redis-pass"
