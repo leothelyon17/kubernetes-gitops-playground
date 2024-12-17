@@ -19,6 +19,12 @@ nautobot:
     existingSecret: "nautobot-test-secrets"
     # -- Password key to be retrieved from existing secret<sup>[1](#notes)</sup>
     existingSecretPasswordKey: "password"
+  
+  redis:
+    # -- Name of existing secret to use for Redis passwords<sup>[1](#notes)</sup>
+    existingSecret: "nautobot-test-secrets"
+    # -- Password key to be retrieved from existing secret<sup>[1](#notes)</sup>
+    existingSecretPasswordKey: "redis-password"
 
 postgresql:
   primary:
