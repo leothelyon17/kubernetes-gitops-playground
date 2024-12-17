@@ -21,8 +21,10 @@ postgresql:
       storageClass: "rook-cephfs"
       accessModes: ['ReadWriteOnce']
   auth:
-    # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters)] Enable password authentication
-    password: "nautobot-postgres-pass"
+    #password: "nautobot-postgres-pass"
+    existingSecret: nautobot-secrets-test
+    usernameKey: POSTGRES_USER
+    passwordKey: POSTGRES_PASSWORD
 
 redis:
   master:
@@ -32,7 +34,8 @@ redis:
       storageClass: "rook-cephfs"
       accessModes: ['ReadWriteOnce']
   auth:
-    # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters)] Enable password authentication
     enabled: true
-    # -- [[ref](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-common-configuration-parameters)] Redis password
-    password: "nautobot-redis-pass"
+    existingSecret: nautobot-secrets
+    usernameKey: REDIS_USER
+    passwordKey: REDIS_PASSWORD
+    #password: "nautobot-redis-pass"
