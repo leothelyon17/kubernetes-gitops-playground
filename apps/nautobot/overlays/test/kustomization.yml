@@ -3,6 +3,5 @@ resources:
 
 resources:
   - external-secrets.yml
-  - values.yml
 
 #patchesStrategicMerge:
