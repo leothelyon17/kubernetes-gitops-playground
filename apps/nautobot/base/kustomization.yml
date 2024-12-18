@@ -1,0 +1,3 @@
+resources:
+  - cephfs-storage-class.yml
+  - cluster-secret-store.yml
