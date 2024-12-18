@@ -1,6 +1,8 @@
 resources:
   - ../../base
 
-patchesStrategicMerge:
+resources:
   - external-secrets.yml
   - values.yml
+
+#patchesStrategicMerge:
