@@ -31,11 +31,11 @@ jobs:
     # Set up kubeconfig
     - name: Set up kubeconfig
       env:
-        KUBECONFIG_PATH: /home/jeff/.kube/config
+        KUBECONFIG_PATH: /home/jeff/.kube
       run: |
         mkdir -p $(dirname $KUBECONFIG_PATH)
-        echo ${{ secrets.KUBECONFIG_BASE64_PROD }} | base64 --decode > $KUBECONFIG_PATH
-        chmod 600 $KUBECONFIG_PATH
+        echo ${{ secrets.KUBECONFIG_BASE64_PROD }} | base64 --decode > $KUBECONFIG_PATH/config
+        chmod 600 $KUBECONFIG_PATH/config
 
     # Verify kubectl is installed and cluster access
     - name: Verify cluster access
