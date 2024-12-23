@@ -85,5 +85,5 @@ jobs:
           ansible-playbook -i inventory/${CHANGED_CLUSTER}/hosts.yml cluster.yml \
             --become -e "ansible_password=${{ secrets.AHEAD_SSH_PASS }}"
 
-  install-argocd:
-    uses: ./.github/workflows/install-argocd.yml  # Path to the reusable workflow
+  #install-argocd:
+    #uses: .github/workflows/install-argocd.yml  # Path to the reusable workflow
