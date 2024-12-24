@@ -51,6 +51,7 @@ jobs:
       # Step 4: Clone down Kubespray
       - name: Set up Python virtual environment
         run: |
+          sudo rm -rf kubespray
           git clone https://github.com/kubernetes-sigs/kubespray.git
       
       # Step 5: Set up Python virtual environment
@@ -73,6 +74,7 @@ jobs:
         working-directory: ./kubespray
         run: |
           source venv/bin/activate
+          sudo rm -rf inventory
           mkdir -p inventory/${CHANGED_CLUSTER}
           cp -r ../${BASE_CLUSTER_DIR}/${CHANGED_CLUSTER} inventory/
           ls inventory/${CHANGED_CLUSTER}/
