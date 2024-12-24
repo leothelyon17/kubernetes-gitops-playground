@@ -42,6 +42,13 @@ jobs:
           echo "Changed directories: $CHANGED_CLUSTER"
           echo "CHANGED_CLUSTER=$CHANGED_CLUSTER" >> $GITHUB_ENV
 
+      # Use YAML Lint Action
+      - name: Run YAML Lint Action
+        uses: github/super-linter@v5
+        with:
+          file_extensions: "yml,yaml"
+          validate_yaml: true
+
       # Step 3: Run the Kubernetes-specific tasks
       - name: Run tasks for changed cluster
         if: env.CHANGED_CLUSTER != ''
