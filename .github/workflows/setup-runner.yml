@@ -26,6 +26,11 @@ jobs:
           else
             echo "Python 3.12 is already installed."
           fi
+      
+      - name: Verify Python installation
+        run: |
+          python3.12 --version
+          pip3.12 --version
 
   install-docker:
     runs-on: self-hosted
@@ -54,8 +59,3 @@ jobs:
         run: |
           docker --version
           sudo systemctl status docker
-
-      - name: Verify Python installation
-        run: |
-          python3.12 --version
-          pip3.12 --version
