@@ -1,4 +1,4 @@
-name: Install Python 3.12 on Rocky Linux 9
+name: Install Tools on Rocky Linux 9 runner
 
 on:
   push:
@@ -26,6 +26,34 @@ jobs:
           else
             echo "Python 3.12 is already installed."
           fi
+
+  install-docker:
+    runs-on: self-hosted
+    steps:
+      - name: Check if Docker is installed
+        id: check-docker
+        run: |
+          if ! command -v docker &> /dev/null; then
+            echo "Docker is not installed"
+            echo "needs_install=true" >> $GITHUB_ENV
+          else
+            echo "Docker is already installed"
+            echo "needs_install=false" >> $GITHUB_ENV
+          fi
+
+      - name: Install Docker
+        if: env.needs_install == 'true'
+        run: |
+          sudo dnf -y install dnf-plugins-core
+          sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+          sudo dnf -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+          sudo systemctl enable --now docker
+          sudo usermod -aG docker $USER
+
+      - name: Verify Docker Installation
+        run: |
+          docker --version
+          sudo systemctl status docker
 
       - name: Verify Python installation
         run: |
