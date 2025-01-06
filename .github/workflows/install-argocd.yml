@@ -78,42 +78,45 @@ jobs:
         # Apply configmap
         kubectl -n argocd apply -f argocd-cm.yaml
 
-    # # Create Additional Admin User RBAC
-    # - name: Create Admin User RBAC
-    #   env:
-    #     ARGOCD_SERVER: ${{ vars.ARGOCD_URL_LAB }}
-    #     ADMIN_USERNAME: ${{ secrets.ARGOCD_MY_ADMIN_USER }}
-    #     ADMIN_PASSWORD: ${{ secrets.ARGOCD_MY_ADMIN_PASSWORD }}
-    #   run: |
-    #     kubectl -n argocd get configmap argocd-rbac-cm -o yaml > rbac-config.yaml
+    # Create Additional Admin User RBAC
+    - name: Create Admin User RBAC
+      env:
+        ARGOCD_SERVER: ${{ vars.ARGOCD_URL_LAB }}
+        ADMIN_USERNAME: ${{ secrets.ARGOCD_MY_ADMIN_USER }}
+        ADMIN_PASSWORD: ${{ secrets.ARGOCD_MY_ADMIN_PASSWORD }}
+      run: |
+        kubectl -n argocd get configmap argocd-rbac-cm -o yaml > rbac-config.yaml
 
-    #     # Add new admin user and role
-    #     echo "
-    #     apiVersion: v1
-    #     kind: ConfigMap
-    #     metadata:
-    #       name: argocd-rbac-cm
-    #       namespace: argocd
-    #     data:
-    #       policy.csv: |
-    #         p, role:admin, applications, *, *, allow
-    #         g, $ADMIN_USERNAME, role:admin
-    #     " > rbac-config.yaml
+        # Add new admin user and role
+        echo "
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          name: argocd-rbac-cm
+          namespace: argocd
+          labels:
+            app.kubernetes.io/name: argocd-rbac-cm
+            app.kubernetes.io/part-of: argocd
+        data:
+          policy.csv: |
+            p, role:admin, applications, *, *, allow
+            g, $ADMIN_USERNAME, role:admin
+        " > rbac-config.yaml
 
-    #     # Apply RBAC configmap
-    #     kubectl -n argocd apply -f rbac-config.yaml
+        # Apply RBAC configmap
+        kubectl -n argocd apply -f rbac-config.yaml
 
-    #     # Add the admin user
-    #     argocd account update-password --account $ADMIN_USERNAME --current-password ${{ secrets.ARGOCD_ADMIN_PASSWORD_LAB }} --new-password $ADMIN_PASSWORD
+        # Add the admin user
+        argocd account update-password --account $ADMIN_USERNAME --current-password ${{ secrets.ARGOCD_ADMIN_PASSWORD_LAB }} --new-password $ADMIN_PASSWORD
 
-    #     echo "Admin user $ADMIN_USERNAME created successfully."
+        echo "Admin user $ADMIN_USERNAME created successfully."
 
-    # # Verify Admin User Creation
-    # - name: Verify Admin User
-    #   run: |
-    #     echo "Attempting to log in with the new admin user..."
-    #     argocd login ${{ vars.ARGOCD_URL_LAB }} \
-    #       --username ${{ secrets.ARGOCD_MY_ADMIN_USER }} \
-    #       --password ${{ secrets.ARGOCD_MY_ADMIN_PASSWORD }} \
-    #       --insecure
-    #     echo "New admin user login successful."
+    # Verify Admin User Creation
+    - name: Verify Admin User
+      run: |
+        echo "Attempting to log in with the new admin user..."
+        argocd login ${{ vars.ARGOCD_URL_LAB }} \
+          --username ${{ secrets.ARGOCD_MY_ADMIN_USER }} \
+          --password ${{ secrets.ARGOCD_MY_ADMIN_PASSWORD }} \
+          --insecure
+        echo "New admin user login successful."
