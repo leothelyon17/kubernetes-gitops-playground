@@ -43,7 +43,7 @@ jobs:
     # Log in to ArgoCD
     - name: Login to ArgoCD
       env:
-        ARGOCD_SERVER: ${{ env.ARGOCD_URL_LAB }}
+        ARGOCD_SERVER: ${{ vars.ARGOCD_URL_LAB }}
         ARGOCD_USERNAME: ${{ secrets.ARGOCD_ADMIN_USER }}
         ARGOCD_PASSWORD: ${{ secrets.ARGOCD_ADMIN_PASSWORD_LAB }}
       run: |
@@ -55,7 +55,7 @@ jobs:
     # Create Additional Admin User
     - name: Create Admin User
       env:
-        ARGOCD_SERVER: ${{ env.ARGOCD_URL_LAB }}
+        ARGOCD_SERVER: ${{ vars.ARGOCD_URL_LAB }}
         ADMIN_USERNAME: ${{ secrets.ARGOCD_MY_ADMIN_USER }}
         ADMIN_PASSWORD: ${{ secrets.ARGOCD_MY_ADMIN_PASSWORD }}
       run: |
