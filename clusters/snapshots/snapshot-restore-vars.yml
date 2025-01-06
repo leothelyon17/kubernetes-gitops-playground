@@ -1,0 +1,20 @@
+---
+snapshot_repository_base_directory: volume1/Home\ Media/Backup
+repository_user: unraid
+
+snapshot_restore_list:
+  # - vm_name: Rocky9-LabNode1
+  #   disks_to_restore:
+  #     - vm_disk_to_restore: vdisk1.img
+  #       vm_disk_directory: /mnt/nvme_cache/domains
+  #       snapshot_to_restore_from: baseline_kubernetes
+  # - vm_name: Rocky9-LabNode2
+  #   disks_to_restore:
+  #     - vm_disk_to_restore: vdisk1.img
+  #       vm_disk_directory: /mnt/nvme_cache/domains
+  #       snapshot_to_restore_from: baseline_kubernetes
+  - vm_name: Rocky9-LabNode3
+    disks_to_restore:
+      - vm_disk_to_restore: vdisk1.img
+        vm_disk_directory: /mnt/nvme_cache/domains
+        snapshot_to_restore_from: baseline_kubernetes
