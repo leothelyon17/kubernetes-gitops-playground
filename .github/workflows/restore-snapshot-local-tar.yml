@@ -48,4 +48,5 @@ jobs:
     - name: Run Ansible Playbook
       run: |
         cd unraid-vm-snapshots
+        source venv/bin/activate
         ansible-playbook restore-from-local-tar-pb.yml -i defaults/inventory.yml
