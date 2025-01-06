@@ -38,7 +38,7 @@ jobs:
     - name: Expose Argo CD Server
       run: |
         kubectl patch svc argocd-server -n argocd \
-          -p '{"spec": {"type": "NodePort"}}'
+          -p '{"spec": {"type": "NodePort", "ports": [{"port": 443, "targetPort": 8080, "nodePort": ${{ vars.ARGOCD_PORT_LAB }} }]}}'
 
     # # Log in to ArgoCD
     # - name: Login to ArgoCD
