@@ -52,28 +52,28 @@ jobs:
           --password $ARGOCD_PASSWORD \
           --insecure
 
-    # # Create Additional Admin User ConfigMap
-    # - name: Create Admin User ConfigMap
-    #   env:
-    #     ARGOCD_SERVER: ${{ vars.ARGOCD_URL_LAB }}
-    #     ADMIN_USERNAME: ${{ secrets.ARGOCD_MY_ADMIN_USER }}
-    #     ADMIN_PASSWORD: ${{ secrets.ARGOCD_MY_ADMIN_PASSWORD }}
-    #   run: |
-    #     kubectl get configmap argocd-cm -n argocd -o yaml > argocd-cm.yaml
+    # Create Additional Admin User ConfigMap
+    - name: Create Admin User ConfigMap
+      env:
+        ARGOCD_SERVER: ${{ vars.ARGOCD_URL_LAB }}
+        ADMIN_USERNAME: ${{ secrets.ARGOCD_MY_ADMIN_USER }}
+        ADMIN_PASSWORD: ${{ secrets.ARGOCD_MY_ADMIN_PASSWORD }}
+      run: |
+        kubectl get configmap argocd-cm -n argocd -o yaml > argocd-cm.yaml
 
-    #     # Add new admin user and role
-    #     echo "
-    #     apiVersion: v1
-    #     kind: ConfigMap
-    #     metadata:
-    #       name: argocd-cm
-    #       namespace: argocd
-    #     data:
-    #       accounts.$ADMIN_USERNAMEs: login
-    #     " > argocd-cm.yaml
+        # Add new admin user for login
+        echo "
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          name: argocd-cm
+          namespace: argocd
+        data:
+          accounts.$ADMIN_USERNAME: login
+        " > argocd-cm.yaml
 
-    #     # Apply RBAC configmap
-    #     kubectl -n argocd apply -f argocd-cm.yaml
+        # Apply configmap
+        kubectl -n argocd apply -f argocd-cm.yaml
 
     # # Create Additional Admin User RBAC
     # - name: Create Admin User RBAC
