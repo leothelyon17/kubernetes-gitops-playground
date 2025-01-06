@@ -1,9 +1,9 @@
 name: Setup and Test Kubernetes Access
 
 on:
-  push:
-    branches:
-      - main
+  #push:
+  #  branches:
+  #    - main
   workflow_dispatch:
 
 jobs:
@@ -28,17 +28,22 @@ jobs:
         fi
         kubectl version --client
 
-    # Set up kubeconfig
-    - name: Set up kubeconfig
+    - name: Combine and decode kubeconfigs
       env:
-        KUBECONFIG_PATH: /home/jeff/.kube
+        KUBE_CONFIG_1: ${{ secrets.KUBECONFIG_BASE64_PROD }}
+        KUBE_CONFIG_2: ${{ secrets.KUBECONFIG_BASE64_LAB }}
       run: |
-        mkdir -p $(dirname $KUBECONFIG_PATH)
-        echo ${{ secrets.KUBECONFIG_BASE64_PROD }} | base64 --decode > $KUBECONFIG_PATH/config
-        chmod 600 $KUBECONFIG_PATH/config
+        # Decode the first config and append it to the kube config
+        echo "$KUBE_CONFIG_1" | base64 --decode > $HOME/.kube/config1.yaml
+        # Decode the second config and append it to the kube config
+        echo "$KUBE_CONFIG_2" | base64 --decode > $HOME/.kube/config2.yaml
+        
+        # Combine both config files into the .kube/config
+        KUBECONFIG=$HOME/.kube/config1.yaml:$HOME/.kube/config2.yaml kubectl config view --flatten > $HOME/.kube/config
+        chmod 600 $HOME/.kube/config
 
-    # Verify kubectl is installed and cluster access
-    - name: Verify cluster access
+    - name: Verify Kubeconfig
       run: |
+        kubectl config get-contexts
         kubectl version
         kubectl get nodes
