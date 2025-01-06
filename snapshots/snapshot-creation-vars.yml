@@ -1,0 +1,17 @@
+---
+snapshot_repository_base_directory: volume1/Home\ Media/Backup
+repository_user: unraid
+
+snapshot_create_list:
+  # - vm_name: Rocky9-TESTNode
+  #   disks_to_snapshot:
+  #     - disk_name: vdisk1.img
+  #       source_directory: /mnt/cache/domains
+  #       desired_snapshot_name: test-snapshot
+  #     - disk_name: vdisk2.img
+  #       source_directory: /mnt/disk1/domains
+  - vm_name: Rocky9-LabNode3
+    disks_to_snapshot:
+      - disk_name: vdisk1.img
+        source_directory: /mnt/nvme_cache/domains
+        desired_snapshot_name: baseline_kubernetes
