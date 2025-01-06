@@ -52,8 +52,31 @@ jobs:
           --password $ARGOCD_PASSWORD \
           --insecure
 
-    # Create Additional Admin User
-    - name: Create Admin User
+    # Create Additional Admin User ConfigMap
+    - name: Create Admin User ConfigMap
+      env:
+        ARGOCD_SERVER: ${{ vars.ARGOCD_URL_LAB }}
+        ADMIN_USERNAME: ${{ secrets.ARGOCD_MY_ADMIN_USER }}
+        ADMIN_PASSWORD: ${{ secrets.ARGOCD_MY_ADMIN_PASSWORD }}
+      run: |
+        kubectl get configmap argocd-cm -n argocd -o yaml > argocd-cm.yaml
+
+        # Add new admin user and role
+        echo "
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          name: argocd-cm
+          namespace: argocd
+        data:
+          accounts.$ADMIN_USERNAMEs: login
+        " > argocd-cm.yaml
+
+        # Apply RBAC configmap
+        kubectl -n argocd apply -f argocd-cm.yaml
+
+    # Create Additional Admin User RBAC
+    - name: Create Admin User RBAC
       env:
         ARGOCD_SERVER: ${{ vars.ARGOCD_URL_LAB }}
         ADMIN_USERNAME: ${{ secrets.ARGOCD_MY_ADMIN_USER }}
@@ -78,10 +101,7 @@ jobs:
         kubectl -n argocd apply -f rbac-config.yaml
 
         # Add the admin user
-        kubectl -n argocd create secret generic $ADMIN_USERNAME \
-          --from-literal=username=$ADMIN_USERNAME \
-          --from-literal=password=$ADMIN_PASSWORD \
-          --dry-run=client -o yaml | kubectl apply -f -
+        argocd account update-password --account $ADMIN_USERNAME --current-password ${{ secrets.ARGOCD_ADMIN_PASSWORD_LAB }} --new-password $ADMIN_PASSWORD
 
         echo "Admin user $ADMIN_USERNAME created successfully."
 
