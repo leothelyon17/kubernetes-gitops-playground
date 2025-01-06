@@ -1,0 +1,51 @@
+name: Restore Lab VM from local tar snapshot
+
+on:
+  workflow_dispatch: # Triggered manually or customize for triggers like push/cron
+
+env:
+  DISKSTATION_IP_ADDRESS: ${ vars.DISKSTATION_IP_ADDRESS }
+  DISKSTATION_USER: ${ secrets.DISKSTATION_USER }
+  DISKSTATION_PASS: ${ secrets.DISKSTATION_PASS }
+  UNRAID_IP_ADDRESS: ${ vars.UNRAID_IP_ADDRESS }
+  UNRAID_USER: ${ secrets.UNRAID_USER }
+  UNRAID_PASS: ${ secrets.UNRAID_PASS }
+
+jobs:
+  run-ansible:
+    runs-on: self-hosted
+    
+    steps:
+    # Checkout the GitHub repository hosting this workflow
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    # Pull the public repository
+    - name: Clone Public Repository
+      run: |
+        git clone https://github.com/leothelyon17/unraid-vm-snapshots.git
+
+    # Copy local folder to the cloned repository
+    - name: Copy vars file to repo folder
+      run: |
+        cp -f ./snapshots/snapshot-restore-vars.yml ./unraid-vm-snapshots/vars/
+
+    - name: Set up Python virtual environment
+      working-directory: ./unraid-vm-snapshots
+      run: |
+        python3.12 -m venv venv
+        source venv/bin/activate
+        python -m pip install --upgrade pip
+
+    # Step 6: Install Kubespray dependencies
+    - name: Install dependencies
+      working-directory: ./unraid-vm-snapshots
+      run: |
+        source venv/bin/activate
+        pip install -r requirements.txt
+
+    # Run the Ansible Playbook
+    - name: Run Ansible Playbook
+      run: |
+        cd unraid-vm-snapshots
+        ansible-playbook restore-from-local-tar-pb.yml -i defaults/inventory.yml
