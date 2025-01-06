@@ -4,12 +4,12 @@ on:
   workflow_dispatch: # Triggered manually or customize for triggers like push/cron
 
 env:
-  DISKSTATION_IP_ADDRESS: ${ vars.DISKSTATION_IP_ADDRESS }
-  DISKSTATION_USER: ${ secrets.DISKSTATION_USER }
-  DISKSTATION_PASS: ${ secrets.DISKSTATION_PASS }
-  UNRAID_IP_ADDRESS: ${ vars.UNRAID_IP_ADDRESS }
-  UNRAID_USER: ${ secrets.UNRAID_USER }
-  UNRAID_PASS: ${ secrets.UNRAID_PASS }
+  DISKSTATION_IP_ADDRESS: ${{ vars.DISKSTATION_IP_ADDRESS }}
+  DISKSTATION_USER: ${{ secrets.DISKSTATION_USER }}
+  DISKSTATION_PASS: ${{ secrets.DISKSTATION_PASS }}
+  UNRAID_IP_ADDRESS: ${{ vars.UNRAID_IP_ADDRESS }}
+  UNRAID_USER: ${{ secrets.UNRAID_USER }}
+  UNRAID_PASS: ${{ secrets.UNRAID_PASS }}
 
 jobs:
   run-ansible:
