@@ -128,7 +128,7 @@ jobs:
         CONTEXT=$(kubectl config current-context)
         EXISTS=$(argocd cluster get $CLUSTER_NAME || echo "not found")
         if [[ "$EXISTS" == "not found" ]]; then
-          echo "Cluster $CLUSTER_NAME not found. Adding it...
+          echo "Cluster $CLUSTER_NAME not found. Adding it..."
           argocd cluster add $CONTEXT --name $CLUSTER_NAME --yes
         else
           echo "Cluster $CLUSTER_NAME already exists."
