@@ -123,7 +123,7 @@ jobs:
     - name: Verify Admin User
       run: |
         echo "Attempting to log in with the new admin user..."
-        argocd login ${{ vars.ARGOCD_URL_$TARGETED_CLUSTER }} \
+        argocd login ${{ vars.ARGOCD_URL_LAB }} \
           --username ${{ secrets.ARGOCD_MY_ADMIN_USER }} \
           --password ${{ secrets.ARGOCD_MY_ADMIN_PASSWORD }} \
           --insecure
