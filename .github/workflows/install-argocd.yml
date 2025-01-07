@@ -6,6 +6,9 @@ on:
   #     - main
   workflow_dispatch:
 
+env:
+  TARGETED_CLUSTER: LAB
+
 jobs:
   install-argocd:
     runs-on: self-hosted
