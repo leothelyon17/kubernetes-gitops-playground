@@ -19,6 +19,10 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    - name: Debug Environment
+      run: | 
+        echo "Environment: ${{ github.environment }}"
+
     # Set Correct Kubernetes Context
     - name: Set Correct Kubernetes Context
       run: |
