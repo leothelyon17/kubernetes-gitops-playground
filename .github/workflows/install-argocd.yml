@@ -21,7 +21,7 @@ jobs:
 
     - name: Debug Environment
       run: | 
-        echo "Environment: ${{ github.environment }}"
+        echo "Environment: ${{ env }}"
 
     # Set Correct Kubernetes Context
     - name: Set Correct Kubernetes Context
