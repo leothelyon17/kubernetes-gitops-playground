@@ -129,6 +129,10 @@ jobs:
         EXISTS=$(argocd cluster get $CLUSTER_NAME || echo "not found")
         if [[ "$EXISTS" == "not found" ]]; then
           echo "Cluster $CLUSTER_NAME not found. Adding it...
+          argocd login ${{ vars.ARGOCD_URL_LAB }} \
+          --username ${{ secrets.ARGOCD_MY_ADMIN_USER }} \
+          --password ${{ secrets.ARGOCD_MY_ADMIN_PASSWORD }} \
+          --insecure
           argocd cluster add $CONTEXT --name $CLUSTER_NAME --yes
         else
           echo "Cluster $CLUSTER_NAME already exists."
