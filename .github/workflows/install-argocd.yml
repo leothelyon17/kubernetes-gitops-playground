@@ -123,8 +123,8 @@ jobs:
 
     # Add the cluster to ArgoCD if not exists
     - name: Add Cluster to ArgoCD
-      env:
-        KUBECONFIG: ${{ secrets.KUBECONFIG_BASE64_LAB }}
+      # env:
+      #   KUBECONFIG: ${{ secrets.KUBECONFIG_BASE64_LAB }}
       run: |
         CLUSTER_NAME=lab-cluster
         CONTEXT=$(kubectl config current-context)
