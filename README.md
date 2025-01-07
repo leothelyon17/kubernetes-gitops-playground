@@ -1,4 +1,4 @@
-# kubernetes-home-playground
+# kubernetes-gitops-playground
 
 ## Existing snapshots
   - baseline_kubernetes
