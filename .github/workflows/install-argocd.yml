@@ -7,16 +7,21 @@ on:
   workflow_dispatch:
 
 env:
-  TARGETED_CLUSTER: LAB
+  TARGETED_CLUSTER: lab 
 
 jobs:
   install-argocd:
     runs-on: self-hosted
 
     steps:
-    # Step 1: Checkout the repository
+    # Checkout the repository
     - name: Checkout repository
       uses: actions/checkout@v3
+
+    # Set Correct Kubernetes Context
+    - name: Set Correct Kubernetes Context
+      run: |
+        kubectl config use-context $TARGETED_CLUSTER-kubernetes-admin@$TARGETED_CLUSTER-cluster.jjland.local
 
     # Install Argo CD
     - name: Install Argo CD on Kubernetes
@@ -118,7 +123,7 @@ jobs:
     - name: Verify Admin User
       run: |
         echo "Attempting to log in with the new admin user..."
-        argocd login ${{ vars.ARGOCD_URL_LAB }} \
+        argocd login ${{ vars.ARGOCD_URL_$TARGETED_CLUSTER }} \
           --username ${{ secrets.ARGOCD_MY_ADMIN_USER }} \
           --password ${{ secrets.ARGOCD_MY_ADMIN_PASSWORD }} \
           --insecure
@@ -127,7 +132,7 @@ jobs:
     # Add the cluster to ArgoCD if not exists
     - name: Add Cluster to ArgoCD
       run: |
-        CLUSTER_NAME=lab-cluster
+        CLUSTER_NAME=$TARGETED_CLUSTER-cluster
         CONTEXT=$(kubectl config current-context)
         EXISTS=$(argocd cluster get $CLUSTER_NAME || echo "not found")
         if [[ "$EXISTS" == "not found" ]]; then
