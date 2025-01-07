@@ -120,3 +120,19 @@ jobs:
           --password ${{ secrets.ARGOCD_MY_ADMIN_PASSWORD }} \
           --insecure
         echo "New admin user login successful."
+
+    # Add the cluster to ArgoCD if not exists
+    - name: Add Cluster to ArgoCD
+      env:
+        KUBECONFIG: ${{ secrets.KUBECONFIG_BASE64_LAB }}
+      run: |
+        CLUSTER_NAME=lab-cluster
+        CONTEXT=$(kubectl config current-context)
+        EXISTS=$(argocd cluster get $CLUSTER_NAME || echo "not found")
+        if [[ "$EXISTS" == "not found" ]]; then
+          echo "Cluster $CLUSTER_NAME not found. Adding it..."
+          echo $KUBECONFIG | base64 --decode > kubeconfig.yaml
+          argocd cluster add $CONTEXT --name $CLUSTER_NAME --kubeconfig kubeconfig.yaml
+        else
+          echo "Cluster $CLUSTER_NAME already exists."
+        fi
