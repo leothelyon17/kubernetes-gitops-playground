@@ -42,7 +42,7 @@ jobs:
     # Run the Ansible Playbook
     - name: Run Ansible Playbook
       run: |
-        cd unraid-vm-snapshots
+        cd ansible-role-microceph
         source venv/bin/activate
         ansible-playbook microceph_cluster_pb.yml -i inventory.yml \
             -e "ansible_password=${{ secrets.SSH_PASS }}" \
