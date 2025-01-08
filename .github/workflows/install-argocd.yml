@@ -5,21 +5,14 @@ on:
   #   branches:
   #     - main
   workflow_dispatch:
-    # inputs:
-    #     environment:
-    #       description: "The environment to deploy to"
-    #       required: true
-    #       default: "lab"
-    #       type: choice
-    #       options:
-    #         - lab
-    #         - prod
 
 env:
   ARGOCD_PORT: ${{ vars.ARGOCD_PORT }}
   ARGOCD_SERVER: ${{ vars.ARGOCD_URL }}
   ARGOCD_PASSWORD: ${{ secrets.ARGOCD_ADMIN_PASSWORD }}
-  #ENV_NAME: ${{ inputs.environment || 'lab'}}
+  ARGOCD_USERNAME: ${{ secrets.ARGOCD_ADMIN_USER }}
+  ADMIN_USERNAME: ${{ secrets.ARGOCD_MY_ADMIN_USER }}
+  ADMIN_PASSWORD: ${{ secrets.ARGOCD_MY_ADMIN_PASSWORD }}
 
 jobs:
   set-environment:
@@ -84,8 +77,6 @@ jobs:
 
     # Log in to ArgoCD
     - name: Login to ArgoCD
-      env:
-        ARGOCD_USERNAME: ${{ secrets.ARGOCD_ADMIN_USER }}
       run: |
         argocd login $ARGOCD_SERVER \
           --username $ARGOCD_USERNAME \
@@ -94,9 +85,6 @@ jobs:
 
     # Create Additional Admin User ConfigMap
     - name: Create Admin User ConfigMap
-      env:
-        ADMIN_USERNAME: ${{ secrets.ARGOCD_MY_ADMIN_USER }}
-        ADMIN_PASSWORD: ${{ secrets.ARGOCD_MY_ADMIN_PASSWORD }}
       run: |
         kubectl get configmap argocd-cm -n argocd -o yaml > argocd-cm.yaml
 
@@ -119,9 +107,6 @@ jobs:
 
     # Create Additional Admin User RBAC
     - name: Create Admin User RBAC
-      env:
-        ADMIN_USERNAME: ${{ secrets.ARGOCD_MY_ADMIN_USER }}
-        ADMIN_PASSWORD: ${{ secrets.ARGOCD_MY_ADMIN_PASSWORD }}
       run: |
         kubectl -n argocd get configmap argocd-rbac-cm -o yaml > rbac-config.yaml
 
