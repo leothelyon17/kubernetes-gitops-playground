@@ -1,0 +1,8 @@
+---
+microceph_cluster_nodes: ceph_nodes
+microceph_seed_node: rocky9-lab-node1
+microceph_encrypt_data: False
+microceph_disk_devices:
+  - /dev/vdb
+ceph_release: squid
+distro: el9
