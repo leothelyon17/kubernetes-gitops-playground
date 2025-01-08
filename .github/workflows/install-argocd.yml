@@ -154,7 +154,7 @@ jobs:
     - name: Verify Admin User
       run: |
         echo "Attempting to log in with the new admin user..."
-        argocd login $ARGOCD_URL \
+        argocd login $ARGOCD_SERVER \
           --username ${{ secrets.ARGOCD_MY_ADMIN_USER }} \
           --password ${{ secrets.ARGOCD_MY_ADMIN_PASSWORD }} \
           --insecure
@@ -163,7 +163,7 @@ jobs:
     # Add the cluster to ArgoCD if not exists
     - name: Add Cluster to ArgoCD
       run: |
-        CLUSTER_NAME=$TARGETED_CLUSTER-cluster
+        CLUSTER_NAME=$ENV_NAME-cluster
         CONTEXT=$(kubectl config current-context)
         EXISTS=$(argocd cluster get $CLUSTER_NAME || echo "not found")
         if [[ "$EXISTS" == "not found" ]]; then
