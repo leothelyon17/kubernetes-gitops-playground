@@ -41,7 +41,7 @@ jobs:
 
     - name: Set Environment Name Variable Dynamically
       id: set-environment-variable
-      run: echo "env_name=$needs.set-environment.outputs.ENV_NAME" >> $GITHUB_ENV
+      run: echo "env_name=${{ steps.context.outputs.environment }}" >> $GITHUB_ENV
 
     # Set Correct Kubernetes Context
     - name: Set Correct Kubernetes Context
