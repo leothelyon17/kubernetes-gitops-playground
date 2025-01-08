@@ -26,7 +26,7 @@ jobs:
         cp -f ./microceph/vars-lab.yml ./ansible-role-microceph/cluster-vars.yml
 
     - name: Set up Python virtual environment
-      working-directory: ./unraid-vm-snapshots
+      working-directory: ./ansible-role-microceph
       run: |
         python3.12 -m venv venv
         source venv/bin/activate
@@ -34,7 +34,7 @@ jobs:
 
     # Step 6: Install dependencies
     - name: Install dependencies
-      working-directory: ./unraid-vm-snapshots
+      working-directory: ./ansible-role-microceph
       run: |
         source venv/bin/activate
         pip install -r requirements.txt
