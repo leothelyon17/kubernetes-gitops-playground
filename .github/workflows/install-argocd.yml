@@ -5,9 +5,19 @@ on:
   #   branches:
   #     - main
   workflow_dispatch:
+    inputs:
+        environment:
+          description: "The environment to deploy to"
+          required: true
+          default: "lab"
+          type: choice
+          options:
+            - lab
+            - prod
 
 env:
   TARGETED_CLUSTER: lab 
+  ENV_NAME: ${{ inputs.environment || 'test'}}
 
 jobs:
   set-environment:
@@ -31,7 +41,7 @@ jobs:
   
   install-argocd:
     needs: set-environment
-    environment: ${{ needs.set-environment.outputs.ENV_NAME }}
+    environment: ${{ inputs.environment || 'lab'}}
     runs-on: self-hosted
 
     steps:
@@ -39,16 +49,16 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Set Environment Name Variable Dynamically
-      id: set-environment-variable
-      run: echo "env_name=${{ needs.set-environment.outputs.ENV_NAME }}" >> $GITHUB_ENV
+    # - name: Set Environment Name Variable Dynamically
+    #   id: set-environment-variable
+    #   run: echo "env_name=${{ needs.set-environment.outputs.ENV_NAME }}" >> $GITHUB_ENV
 
     # Set Correct Kubernetes Context
     - name: Set Correct Kubernetes Context
       run: |
         echo "${{ vars.ARGOCD_PORT }}"
-        echo $env.env_name
-        kubectl config use-context "${env_name}-kubernetes-admin@${env_name}-cluster.jjland.local"
+        echo ${{ inputs.environment || 'lab'}}
+        kubectl config use-context "$ENV_NAME-kubernetes-admin@${{ env.ENV_NAME }}-cluster.jjland.local"
 
     # Install Argo CD
     - name: Install Argo CD on Kubernetes
