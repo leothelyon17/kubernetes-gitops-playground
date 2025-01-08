@@ -1,0 +1,9 @@
+---
+ceph_nodes:
+  hosts:
+    rocky9-lab-node1:
+      ansible_host: 172.16.99.25
+    rocky9-lab-node2:
+      ansible_host: 172.16.99.26
+    rocky9-lab-node3:
+      ansible_host: 172.16.99.27
