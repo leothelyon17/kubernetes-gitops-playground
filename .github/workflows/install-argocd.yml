@@ -5,6 +5,15 @@ on:
   #   branches:
   #     - main
   workflow_dispatch:
+    inputs:
+        environment:
+          description: "The environment to deploy to"
+          required: true
+          default: "lab"
+          type: choice
+          options:
+            - lab
+            - prod
 
 env:
   ARGOCD_PORT: ${{ vars.ARGOCD_PORT }}
