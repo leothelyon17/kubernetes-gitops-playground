@@ -46,16 +46,14 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # - name: Set Environment Name Variable Dynamically
-    #   id: set-environment-variable
-    #   run: echo "ENV_NAME=${{ needs.set-environment.outputs.ENV_NAME }}" >> $GITHUB_ENV
+    - name: Set Environment Name Variable Dynamically
+      id: set-environment-variable
+      run: echo "ENV_NAME=${{ needs.set-environment.outputs.ENV_NAME }}" >> $GITHUB_ENV
 
     # Set Correct Kubernetes Context
     - name: Set Correct Kubernetes Context
       run: |
-        echo "${{ needs.set-environment.outputs.ENV_NAME }}"
-        echo "${{ vars.ARGOCD_PORT }}"
-        kubectl config use-context "$ENV_NAME-kubernetes-admin@${{ env.ENV_NAME }}-cluster.jjland.local"
+        kubectl config use-context "${{ env.ENV_NAME }}-kubernetes-admin@${{ env.ENV_NAME }}-cluster.jjland.local"
 
     # Install Argo CD
     - name: Install Argo CD on Kubernetes
