@@ -16,7 +16,9 @@ on:
     #         - prod
 
 env:
-  TARGETED_CLUSTER: lab 
+  TARGETED_CLUSTER: lab
+  ARGOCD_PORT: ${{ vars.ARGOCD_PORT }}
+  ARGOCD_SERVER: ${{ vars.ARGOCD_URL_LAB }}
   #ENV_NAME: ${{ inputs.environment || 'lab'}}
 
 jobs:
@@ -78,12 +80,11 @@ jobs:
     - name: Expose Argo CD Server
       run: |
         kubectl patch svc argocd-server -n argocd \
-          -p '{"spec": {"type": "NodePort", "ports": [{"port": 443, "targetPort": 8080, "nodePort": '"${{ vars.ARGOCD_PORT }}"' }]}}'
+          -p '{"spec": {"type": "NodePort", "ports": [{"port": 443, "targetPort": 8080, "nodePort": $ARGOCD_PORT }]}}'
 
     # Log in to ArgoCD
     - name: Login to ArgoCD
       env:
-        ARGOCD_SERVER: ${{ vars.ARGOCD_URL_LAB }}
         ARGOCD_USERNAME: ${{ secrets.ARGOCD_ADMIN_USER }}
         ARGOCD_PASSWORD: ${{ secrets.ARGOCD_ADMIN_PASSWORD_LAB }}
       run: |
@@ -95,7 +96,6 @@ jobs:
     # Create Additional Admin User ConfigMap
     - name: Create Admin User ConfigMap
       env:
-        ARGOCD_SERVER: ${{ vars.ARGOCD_URL_LAB }}
         ADMIN_USERNAME: ${{ secrets.ARGOCD_MY_ADMIN_USER }}
         ADMIN_PASSWORD: ${{ secrets.ARGOCD_MY_ADMIN_PASSWORD }}
       run: |
@@ -121,7 +121,6 @@ jobs:
     # Create Additional Admin User RBAC
     - name: Create Admin User RBAC
       env:
-        ARGOCD_SERVER: ${{ vars.ARGOCD_URL_LAB }}
         ADMIN_USERNAME: ${{ secrets.ARGOCD_MY_ADMIN_USER }}
         ADMIN_PASSWORD: ${{ secrets.ARGOCD_MY_ADMIN_PASSWORD }}
       run: |
@@ -155,7 +154,7 @@ jobs:
     - name: Verify Admin User
       run: |
         echo "Attempting to log in with the new admin user..."
-        argocd login ${{ vars.ARGOCD_URL_LAB }} \
+        argocd login $ARGOCD_URL \
           --username ${{ secrets.ARGOCD_MY_ADMIN_USER }} \
           --password ${{ secrets.ARGOCD_MY_ADMIN_PASSWORD }} \
           --insecure
