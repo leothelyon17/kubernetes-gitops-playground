@@ -1,0 +1,50 @@
+name: Destroy MicroCEPH cluster
+
+on:
+  workflow_dispatch: # Triggered manually or customize for triggers like push/cron
+
+#env:
+
+jobs:
+  run-ansible:
+    runs-on: self-hosted
+    
+    steps:
+    # Checkout the GitHub repository hosting this workflow
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    # Pull the public repository
+    - name: Clone Public Repository
+      run: |
+        git clone https://github.com/leothelyon17/ansible-role-microceph.git
+
+    # Copy local folder to the cloned repository
+    - name: Copy vars file to repo folder
+      run: |
+        cp -f ./microceph/inventory-lab.yml ./ansible-role-microceph/inventory.yml
+        cp -f ./microceph/vars-lab.yml ./ansible-role-microceph/cluster-vars.yml
+
+    - name: Set up Python virtual environment
+      working-directory: ./ansible-role-microceph
+      run: |
+        python3.12 -m venv venv
+        source venv/bin/activate
+        python -m pip install --upgrade pip
+
+    # Step 6: Install dependencies
+    - name: Install dependencies
+      working-directory: ./ansible-role-microceph
+      run: |
+        source venv/bin/activate
+        pip install -r requirements.txt
+
+    # Run the Ansible Playbook
+    - name: Run Ansible Playbook
+      run: |
+        cd ansible-role-microceph
+        source venv/bin/activate
+        ansible-playbook microceph_cluster_pb.yml -i inventory.yml \
+            -e "ansible_password=${{ secrets.SSH_PASS }}" \
+            -e "ansible_become_pass=${{ secrets.ROOT_SSH_PASS }}" \
+            --tags teardown-cluster
