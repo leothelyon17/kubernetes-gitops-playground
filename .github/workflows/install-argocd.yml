@@ -46,6 +46,7 @@ jobs:
     # Set Correct Kubernetes Context
     - name: Set Correct Kubernetes Context
       run: |
+        echo $env_name
         kubectl config use-context "${env_name}-kubernetes-admin@${env_name}-cluster.jjland.local"
 
     # Install Argo CD
