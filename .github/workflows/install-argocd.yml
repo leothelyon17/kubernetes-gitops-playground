@@ -23,7 +23,7 @@ jobs:
   set-environment:
     runs-on: self-hosted
     outputs:
-      ENV_NAME: ${{ steps.detect_env.outputs.env_name }}
+      CJ_ENV_NAME: ${{ steps.detect_env.outputs.env_name }}
     steps:
     - name: Determine Environment
       id: detect_env
@@ -56,7 +56,8 @@ jobs:
     # Set Correct Kubernetes Context
     - name: Set Correct Kubernetes Context
       run: |
-        echo "${{ needs.set-environment.outputs.ENV_NAME }}"
+        echo "${{ needs.set-environment.outputs.CJ_ENV_NAME }}"
+        echo $CJ_ENV_NAME
         echo "${{ vars.ARGOCD_PORT }}"
         echo ${{ inputs.environment || 'lab'}}
         kubectl config use-context "$ENV_NAME-kubernetes-admin@${{ env.ENV_NAME }}-cluster.jjland.local"
