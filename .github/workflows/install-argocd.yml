@@ -31,7 +31,7 @@ jobs:
   
   install-argocd:
     needs: set-environment
-    environment: $needs.set-environment.outputs.ENV_NAME
+    environment: ${{ needs.set-environment.outputs.ENV_NAME }}
     runs-on: self-hosted
 
     steps:
