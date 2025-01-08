@@ -16,9 +16,9 @@ on:
     #         - prod
 
 env:
-  TARGETED_CLUSTER: lab
   ARGOCD_PORT: ${{ vars.ARGOCD_PORT }}
   ARGOCD_SERVER: ${{ vars.ARGOCD_URL }}
+  ARGOCD_PASSWORD: ${{ secrets.ARGOCD_ADMIN_PASSWORD }}
   #ENV_NAME: ${{ inputs.environment || 'lab'}}
 
 jobs:
@@ -86,7 +86,6 @@ jobs:
     - name: Login to ArgoCD
       env:
         ARGOCD_USERNAME: ${{ secrets.ARGOCD_ADMIN_USER }}
-        ARGOCD_PASSWORD: ${{ secrets.ARGOCD_ADMIN_PASSWORD_LAB }}
       run: |
         argocd login $ARGOCD_SERVER \
           --username $ARGOCD_USERNAME \
@@ -146,7 +145,7 @@ jobs:
         kubectl -n argocd apply -f rbac-config.yaml
 
         # Add the admin user
-        argocd account update-password --account $ADMIN_USERNAME --current-password ${{ secrets.ARGOCD_ADMIN_PASSWORD_LAB }} --new-password $ADMIN_PASSWORD
+        argocd account update-password --account $ADMIN_USERNAME --current-password ${{ secrets.ARGOCD_ADMIN_PASSWORD }} --new-password $ADMIN_PASSWORD
 
         echo "Admin user $ADMIN_USERNAME created successfully."
 
