@@ -30,7 +30,8 @@ jobs:
       run: echo "Environment is $env_name"
   
   install-argocd:
-    environment: $ENV_NAME
+    needs: set-environment
+    environment: $needs.set-environment.outputs.ENV_NAME
     runs-on: self-hosted
 
     steps:
