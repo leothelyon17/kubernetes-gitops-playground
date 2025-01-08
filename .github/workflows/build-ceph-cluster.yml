@@ -22,7 +22,7 @@ jobs:
     # Copy local folder to the cloned repository
     - name: Copy vars file to repo folder
       run: |
-        cp -f ./microceph/inventory-lab.yml ./ansible-role-microceph
+        cp -f ./microceph/inventory-lab.yml ./ansible-role-microceph/inventory.yml
         cp -f ./microceph/vars-lab.yml ./ansible-role-microceph/cluster-vars.yml
 
     - name: Set up Python virtual environment
@@ -44,4 +44,7 @@ jobs:
       run: |
         cd unraid-vm-snapshots
         source venv/bin/activate
-        ansible-playbook microceph_cluster_pb.yml -i inventory.yml --ask-pass --ask-become-pass --tags build-cluster,setup-gui
+        ansible-playbook microceph_cluster_pb.yml -i inventory.yml \
+            -e "ansible_password=${{ secrets.SSH_PASS }}" \
+            -e "ansible_become_pass=${{ secrets.SSH_PASS }}" \
+            --tags build-cluster,setup-gui
