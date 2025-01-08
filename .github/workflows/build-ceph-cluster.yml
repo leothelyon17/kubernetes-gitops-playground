@@ -22,7 +22,8 @@ jobs:
     # Copy local folder to the cloned repository
     - name: Copy vars file to repo folder
       run: |
-        cp -f ./snapshots/snapshot-restore-vars.yml ./unraid-vm-snapshots/vars/
+        cp -f ./microceph/inventory-lab.yml ./ansible-role-microceph
+        cp -f ./microceph/vars-lab.yml ./ansible-role-microceph/cluster-vars.yml
 
     - name: Set up Python virtual environment
       working-directory: ./unraid-vm-snapshots
