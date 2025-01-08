@@ -41,13 +41,13 @@ jobs:
 
     - name: Set Environment Name Variable Dynamically
       id: set-environment-variable
-      run: echo "env_name=${{ jobs.install-argocd.outputs.environment }}" >> $GITHUB_ENV
+      run: echo "env_name=${{ needs.set-environment.outputs.ENV_NAME }}" >> $GITHUB_ENV
 
     # Set Correct Kubernetes Context
     - name: Set Correct Kubernetes Context
       run: |
-        echo "${{ env.vars.ARGOCD_PORT }}"
-        echo $env_name
+        echo "${{ vars.ARGOCD_PORT }}"
+        echo $env.env_name
         kubectl config use-context "${env_name}-kubernetes-admin@${env_name}-cluster.jjland.local"
 
     # Install Argo CD
