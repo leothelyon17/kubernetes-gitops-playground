@@ -18,7 +18,7 @@ on:
 env:
   TARGETED_CLUSTER: lab
   ARGOCD_PORT: ${{ vars.ARGOCD_PORT }}
-  ARGOCD_SERVER: ${{ vars.ARGOCD_URL_LAB }}
+  ARGOCD_SERVER: ${{ vars.ARGOCD_URL }}
   #ENV_NAME: ${{ inputs.environment || 'lab'}}
 
 jobs:
