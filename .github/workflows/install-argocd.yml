@@ -10,15 +10,11 @@ env:
   TARGETED_CLUSTER: lab 
 
 jobs:
-  install-argocd:
-    environment: LAB
+  set-environment:
     runs-on: self-hosted
-
+    outputs:
+      ENV_NAME: ${{ steps.detect_env.outputs.env_name }}
     steps:
-    # Checkout the repository
-    - name: Checkout repository
-      uses: actions/checkout@v3
-
     - name: Determine Environment
       id: detect_env
       run: |
@@ -32,11 +28,20 @@ jobs:
 
     - name: Output Environment
       run: echo "Environment is $env_name"
+  
+  install-argocd:
+    environment: $ENV_NAME
+    runs-on: self-hosted
+
+    steps:
+    # Checkout the repository
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
     # Set Correct Kubernetes Context
     - name: Set Correct Kubernetes Context
       run: |
-        kubectl config use-context "$env_name-kubernetes-admin@$env_name-cluster.jjland.local"
+        kubectl config use-context "$ENV_NAME-kubernetes-admin@$ENV_NAME-cluster.jjland.local"
 
     # Install Argo CD
     - name: Install Argo CD on Kubernetes
@@ -61,7 +66,7 @@ jobs:
     - name: Expose Argo CD Server
       run: |
         kubectl patch svc argocd-server -n argocd \
-          -p '{"spec": {"type": "NodePort", "ports": [{"port": 443, "targetPort": 8080, "nodePort": $env_name.${{ vars.ARGOCD_PORT }} }]}}'
+          -p '{"spec": {"type": "NodePort", "ports": [{"port": 443, "targetPort": 8080, "nodePort": {{ vars.ARGOCD_PORT }} }]}}'
 
     # Log in to ArgoCD
     - name: Login to ArgoCD
