@@ -46,4 +46,4 @@ jobs:
         source venv/bin/activate
         ansible-playbook pre-kubespray-setup-pb.yml -i inventory.yml \
             -e "ansible_password=${{ secrets.SSH_PASS }}" \
-            -e "ansible_become_pass=${{ secrets.ROOT_SSH_PASS }}"
+            -e "ansible_become_pass=${{ secrets.SSH_PASS }}"
