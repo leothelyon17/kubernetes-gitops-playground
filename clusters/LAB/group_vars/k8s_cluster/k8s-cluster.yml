@@ -117,7 +117,8 @@ kube_pods_subnet_ipv6: fd85:ee78:d8a6:8607::1:0000/112
 kube_network_node_prefix_ipv6: 120
 
 # The port the API Server will be listening on.
-kube_apiserver_ip: "{{ kube_service_addresses | ansible.utils.ipaddr('net') | ansible.utils.ipaddr(1) | ansible.utils.ipaddr('address') }}"
+# kube_apiserver_ip: "{{ kube_service_addresses | ansible.utils.ipaddr('net') | ansible.utils.ipaddr(1) | ansible.utils.ipaddr('address') }}"
+kube_apiserver_ip: "172.16.99.25"
 kube_apiserver_port: 6443  # (https)
 
 # Kube-proxy proxyMode configuration.
@@ -157,7 +158,7 @@ kube_encrypt_secret_data: false
 
 # DNS configuration.
 # Kubernetes cluster name, also will be used as DNS domain
-cluster_name: cluster.local
+cluster_name: prod-cluster.jjland.local
 # Subdomains of DNS domain to be resolved via /etc/resolv.conf for hostnet pods
 ndots: 2
 # dns_timeout: 2
@@ -376,3 +377,5 @@ kubeadm_patches: []
 
 # Set to true to remove the role binding to anonymous users created by kubeadm
 remove_anonymous_access: false
+
+kube_admin_user: "lab-kubernetes-admin" 
