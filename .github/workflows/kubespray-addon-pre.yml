@@ -1,0 +1,48 @@
+name: Run Pre-Kubespray Addon
+
+on:
+  workflow_dispatch: # Triggered manually or customize for triggers like push/cron
+
+#env:
+
+jobs:
+  run-ansible:
+    runs-on: self-hosted
+    
+    steps:
+    # Checkout the GitHub repository hosting this workflow
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    # Pull the public repository
+    - name: Clone Public Repository
+      run: |
+        git clone https://github.com/leothelyon17/kubespray-addons.git
+
+    # Copy local folder to the cloned repository
+    - name: Copy vars file to repo folder
+      run: |
+        cp -f ./kubespray-addons/inventory-lab.yml ./kubespray-addons/inventory.yml
+
+    - name: Set up Python virtual environment
+      working-directory: ./kubespray-addons
+      run: |
+        python3.12 -m venv venv
+        source venv/bin/activate
+        python -m pip install --upgrade pip
+
+    # Step 6: Install dependencies
+    - name: Install dependencies
+      working-directory: ./kubespray-addons
+      run: |
+        source venv/bin/activate
+        pip install -r requirements.txt
+
+    # Run the Ansible Playbook
+    - name: Run Ansible Playbook
+      run: |
+        cd kubespray-addons
+        source venv/bin/activate
+        ansible-playbook pre-kubespray-setup-pb.yml -i inventory.yml \
+            -e "ansible_password=${{ secrets.SSH_PASS }}" \
+            -e "ansible_become_pass=${{ secrets.ROOT_SSH_PASS }}"
