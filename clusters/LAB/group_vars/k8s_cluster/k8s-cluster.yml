@@ -378,4 +378,6 @@ kubeadm_patches: []
 # Set to true to remove the role binding to anonymous users created by kubeadm
 remove_anonymous_access: false
 
-kube_admin_user: "lab-kubernetes-admin" 
+loadbalancer_apiserver:
+  address: "172.16.99.25"
+  port: 6443
