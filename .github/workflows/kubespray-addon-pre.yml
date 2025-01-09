@@ -23,7 +23,7 @@ jobs:
     # Copy local folder to the cloned repository
     - name: Copy vars file to repo folder
       run: |
-        cp -f ./kubespray-addons/inventory-lab.yml ./kubespray-addons/inventory.yml
+        cp -f ./k8s-addons/inventory-lab.yml ./kubespray-addons/inventory.yml
 
     - name: Set up Python virtual environment
       working-directory: ./kubespray-addons
