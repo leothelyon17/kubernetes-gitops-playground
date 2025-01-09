@@ -17,7 +17,7 @@ jobs:
     # Pull the public repository
     - name: Clone Public Repository
       run: |
-        rm -rf /kubespray-addons
+        rm -rf kubespray-addons/
         git clone https://github.com/leothelyon17/kubespray-addons.git
 
     # Copy local folder to the cloned repository
