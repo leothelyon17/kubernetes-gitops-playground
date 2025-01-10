@@ -107,7 +107,7 @@ jobs:
         #working-directory: ./kubespray
         run: |
           source ./kubespray/venv/bin/activate
-          ansible-playbook -i ./kubespray/inventory/${CHANGED_CLUSTER}/hosts.yml ./ansible/update-k8s-certs.yml \
+          ansible-playbook -i ./kubespray/inventory/${CHANGED_CLUSTER}/hosts.yml ./ansible/update-k8s-certs-pb.yml \
               -e "ansible_password=${{ secrets.SSH_PASS }}" -e "ansible_become_pass=${{ secrets.SSH_PASS }}" \
               -e "environment_context=$CHANGED_CLUSTER
     
