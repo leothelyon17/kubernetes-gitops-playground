@@ -5,6 +5,15 @@ on:
     paths:
       - 'clusters/**'  # Monitor changes in the clusters/ directory
   workflow_dispatch:
+    inputs:
+        environment:
+          description: "The environment to deploy to"
+          required: true
+          default: "lab"
+          type: choice
+          options:
+            - lab
+            - prod
 
 env:
   BASE_CLUSTER_DIR: clusters
