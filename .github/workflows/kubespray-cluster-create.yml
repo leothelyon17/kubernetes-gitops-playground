@@ -17,6 +17,7 @@ on:
 
 env:
   BASE_CLUSTER_DIR: clusters
+  CHANGED_CLUSTER: ${{ github.event.inputs.environment }}
 
 jobs:
   detect-and-run:
