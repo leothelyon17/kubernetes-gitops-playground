@@ -55,6 +55,6 @@
 
     - name: Copy a new "sudoers" file into place, after passing validation with visudo
       ansible.builtin.copy:
-        src: "./kubespray/inventory/{{ environment_context }}/kubeconfig"
+        src: "../kubespray/inventory/{{ environment_context }}/kubeconfig"
         dest: ~/.kube/config
-        mode: '0644'
+        mode: '0755'
