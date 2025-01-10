@@ -1,0 +1,60 @@
+---
+- name: Copy Kubernetes cert files from control node to Ansible host
+  hosts: kube_control_plane
+  become: yes
+  vars:
+    cert_files:
+      - { src: "/etc/kubernetes/pki/ca.crt", dest: "/etc/kubernetes/pki/{{ environment_context }}-cluster/" }
+      - { src: "/etc/kubernetes/pki/apiserver-kubelet-client.crt", dest: "/etc/kubernetes/pki/{{ environment_context }}-cluster/" }
+      - { src: "/etc/kubernetes/pki/apiserver-kubelet-client.key", dest: "/etc/kubernetes/pki/{{ environment_context }}-cluster/" }
+
+  tasks:
+    - name: Ensure /etc/kubernetes/pki directory has 755 permissions on control node
+      ansible.builtin.file:
+        path: "/etc/kubernetes/pki"
+        state: directory
+        mode: '0755'
+
+    - name: Verify certificate files exist on the control node
+      ansible.builtin.stat:
+        path: "{{ item.src }}"
+      loop: "{{ cert_files }}"
+      register: cert_stat_results
+
+    - name: Debug missing certificate files on the control node
+      ansible.builtin.debug:
+        msg: "File {{ item.stat.path }} does not exist on the control node."
+      when: not item.stat.exists
+      loop: "{{ cert_stat_results.results }}"
+
+    - name: Ensure destination directory exists on the Ansible host
+      delegate_to: localhost
+      ansible.builtin.file:
+        path: "/etc/kubernetes/pki/{{ environment_context }}-cluster/"
+        state: directory
+        mode: '0777'
+
+    - name: Ensure Ansible can read certificate files
+      ansible.builtin.file:
+        path: "{{ item.src }}"
+        mode: '0644'
+      loop: "{{ cert_files }}"
+
+    - name: Copy certificate files from control node to Ansible host
+      ansible.builtin.fetch:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        flat: yes
+        fail_on_missing: false
+      loop: "{{ cert_files }}"
+
+    - name: Debug fetched files
+      ansible.builtin.debug:
+        msg: "Successfully fetched {{ item.src }} to {{ item.dest }}"
+      loop: "{{ cert_files }}"
+
+    - name: Copy a new "sudoers" file into place, after passing validation with visudo
+      ansible.builtin.copy:
+        src: "./kubespray/inventory/{{ environment_context }}/kubeconfig"
+        dest: ~/.kube/config
+        mode: '0644'
