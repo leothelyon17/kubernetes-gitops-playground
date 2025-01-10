@@ -1,4 +1,4 @@
-name: Run Kubespray Playbook
+name: Kubespray Cluster Create
 
 on:
   push:
