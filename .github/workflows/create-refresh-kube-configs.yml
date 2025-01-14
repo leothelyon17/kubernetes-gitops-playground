@@ -54,7 +54,7 @@ jobs:
             echo "Public key API response: $response"
             public_key_id=$(echo "$response" | jq -r '.key_id')
             public_key=$(echo "$response" | jq -r '.key')
-            echo "key_id=$public_key_id" >> $GITHUB_ENV
+            echo "public_key_id=$public_key_id" >> $GITHUB_ENV
             echo "public_key=$public_key" >> $GITHUB_ENV
 
       # Step 4: Encrypt the secret
