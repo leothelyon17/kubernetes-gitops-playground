@@ -21,11 +21,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Set up Python for Jinja2 rendering
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.x"
+      # # Step 2: Set up Python for Jinja2 rendering
+      # - name: Set up Python
+      #   uses: actions/setup-python@v4
+      #   with:
+      #     python-version: "3.x"
 
       - name: Install Jinja2
         run: pip install jinja2-cli
