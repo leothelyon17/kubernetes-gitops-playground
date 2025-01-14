@@ -52,8 +52,10 @@ jobs:
             -H "Authorization: Bearer $PAT_TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/${{ github.repository }}/actions/secrets/public-key)
+            echo "Public key API response: $response"
             key_id=$(echo "$response" | jq -r '.key_id')
             echo "key_id=$key_id" >> $GITHUB_ENV
+            echo "key_id=$key_id" # Optional debug output
 
       # Step 5: Store the Base64 encoded config as a GitHub secret (requires admin token)
       - name: Store Kubernetes Config as Secret
