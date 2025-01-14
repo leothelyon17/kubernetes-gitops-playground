@@ -62,7 +62,7 @@ jobs:
         id: encrypt-secret
         run: |
           . venv/bin/activate
-          encrypted=$(python3.12 scripts/encrypt_secret.py "$public_key" "$KUBECONFIG_BASE64")
+          encrypted=$(python3.12 scripts/encrypt-secret.py "$public_key" "$KUBECONFIG_BASE64")
           echo "encrypted_secret=$encrypted" >> $GITHUB_ENV
 
       # Step 5: Store the Base64 encoded config as a GitHub secret (requires admin token)
