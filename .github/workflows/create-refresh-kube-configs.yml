@@ -28,7 +28,7 @@ jobs:
       #     python-version: "3.x"
 
       - name: Install Jinja2
-        run: pip install jinja2-cli
+        run: pip3.12 install jinja2-cli
 
       # Step 3: Render the Kubernetes config using Jinja2
       - name: Render Kubernetes Config
