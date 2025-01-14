@@ -38,7 +38,7 @@ jobs:
         environments=$(echo "$response" | jq -r '.environments[].name')
         
         # Save the list as a GitHub Actions output
-        echo environment=$environments >> $GITHUB_ENV
+        echo "environment=$environments" >> $GITHUB_ENV
     
     #   env:
     #     KUBE_CONFIG_1: ${{ secrets.KUBECONFIG_BASE64_PROD }}
