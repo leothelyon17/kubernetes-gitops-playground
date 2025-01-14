@@ -40,7 +40,7 @@ jobs:
         # Save the list as a GitHub Actions output
         # echo "environment=$environments" >> $GITHUB_ENV
 
-        for environment in ${{ steps.list-environments.outputs.environments }}; do
+        for environment in $environments; do
           echo "Processing environment: $environment"
         done
     
