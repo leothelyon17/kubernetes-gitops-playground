@@ -68,28 +68,38 @@ jobs:
         mkdir -p $HOME/.kube
         echo "Kube config directory created at $HOME/.kube"
     
-    - name: Combine all kubeconfigs into a single file
+    - name: Combine all kube configs into a single file
       run: |
         combined_config="$HOME/.kube/config"
-        echo "Combining kubeconfigs into $combined_config"
+        echo "Combining kube configs into $combined_config"
         
         # Initialize combined config
         touch "$combined_config"
-
-        # Combine kubeconfigs
+    
+        # Combine kube configs
+        kubeconfigs=""
         for config_file in $HOME/.kube/*-kubeconfig.yaml; do
           if [[ -f "$config_file" ]]; then
             echo "Adding $config_file to combined config"
-            KUBECONFIG=$KUBECONFIG:$config_file
+            kubeconfigs="$kubeconfigs:$config_file"
+          else
+            echo "No kube config files found in $HOME/.kube/"
           fi
         done
-        
-        # Flatten and save the combined config
-        kubectl config view --flatten > "$combined_config"
-        chmod 600 "$combined_config"
-        echo "Combined kubeconfig saved at $combined_config"
     
-    - name: Verify Kubeconfig
+        # Remove leading colon from the KUBECONFIG string
+        kubeconfigs="${kubeconfigs#:}"
+    
+        # Set KUBECONFIG and flatten the config files into a single combined config
+        if [[ -n "$kubeconfigs" ]]; then
+          KUBECONFIG="$kubeconfigs" kubectl config view --flatten > "$combined_config"
+          chmod 600 "$combined_config"
+          echo "Combined kube config saved at $combined_config"
+        else
+          echo "No kube config files were found to combine."
+        fi
+    
+    - name: Verify Kube config
       run: |
         kubectl config get-contexts
         kubectl version
