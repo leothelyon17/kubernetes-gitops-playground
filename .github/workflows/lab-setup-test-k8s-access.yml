@@ -1,4 +1,4 @@
-name: Setup and Test Kubernetes Access
+name: Setup Kubectl, Merge Configs, and Test Kubernetes Access
 
 on:
   #push:
