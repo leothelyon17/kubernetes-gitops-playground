@@ -39,6 +39,10 @@ jobs:
         
         # Save the list as a GitHub Actions output
         echo "environment=$environments" >> $GITHUB_ENV
+
+        for environment in ${{ steps.list-environments.outputs.environments }}; do
+          echo "Processing environment: $environment"
+        done
     
     #   env:
     #     KUBE_CONFIG_1: ${{ secrets.KUBECONFIG_BASE64_PROD }}
