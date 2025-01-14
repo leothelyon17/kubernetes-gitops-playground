@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
+  install-kubectl:
     runs-on: self-hosted
 
     steps:
@@ -28,36 +28,46 @@ jobs:
         fi
         kubectl version --client
     
+  deploy:
+    runs-on: self-hosted
+
+    strategy:
+      matrix:
+        environment: ["lab", "prod"]
+      fail-fast: false
+
+    steps:
+    
     - name: Combine and decode kubeconfigs
+      env:
+          ENVIRONMENT: ${{ matrix.environment }}
       run: |
         mkdir -p $HOME/.kube
         combined_config=$HOME/.kube/config
         
-        # Fetch the list of environments using GitHub API
-        response=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          "https://api.github.com/repos/${{ github.repository }}/environments")
+        # # Fetch the list of environments using GitHub API
+        # response=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+        #   "https://api.github.com/repos/${{ github.repository }}/environments")
         
         # Extract environment names and store them in a list
-        environments=$(echo "$response" | jq -r '.environments[].name')
+        # environments=$(echo "$response" | jq -r '.environments[].name')
 
-        for environment in $environments; do
-          echo "Processing environment: $environment"
-          # Check if the secret exists
-          if [ -n "${{ secrets.KUBECONFIG_BASE64 }}" ]; then
-            echo "Found KUBECONFIG_BASE64 secret for $environment"
+        echo "Processing environment: $environment"
+        # Check if the secret exists
+        if [ -n "${{ secrets.KUBECONFIG_BASE64 }}" ]; then
+          echo "Found KUBECONFIG_BASE64 secret for ${{ matrix.environment }}"
 
-            # Decode the secret and append it to the combined kubeconfig
-            echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 --decode > $HOME/.kube/$environment.yaml
-            KUBECONFIG=$KUBECONFIG:$HOME/.kube/$environment.yaml
-          else
-            echo "No KUBECONFIG_BASE64 secret found for $environment"
-          fi
-        done
+          # Decode the secret and append it to the combined kubeconfig
+          echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 --decode > $HOME/.kube/${{ matrix.environment }}.yaml
+          #KUBECONFIG=$KUBECONFIG:$HOME/.kube/${{ matrix.environment }}.yaml
+        else
+          echo "No KUBECONFIG_BASE64 secret found for ${{ matrix.environment }}"
+        fi
 
-        # Flatten the combined kubeconfig
-        KUBECONFIG=$KUBECONFIG kubectl config view --flatten > $combined_config
-        chmod 600 $combined_config
-        echo "Combined kubeconfig saved to $combined_config"
+        # # Flatten the combined kubeconfig
+        # KUBECONFIG=$KUBECONFIG kubectl config view --flatten > $combined_config
+        # chmod 600 $combined_config
+        # echo "Combined kubeconfig saved to $combined_config"
     
     - name: Verify Kubeconfig
       run: |
