@@ -34,7 +34,8 @@ jobs:
         run: |
           export ENV_NAME=${{ github.event.inputs.environment }}
           export KUBERNETES_API_URL=${{ vars.KUBERNETES_API_URL }}
-          echo $KUBERNETES_API_URL
+          export KUBERNETES_CLUSTER_NAME=${{ vars.KUBERNETES_CLUSTER_NAME }}
+          export KUBERNETES_CLUSTER_ADMIN=${{ secrets.KUBERNETES_CLUSTER_ADMIN }}
           . venv/bin/activate
           jinja2 ./ansible/templates/kubeconfig-template.j2 \
           -D environment=$ENV_NAME \
