@@ -1,0 +1,57 @@
+name: Build and Store Kubernetes Config
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "The environment to generate the Kubernetes config for"
+        required: true
+        default: "lab"
+        type: choice
+        options:
+          - lab
+          - prod
+
+jobs:
+  generate-kubeconfig:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Python for Jinja2 rendering
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install Jinja2
+        run: pip install jinja2-cli
+
+      # Step 3: Render the Kubernetes config using Jinja2
+      - name: Render Kubernetes Config
+        run: |
+          export ENV_NAME=${{ github.event.inputs.environment }}
+          jinja2 ./ansible/templates/kubeconfig-template.j2 -D environment=$ENV_NAME > kubeconfig.yaml
+
+      # Step 4: Base64 encode the generated Kubernetes config
+      - name: Base64 Encode Kubernetes Config
+        id: encode
+        run: |
+          export KUBECONFIG_BASE64=$(base64 -w 0 kubeconfig.yaml)
+          echo "KUBECONFIG_BASE64=$KUBECONFIG_BASE64" >> $GITHUB_ENV
+
+      # Step 5: Store the Base64 encoded config as a GitHub secret (requires admin token)
+      - name: Store Kubernetes Config as Secret
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl \
+            -X PUT \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ github.repository }}/actions/secrets/KUBECONFIG_${{ github.event.inputs.environment | upper }} \
+            -d '{"encrypted_value": "'"$KUBECONFIG_BASE64"'"}'
+
