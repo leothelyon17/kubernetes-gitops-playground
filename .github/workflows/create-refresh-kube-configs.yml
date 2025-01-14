@@ -20,20 +20,19 @@ jobs:
       # Step 1: Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
-
-      # # Step 2: Set up Python for Jinja2 rendering
-      # - name: Set up Python
-      #   uses: actions/setup-python@v4
-      #   with:
-      #     python-version: "3.x"
-
-      - name: Install Jinja2
-        run: pip3.12 install jinja2-cli
+      
+      # Install required Python dependencies
+      - name: Install dependencies
+        run: |
+          python3.12 -m venv venv
+          . venv/bin/activate
+          pip3.12 install pynacl jinja2-cli
 
       # Step 3: Render the Kubernetes config using Jinja2
       - name: Render Kubernetes Config
         run: |
           export ENV_NAME=${{ github.event.inputs.environment }}
+          . venv/bin/activate
           jinja2 ./ansible/templates/kubeconfig-template.j2 -D environment=$ENV_NAME > kubeconfig.yaml
 
       # Step 4: Base64 encode the generated Kubernetes config
@@ -53,9 +52,18 @@ jobs:
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/${{ github.repository }}/environments/${{ github.event.inputs.environment }}/secrets/public-key)
             echo "Public key API response: $response"
-            key_id=$(echo "$response" | jq -r '.key_id')
+            public_key_id=$(echo "$response" | jq -r '.key_id')
+            public_key=$(echo "$response" | jq -r '.key')
             echo "key_id=$key_id" >> $GITHUB_ENV
             echo "key_id=$key_id" # Optional debug output
+
+      # Step 4: Encrypt the secret
+      - name: Encrypt the secret
+        id: encrypt-secret
+        run: |
+          . venv/bin/activate
+          encrypted=$(python3.12 ./scripts/encrypt_secret.py "$public_key" "$KUBECONFIG_BASE64")
+          echo "encrypted_secret=$encrypted" >> $GITHUB_ENV
 
       # Step 5: Store the Base64 encoded config as a GitHub secret (requires admin token)
       - name: Store Kubernetes Config as Secret
@@ -67,6 +75,6 @@ jobs:
             -H "Authorization: Bearer $PAT_TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/${{ github.repository }}/environments/${{ github.event.inputs.environment }}/secrets/KUBECONFIG_BASE64 \
-                -d '{"encrypted_value": "'"$KUBECONFIG_BASE64"'",
-                    "key_id":"'"$key_id"'"}'
+                -d '{"encrypted_value": "'"$encrypted_secret"'",
+                    "key_id":"'"$public_key_id"'"}'
 
