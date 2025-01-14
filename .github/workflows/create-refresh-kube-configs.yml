@@ -15,6 +15,7 @@ on:
 jobs:
   generate-kubeconfig:
     runs-on: self-hosted
+    environment: ${{ github.event.inputs.environment }}
 
     steps:
       # Step 1: Checkout the repository
