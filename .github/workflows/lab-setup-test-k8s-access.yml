@@ -58,7 +58,6 @@ jobs:
         KUBECONFIG=$KUBECONFIG kubectl config view --flatten > $combined_config
         chmod 600 $combined_config
         echo "Combined kubeconfig saved to $combined_config"
-        done
     
     - name: Verify Kubeconfig
       run: |
