@@ -14,7 +14,7 @@ on:
 
 jobs:
   generate-kubeconfig:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       # Step 1: Checkout the repository
