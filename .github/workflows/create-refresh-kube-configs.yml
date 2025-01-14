@@ -43,17 +43,28 @@ jobs:
           export KUBECONFIG_BASE64=$(base64 -w 0 kubeconfig.yaml)
           echo "KUBECONFIG_BASE64=$KUBECONFIG_BASE64" >> $GITHUB_ENV
 
+      - name: Get Repo Public Key
+        env:
+            PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          response=$(curl \
+            -X GET \
+            -H "Authorization: Bearer $PAT_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ github.repository }}/actions/secrets/public-key)
+            key_id=$(echo "$response" | jq -r '.key_id')
+            echo "key_id=$key_id" >> $GITHUB_ENV
+
       # Step 5: Store the Base64 encoded config as a GitHub secret (requires admin token)
       - name: Store Kubernetes Config as Secret
         env:
             PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           curl \
-            -X GET \
+            -X PUT \
             -H "Authorization: Bearer $PAT_TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/actions/secrets/public-key
-           # https://api.github.com/repos/${{ github.repository }}/environments/${{ github.event.inputs.environment }}/secrets/KUBECONFIG_BASE64 \
-           # -d '{"encrypted_value": "'"$KUBECONFIG_BASE64"'",
-           #       "key_id":"012345678912345678"}'
+            https://api.github.com/repos/${{ github.repository }}/environments/${{ github.event.inputs.environment }}/secrets/KUBECONFIG_BASE64 \
+                -d '{"encrypted_value": "'"$KUBECONFIG_BASE64"'",
+                    "key_id":$key_id}'
 
