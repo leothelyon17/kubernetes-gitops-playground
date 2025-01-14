@@ -40,6 +40,8 @@ jobs:
           jinja2 ./ansible/templates/kubeconfig-template.j2 \
           -D environment=$ENV_NAME \
           -D KUBERNETES_API_URL=$KUBERNETES_API_URL \
+          -D KUBERNETES_CLUSTER_NAME=$KUBERNETES_CLUSTER_NAME \
+          -D KUBERNETES_CLUSTER_ADMIN=$KUBERNETES_CLUSTER_ADMIN \
           > kubeconfig.yaml
 
       # Step 4: Base64 encode the generated Kubernetes config
