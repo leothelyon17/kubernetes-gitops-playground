@@ -28,7 +28,7 @@ jobs:
         fi
         kubectl version --client
     
-  deploy:
+  create-kube-configs:
     runs-on: self-hosted
 
     strategy:
@@ -39,16 +39,12 @@ jobs:
     environment: ${{ matrix.environment }}
 
     steps:
-    - name: Set up directories
-      run: |
-        mkdir -p $HOME/.kube
-        echo "Kube config directory created at $HOME/.kube"
 
     - name: Combine and decode kubeconfigs
       env:
         ENVIRONMENT: ${{ matrix.environment }}
       run: |
-        kubeconfig_path="$HOME/.kube/${{ matrix.environment }}.yaml"
+        kubeconfig_path="$HOME/.kube/${{ matrix.environment }}-kubeconfig.yaml"
         
         echo "Processing environment: $ENVIRONMENT"
 
@@ -62,11 +58,36 @@ jobs:
         else
           echo "No KUBECONFIG_BASE64 secret found for $ENVIRONMENT"
         fi
+    
+  flatten-and-test:
+    runs-on: self-hosted
 
-        # # Flatten the combined kubeconfig
-        # KUBECONFIG=$KUBECONFIG kubectl config view --flatten > $combined_config
-        # chmod 600 $combined_config
-        # echo "Combined kubeconfig saved to $combined_config"
+    steps:
+    - name: Set up directories
+      run: |
+        mkdir -p $HOME/.kube
+        echo "Kube config directory created at $HOME/.kube"
+    
+    - name: Combine all kubeconfigs into a single file
+      run: |
+        combined_config="$HOME/.kube/config"
+        echo "Combining kubeconfigs into $combined_config"
+        
+        # Initialize combined config
+        touch "$combined_config"
+
+        # Combine kubeconfigs
+        for config_file in $HOME/.kube/*-kubeconfig.yaml; do
+          if [[ -f "$config_file" ]]; then
+            echo "Adding $config_file to combined config"
+            KUBECONFIG=$KUBECONFIG:$config_file
+          fi
+        done
+        
+        # Flatten and save the combined config
+        kubectl config view --flatten > "$combined_config"
+        chmod 600 "$combined_config"
+        echo "Combined kubeconfig saved at $combined_config"
     
     - name: Verify Kubeconfig
       run: |
