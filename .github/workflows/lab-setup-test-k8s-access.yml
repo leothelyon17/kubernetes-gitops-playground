@@ -61,6 +61,8 @@ jobs:
     
   flatten-and-test:
     runs-on: self-hosted
+    needs:
+      - create-kube-configs
 
     steps:
     - name: Set up directories
