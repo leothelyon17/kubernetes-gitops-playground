@@ -52,9 +52,3 @@
       ansible.builtin.debug:
         msg: "Successfully fetched {{ item.src }} to {{ item.dest }}"
       loop: "{{ cert_files }}"
-
-    - name: Copy kube config from repo to runner based on environment context
-      ansible.builtin.copy:
-        src: "../kubespray/inventory/{{ environment_context }}/kubeconfig"
-        dest: ~/.kube/config
-        mode: '0755'
