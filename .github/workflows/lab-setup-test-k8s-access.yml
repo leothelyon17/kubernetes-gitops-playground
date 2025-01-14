@@ -36,6 +36,8 @@ jobs:
         environment: ["lab", "prod"]
       fail-fast: false
 
+    environment: ${{ matrix.environment }}
+
     steps:
     - name: Set up directories
       run: |
