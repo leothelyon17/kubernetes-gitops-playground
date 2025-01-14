@@ -52,7 +52,6 @@ jobs:
             -X PUT \
             -H "Authorization: Bearer $GITHUB_TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
-            -H "Content-Type": "application/json"
             https://api.github.com/repositories/${{ github.repository }}/environments/${{ github.event.inputs.environment }}/secrets/KUBECONFIG_BASE64 \
             -d '{"encrypted_value": "'"$KUBECONFIG_BASE64"'"}'
 
