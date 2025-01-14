@@ -33,7 +33,7 @@ jobs:
         run: |
           export ENV_NAME=${{ github.event.inputs.environment }}
           . venv/bin/activate
-          jinja2 ./ansible/templates/kubeconfig-template.j2 -D environment=$ENV_NAME > kubeconfig.yaml
+          jinja2 ./ansible/templates/kubeconfig-template.j2 -D environment=$ENV_NAME KUBERNETES_API_URL=${{ vars.KUBERNETES_API_URL }} > kubeconfig.yaml
 
       # Step 4: Base64 encode the generated Kubernetes config
       - name: Base64 Encode Kubernetes Config
