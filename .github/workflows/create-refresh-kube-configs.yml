@@ -27,7 +27,7 @@ jobs:
         run: |
           python3.12 -m venv venv
           . venv/bin/activate
-          pip3.12 install pynacl jinja2-cli
+          pip3.12 install pynacl jinja2-cli ansible
 
       # Step 3: Render the Kubernetes config using Jinja2
       - name: Render Kubernetes Config
@@ -89,7 +89,7 @@ jobs:
 
       - name: Run Update K8s Certs playbook
         run: |
-          source ./kubespray/venv/bin/activate
+          . venv/bin/activate
           ansible-playbook -i ./kubespray/inventory/${ENV_NAME}/hosts.yml ./ansible/update-k8s-certs-pb.yml \
               -e "ansible_password=${{ secrets.SSH_PASS }}" -e "ansible_become_pass=${{ secrets.SSH_PASS }}" \
               -e "environment_context=$ENV_NAME"
