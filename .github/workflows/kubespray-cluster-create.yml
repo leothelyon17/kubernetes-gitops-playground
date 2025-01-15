@@ -97,20 +97,14 @@ jobs:
           ls inventory/${CHANGED_CLUSTER}/
 
       # Step 8: Run Kubespray Playbook
-      # - name: Run Kubespray playbook
-      #   working-directory: ./kubespray
-      #   run: |
-      #     source venv/bin/activate
-      #     ansible-playbook -i inventory/${CHANGED_CLUSTER}/hosts.yml cluster.yml \
-      #       --become --become-user=root -e "ansible_password=${{ secrets.SSH_PASS }}" -e "ansible_become_pass=${{ secrets.SSH_PASS }}" -e "reset_confirmation=yes"
-
-      - name: Run Update K8s Certs playbook
-        #working-directory: ./kubespray
+      - name: Run Kubespray playbook
+        working-directory: ./kubespray
         run: |
-          source ./kubespray/venv/bin/activate
-          ansible-playbook -i ./kubespray/inventory/${CHANGED_CLUSTER}/hosts.yml ./ansible/update-k8s-certs-pb.yml \
-              -e "ansible_password=${{ secrets.SSH_PASS }}" -e "ansible_become_pass=${{ secrets.SSH_PASS }}" \
-              -e "environment_context=$CHANGED_CLUSTER"
+          source venv/bin/activate
+          ansible-playbook -i inventory/${CHANGED_CLUSTER}/hosts.yml cluster.yml \
+            --become --become-user=root -e "ansible_password=${{ secrets.SSH_PASS }}" -e "ansible_become_pass=${{ secrets.SSH_PASS }}" -e "reset_confirmation=yes"
+
+      
     
     
     #uses: .github/workflows/install-argocd.yml  # Path to the reusable workflow
