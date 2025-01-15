@@ -74,7 +74,7 @@ jobs:
           encrypted=$(python3.12 scripts/encrypt-secret.py "$public_key" "$KUBECONFIG_BASE64")
           echo "encrypted_secret=$encrypted" >> $GITHUB_ENV
 
-      # Step 5: Store the Base64 encoded config as a GitHub secret (requires admin token)
+      # Store the Base64 encoded config as a GitHub secret (requires admin token)
       - name: Store Kubernetes Config as Secret
         env:
             PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
@@ -83,6 +83,13 @@ jobs:
             -X PUT \
             -H "Authorization: Bearer $PAT_TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
+
+      - name: Run Update K8s Certs playbook
+        run: |
+          source ./kubespray/venv/bin/activate
+          ansible-playbook -i ./kubespray/inventory/${CHANGED_CLUSTER}/hosts.yml ./ansible/update-k8s-certs-pb.yml \
+              -e "ansible_password=${{ secrets.SSH_PASS }}" -e "ansible_become_pass=${{ secrets.SSH_PASS }}" \
+              -e "environment_context=$CHANGED_CLUSTER"
             https://api.github.com/repos/${{ github.repository }}/environments/${{ github.event.inputs.environment }}/secrets/KUBECONFIG_BASE64 \
                 -d '{"encrypted_value": "'"$encrypted_secret"'",
                     "key_id":"'"$public_key_id"'"}'
