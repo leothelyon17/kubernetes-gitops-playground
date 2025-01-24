@@ -1,0 +1,9 @@
+---
+ceph_nodes:
+  hosts:
+    rocky9-prod-node1:
+      ansible_host: 192.168.101.157
+    rocky9-prod-node2:
+      ansible_host: 192.168.101.158
+    rocky9-prod-node3:
+      ansible_host: 192.168.101.159
