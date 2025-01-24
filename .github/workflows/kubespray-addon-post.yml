@@ -1,4 +1,4 @@
-name: Run Pre-Kubespray Addon
+name: Run Post-Kubespray Addon
 
 on:
   workflow_dispatch: # Triggered manually or customize for triggers like push/cron
