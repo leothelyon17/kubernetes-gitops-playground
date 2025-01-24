@@ -26,9 +26,9 @@ all:
   children:
     k8s_nodes:
       hosts:
-        rocky9-lab-node1:
-        rocky9-lab-node2:
-        rocky9-lab-node3:
+        rocky9-prod-node1:
+        rocky9-prod-node2:
+        rocky9-prod-node3:
     ansible_nodes:
       hosts:
         rocky9-lab-mgmt:
