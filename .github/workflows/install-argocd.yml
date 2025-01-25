@@ -92,6 +92,19 @@ jobs:
           --password $ARGOCD_PASSWORD \
           --insecure
 
+    # Add the cluster to ArgoCD if not exists
+    - name: Add Cluster to ArgoCD
+      run: |
+        CLUSTER_NAME=$ENV_NAME-cluster
+        CONTEXT=$(kubectl config current-context)
+        EXISTS=$(argocd cluster get $CLUSTER_NAME || echo "not found")
+        if [[ "$EXISTS" == "not found" ]]; then
+          echo "Cluster $CLUSTER_NAME not found. Adding it..."
+          argocd cluster add $CONTEXT --name $CLUSTER_NAME --yes
+        else
+          echo "Cluster $CLUSTER_NAME already exists."
+        fi
+    
     # Create Additional Admin User ConfigMap
     - name: Create Admin User ConfigMap
       run: |
@@ -153,16 +166,3 @@ jobs:
           --password ${{ secrets.ARGOCD_MY_ADMIN_PASSWORD }} \
           --insecure
         echo "New admin user login successful."
-
-    # Add the cluster to ArgoCD if not exists
-    - name: Add Cluster to ArgoCD
-      run: |
-        CLUSTER_NAME=$ENV_NAME-cluster
-        CONTEXT=$(kubectl config current-context)
-        EXISTS=$(argocd cluster get $CLUSTER_NAME || echo "not found")
-        if [[ "$EXISTS" == "not found" ]]; then
-          echo "Cluster $CLUSTER_NAME not found. Adding it..."
-          argocd cluster add $CONTEXT --name $CLUSTER_NAME --yes
-        else
-          echo "Cluster $CLUSTER_NAME already exists."
-        fi
