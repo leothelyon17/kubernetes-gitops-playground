@@ -95,6 +95,9 @@ jobs:
     # Add the cluster to ArgoCD if not exists
     - name: Add Cluster to ArgoCD
       run: |
+        kubectl config current-context
+        argocd context
+        argocd cluster list
         CLUSTER_NAME=$ENV_NAME-cluster
         CONTEXT=$(kubectl config current-context)
         EXISTS=$(argocd cluster get $CLUSTER_NAME || echo "not found")
