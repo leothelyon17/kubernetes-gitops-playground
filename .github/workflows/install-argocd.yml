@@ -96,6 +96,7 @@ jobs:
     - name: Add Cluster to ArgoCD
       run: |
         kubectl config current-context
+        argocd context 192.168.101.157:31372
         argocd cluster list
         CLUSTER_NAME=$ENV_NAME-cluster
         CONTEXT=$(kubectl config current-context)
