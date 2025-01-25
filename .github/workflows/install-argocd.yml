@@ -136,7 +136,6 @@ jobs:
         " > rbac-config.yaml
 
         # Apply RBAC configmap
-        kubectl config get-contexts
         kubectl -n argocd apply -f rbac-config.yaml
 
         # Add the admin user
