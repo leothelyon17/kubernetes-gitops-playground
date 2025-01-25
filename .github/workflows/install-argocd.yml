@@ -97,6 +97,10 @@ jobs:
       run: |
         kubectl config current-context
         argocd context 192.168.101.157:31372
+        argocd login $ARGOCD_SERVER:$ARGOCD_PORT \
+          --username $ARGOCD_USERNAME \
+          --password $ARGOCD_PASSWORD \
+          --insecure
         argocd --loglevel debug cluster list
         CLUSTER_NAME=$ENV_NAME-cluster
         CONTEXT=$(kubectl config current-context)
