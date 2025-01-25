@@ -47,6 +47,7 @@
         flat: yes
         fail_on_missing: false
       loop: "{{ cert_files }}"
+      run_once: true
 
     - name: Debug fetched files
       ansible.builtin.debug:
