@@ -16,7 +16,7 @@ all:
     rocky9-prod-node3:
       ansible_host: 192.168.101.159
       domain_name: jjland.local
-      master_node: False
+      master_node: True
       worker_node: True
       etcd_node: True
     rocky9-lab-mgmt:
