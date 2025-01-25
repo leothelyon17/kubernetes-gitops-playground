@@ -95,6 +95,10 @@ jobs:
     # Add the cluster to ArgoCD if not exists
     - name: Add Cluster to ArgoCD
       run: |
+        argocd login $ARGOCD_SERVER:$ARGOCD_PORT \
+          --username $ARGOCD_USERNAME \
+          --password $ARGOCD_PASSWORD \
+          --insecure
         CLUSTER_NAME=$ENV_NAME-cluster
         CONTEXT=$(kubectl config current-context)
         EXISTS=$(argocd --server $ARGOCD_SERVER:$ARGOCD_PORT cluster get $CLUSTER_NAME || echo "not found")
