@@ -87,7 +87,6 @@ jobs:
     # Log in to ArgoCD
     - name: Login to ArgoCD
       run: |
-        echo $ARGOCD_SERVER:$ARGOCD_PORT
         argocd login $ARGOCD_SERVER:$ARGOCD_PORT \
           --username $ARGOCD_USERNAME \
           --password $ARGOCD_PASSWORD \
@@ -96,13 +95,9 @@ jobs:
     # Add the cluster to ArgoCD if not exists
     - name: Add Cluster to ArgoCD
       run: |
-        kubectl config current-context
-        argocd context 192.168.101.157:31372
-        env | grep -i argocd
-        argocd --server 192.168.101.157:31372 cluster list
         CLUSTER_NAME=$ENV_NAME-cluster
         CONTEXT=$(kubectl config current-context)
-        EXISTS=$(argocd cluster get $CLUSTER_NAME || echo "not found")
+        EXISTS=$(argocd --server $ARGOCD_SERVER:$ARGOCD_PORT cluster get $CLUSTER_NAME || echo "not found")
         if [[ "$EXISTS" == "not found" ]]; then
           echo "Cluster $CLUSTER_NAME not found. Adding it..."
           argocd cluster add $CONTEXT --name $CLUSTER_NAME --yes
