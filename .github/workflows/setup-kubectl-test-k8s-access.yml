@@ -68,6 +68,7 @@ jobs:
     - name: Set up directories
       run: |
         mkdir -p $HOME/.kube
+        rm $HOME/.kube/config
         echo "Kube config directory created at $HOME/.kube"
     
     - name: Combine all kube configs into a single file
