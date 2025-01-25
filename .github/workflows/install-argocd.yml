@@ -87,6 +87,7 @@ jobs:
     # Log in to ArgoCD
     - name: Login to ArgoCD
       run: |
+        echo $ARGOCD_SERVER:$ARGOCD_PORT
         argocd login $ARGOCD_SERVER:$ARGOCD_PORT \
           --username $ARGOCD_USERNAME \
           --password $ARGOCD_PASSWORD \
