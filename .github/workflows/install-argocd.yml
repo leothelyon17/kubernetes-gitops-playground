@@ -97,7 +97,7 @@ jobs:
       run: |
         kubectl config current-context
         argocd context 192.168.101.157:31372
-        argocd cluster list
+        argocd --loglevel debug cluster list
         CLUSTER_NAME=$ENV_NAME-cluster
         CONTEXT=$(kubectl config current-context)
         EXISTS=$(argocd cluster get $CLUSTER_NAME || echo "not found")
