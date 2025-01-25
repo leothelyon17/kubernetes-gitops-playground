@@ -140,7 +140,7 @@ jobs:
 
         # Add the admin user
         argocd context
-        argocd account update-password --account $ADMIN_USERNAME --current-password ${{ secrets.ARGOCD_ADMIN_PASSWORD }} --new-password $ADMIN_PASSWORD
+        argocd --server $ARGOCD_SERVER:$ARGOCD_PORT account update-password --account $ADMIN_USERNAME --current-password ${{ secrets.ARGOCD_ADMIN_PASSWORD }} --new-password $ADMIN_PASSWORD
 
         echo "Admin user $ADMIN_USERNAME created successfully."
 
