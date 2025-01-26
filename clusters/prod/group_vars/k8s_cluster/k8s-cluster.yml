@@ -17,7 +17,7 @@ kube_token_dir: "{{ kube_config_dir }}/tokens"
 kube_api_anonymous_auth: true
 
 ## Change this to use another Kubernetes version, e.g. a current beta release
-kube_version: v1.31.5
+kube_version: v1.30.4
 
 # Where the binaries will be downloaded.
 # Note: ensure that you've enough disk space (about 1G)
@@ -119,9 +119,6 @@ kube_network_node_prefix_ipv6: 120
 # The port the API Server will be listening on.
 kube_apiserver_ip: "{{ kube_service_addresses | ansible.utils.ipaddr('net') | ansible.utils.ipaddr(1) | ansible.utils.ipaddr('address') }}"
 kube_apiserver_port: 6443  # (https)
-# kube_apiserver_cert_extra_sans:
-# supplementary_addresses_in_ssl_keys:
-#   - prod-cluster.jjland.local
 
 # Kube-proxy proxyMode configuration.
 # Can be ipvs, iptables
