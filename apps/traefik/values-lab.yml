@@ -1,0 +1,36 @@
+ports:
+  web:
+    port: 80
+    expose: true
+    exposedPort: 80
+    protocol: TCP
+  websecure:
+    port: 443
+    expose: true
+    exposedPort: 443
+    protocol: TCP
+  traefik:
+    port: 9000
+    expose: true
+    exposedPort: 9000
+    protocol: TCP
+
+ingressRoute:
+  dashboard:
+    enabled: true
+
+providers:
+  kubernetesCRD: {}
+  kubernetesIngress: {}
+
+additionalArguments:
+  - "--api.insecure=true" # Enables the dashboard
+  - "--api.dashboard=true"
+
+service:
+  type: LoadBalancer
+  loadBalancerIP: 172.16.99.30 # External IP from MetalLB
+
+logs:
+  general:
+    level: INFO
