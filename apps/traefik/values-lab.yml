@@ -1,37 +1,37 @@
 # traefik-values.yml
-ports:
-  web:
-    expose: true
-    port: 80
-    exposedPort: 80
-    protocol: TCP
-  websecure:
-    expose: true
-    port: 443
-    exposedPort: 443
-    protocol: TCP
-  traefik:
-    expose: true
-    port: 9000
-    exposedPort: 9000
-    protocol: TCP
+# ports:
+#   web:
+#     expose: true
+#     port: 80
+#     exposedPort: 80
+#     protocol: TCP
+#   websecure:
+#     expose: true
+#     port: 443
+#     exposedPort: 443
+#     protocol: TCP
+#   traefik:
+#     expose: true
+#     port: 9000
+#     exposedPort: 9000
+#     protocol: TCP
 
 ingressRoute:
   dashboard:
     enabled: true
 
-providers:
-  kubernetesCRD: {}
-  kubernetesIngress: {}
+# providers:
+#   kubernetesCRD: {}
+#   kubernetesIngress: {}
 
-additionalArguments:
-  - "--api.insecure=true" # Enables the dashboard
-  - "--api.dashboard=true"
+# additionalArguments:
+#   - "--api.insecure=true" # Enables the dashboard
+#   - "--api.dashboard=true"
 
-service:
-  type: LoadBalancer
-  loadBalancerIP: 172.16.99.30 # External IP from MetalLB
+# service:
+#   type: LoadBalancer
+#   loadBalancerIP: 172.16.99.30 # External IP from MetalLB
 
-logs:
-  general:
-    level: INFO
+# logs:
+#   general:
+#     level: INFO
