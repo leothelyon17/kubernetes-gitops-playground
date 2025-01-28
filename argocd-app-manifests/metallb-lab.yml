@@ -1,0 +1,14 @@
+project: home-lab
+destination:
+  server: https://172.16.99.25:6443
+  namespace: metallb-lab
+syncPolicy:
+  syncOptions:
+    - CreateNamespace=true
+sources:
+  - repoURL: https://metallb.github.io/metallb
+    targetRevision: 0.14.9
+    chart: metallb
+  - repoURL: https://github.com/leothelyon17/kubernetes-gitops-playground.git
+    path: apps/metallb/overlays/lab
+    targetRevision: HEAD
