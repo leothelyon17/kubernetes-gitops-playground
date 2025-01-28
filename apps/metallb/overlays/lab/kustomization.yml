@@ -1,0 +1,6 @@
+#resources:
+#  - ../../base
+
+resources:
+  - ip-address-pool.yml
+  - l2-advertisement.yml
