@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: hashicorp-vault-dev-ui
-  namespace: vault-dev
+  namespace: vault-lab
 spec:
   ports:
   - name: http
@@ -11,6 +11,6 @@ spec:
     protocol: TCP
     targetPort: 8200
   selector:
-    app.kubernetes.io/instance: hashicorp-vault-dev
+    app.kubernetes.io/instance: hashicorp-vault-lab
     app.kubernetes.io/name: vault
   type: NodePort
