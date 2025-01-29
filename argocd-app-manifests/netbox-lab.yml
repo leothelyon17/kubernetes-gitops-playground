@@ -1,11 +1,17 @@
-project: home-lab
-source:
-  repoURL: https://charts.netbox.oss.netboxlabs.com/
-  targetRevision: 5.0.23
-  chart: netbox
-destination:
-  server: https://172.16.99.25:6443
-  namespace: netbox-lab
-syncPolicy:
-  syncOptions:
-    - CreateNamespace=true
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: netbox-lab
+  namespace: argocd
+spec:
+  project: home-lab
+  source:
+    repoURL: https://charts.netbox.oss.netboxlabs.com/
+    targetRevision: 5.0.23
+    chart: netbox
+  destination:
+    server: https://172.16.99.25:6443
+    namespace: netbox-lab
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
