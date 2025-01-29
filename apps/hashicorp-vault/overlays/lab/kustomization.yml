@@ -2,4 +2,4 @@ resources:
   - ../../base
 
 resources:
-  - svc-nodeport.yml
+  - ingress-route-gui.yml
