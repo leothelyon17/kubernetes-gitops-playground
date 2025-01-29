@@ -1,0 +1,18 @@
+project: home-lab
+destination:
+  server: https://172.16.99.25:6443
+  namespace: hashi-vault-lab
+syncPolicy:
+  syncOptions:
+    - CreateNamespace=true
+sources:
+  - repoURL: https://helm.releases.hashicorp.com
+    targetRevision: 0.29.1
+    helm:
+      valueFiles:
+        - $values/apps/hashicorp-vault/values-lab.yml
+    chart: vault
+  - repoURL: https://github.com/leothelyon17/kubernetes-gitops-playground.git
+    path: apps/hashicorp-vault/overlays/lab
+    targetRevision: HEAD
+    ref: values
