@@ -1,17 +1,23 @@
-project: home-lab
-destination:
-  server: https://172.16.99.25:6443
-  namespace: kube-system
-syncPolicy:
-  syncOptions:
-    - CreateNamespace=true
-sources:
-  - repoURL: https://helm.traefik.io/traefik
-    targetRevision: 34.1.0
-    helm:
-      valueFiles:
-        - $values/apps/traefik/values-lab.yml
-    chart: traefik
-  - repoURL: https://github.com/leothelyon17/kubernetes-gitops-playground.git
-    targetRevision: HEAD
-    ref: values
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: traefik-lab
+  namespace: argocd
+spec:
+  project: home-lab
+  destination:
+    server: https://172.16.99.25:6443
+    namespace: kube-system
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+  sources:
+    - repoURL: https://helm.traefik.io/traefik
+      targetRevision: 34.1.0
+      helm:
+        valueFiles:
+          - $values/apps/traefik/values-lab.yml
+      chart: traefik
+    - repoURL: https://github.com/leothelyon17/kubernetes-gitops-playground.git
+      targetRevision: HEAD
+      ref: values
