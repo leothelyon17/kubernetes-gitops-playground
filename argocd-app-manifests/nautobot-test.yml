@@ -1,13 +1,13 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: nautobot-test
+  name: nautobot-lab
   namespace: argocd
 spec:
   project: home-lab
   destination:
     server: https://172.16.99.25:6443
-    namespace: nautobot-test
+    namespace: nautobot-lab
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
