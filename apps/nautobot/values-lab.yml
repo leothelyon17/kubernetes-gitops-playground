@@ -14,7 +14,7 @@ service:
     # -- (int) Node port for Nautobot uwsgimetrics choose port in Kubernetes `--service-node-port-range` typically 30000-32767
 
 nautobot:
-  extraEnvVarsSecret: ["nautobot-test-secrets"]
+  extraEnvVarsSecret: ["nautobot-db-secrets"]
 #   db:
 #     # -- Name of existing secret to use for Database passwords<sup>[1](#notes)</sup>
 #     existingSecret: "nautobot-test-secrets"
@@ -36,7 +36,7 @@ postgresql:
       accessModes: ['ReadWriteOnce']
   auth:
     #password: "nautobot-postgres-pass"
-    existingSecret: nautobot-test-secrets
+    existingSecret: nautobot-db-secrets
     #usernameKey: POSTGRES_USER
     #passwordKey: POSTGRES_PASSWORD
 
@@ -49,7 +49,7 @@ redis:
       accessModes: ['ReadWriteOnce']
   auth:
     enabled: true
-    existingSecret: nautobot-test-secrets
+    existingSecret: nautobot-db-secrets
     #usernameKey: REDIS_USER
     #passwordKey: REDIS_PASSWORD
     #password: "nautobot-redis-pass"
