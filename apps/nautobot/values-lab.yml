@@ -14,7 +14,7 @@ service:
     # -- (int) Node port for Nautobot uwsgimetrics choose port in Kubernetes `--service-node-port-range` typically 30000-32767
 
 nautobot:
-  extraEnvVarsSecret: ["nautobot-db-secrets"]
+  extraEnvVarsSecret: ["nautobot-test-secrets"]
 #   db:
 #     # -- Name of existing secret to use for Database passwords<sup>[1](#notes)</sup>
 #     existingSecret: "nautobot-test-secrets"
