@@ -5,3 +5,11 @@ persistence:
   storageClass: "rook-cephfs"
   accessMode: ReadWriteMany
   size: 1Gi
+
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      size: "5Gi"
+      storageClass: "rook-cephfs"
+      accessModes: ['ReadWriteOnce']
