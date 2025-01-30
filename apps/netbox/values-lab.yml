@@ -1,0 +1,7 @@
+clusterDomain: jjland.local
+
+persistence:
+  enabled: true
+  storageClass: "rook-cephfs"
+  accessMode: ReadWriteMany
+  size: 1Gi
