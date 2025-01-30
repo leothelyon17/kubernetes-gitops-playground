@@ -16,7 +16,7 @@ postgresql:
       storageClass: "rook-cephfs"
       accessModes: ['ReadWriteOnce']
   auth:
-    existingSecret: nautobot-test-secrets
+    existingSecret: netbox-lab-secrets
 
 redis:
   architecture: "standalone"
