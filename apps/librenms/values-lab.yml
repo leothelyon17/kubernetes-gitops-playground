@@ -1,3 +1,14 @@
+rrdcached:
+    persistence:
+      # -- RRDCached persistent volume enabled
+      enabled: true
+      storageClass: "rook-cephfs"
+      journal:
+        # -- RRDCached journal PV size
+        size: 1Gi
+      rrdcached:
+        # -- RRDCached RRD storage PV size
+        size: 2Gi
 mysql:
   primary:
     persistence:
