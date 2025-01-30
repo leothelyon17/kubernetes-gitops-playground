@@ -15,6 +15,7 @@ postgresql:
       accessModes: ['ReadWriteOnce']
 
 redis:
+  architecture: "standalone"
   master:
     persistence:
       enabled: true
