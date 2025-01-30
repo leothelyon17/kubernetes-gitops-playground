@@ -26,3 +26,6 @@ redis:
       size: "1Gi"
       storageClass: "rook-cephfs"
       accessModes: ['ReadWriteOnce']
+  auth:
+    enabled: true
+    existingSecret: netbox-lab-secrets
