@@ -2,11 +2,12 @@ rrdcached:
     persistence:
       # -- RRDCached persistent volume enabled
       enabled: true
-      storageClass: "rook-cephfs"
       journal:
+        storageClassName: "rook-cephfs"
         # -- RRDCached journal PV size
         size: 1Gi
       rrdcached:
+        storageClassName: "rook-cephfs"
         # -- RRDCached RRD storage PV size
         size: 2Gi
 mysql:
