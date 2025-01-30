@@ -1,6 +1,6 @@
 clusterDomain: jjland.local
 
-extraEnvVarsSecret: "netbox-db-secrets"
+extraEnvVarsSecret: "netbox-lab-secrets"
 
 persistence:
   enabled: true
