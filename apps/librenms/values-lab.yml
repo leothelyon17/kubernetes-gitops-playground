@@ -1,4 +1,10 @@
-
+mysql:
+  primary:
+    persistence:
+      enabled: true
+      size: "5Gi"
+      storageClass: "rook-cephfs"
+      accessModes: ['ReadWriteOnce']
 redis:
   master:
     persistence:
