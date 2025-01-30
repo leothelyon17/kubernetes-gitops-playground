@@ -14,7 +14,7 @@
        kind: Rule
        services:
          - name: nautobot-lab-default  # <-- Replace with your service name
-           port: 443
+           port: 8080
 # --> (Optional) Add certificate secret
 # tls:
 #     secretName: your-certificate-secret
