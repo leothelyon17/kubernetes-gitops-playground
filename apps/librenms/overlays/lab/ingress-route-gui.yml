@@ -13,7 +13,7 @@
      - match: Host(`librenms.nerdy-apps-lab.jjland.local`)  # <-- Replace with your FQDN
        kind: Rule
        services:
-         - name: nautobot-lab  # <-- Replace with your service name
+         - name: librenms-lab  # <-- Replace with your service name
            port: 8000
 # --> (Optional) Add certificate secret
 # tls:
