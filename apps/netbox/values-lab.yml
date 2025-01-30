@@ -1,5 +1,7 @@
 clusterDomain: jjland.local
 
+extraEnvVarsSecret: ["netbox-db-secrets"]
+
 persistence:
   enabled: true
   storageClass: "rook-cephfs"
