@@ -1,1 +1,21 @@
-TEST
+---
+# --> (Example) Create an IngressRoute for your service...
+ apiVersion: traefik.io/v1alpha1
+ kind: IngressRoute
+ metadata:
+   name: librenms-lab-ingressroute  # <-- Replace with your IngressRoute name
+   namespace: librenms-lab  # <-- Replace with your namespace
+ spec:
+   entryPoints:
+     - web
+     - websecure
+   routes:
+     - match: Host(`librenms.nerdy-apps-lab.jjland.local`)  # <-- Replace with your FQDN
+       kind: Rule
+       services:
+         - name: nautobot-lab  # <-- Replace with your service name
+           port: 8080
+# --> (Optional) Add certificate secret
+# tls:
+#     secretName: your-certificate-secret
+# <--
