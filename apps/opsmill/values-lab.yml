@@ -1,7 +1,11 @@
 neo4j:
-  tolerations:
-    - key: "node.kubernetes.io/not-enough-cpu"
-      operator: "Exists"
+  resources:
+    limits:
+      cpu: '1'
+      memory: 2Gi
+    requests:
+      cpu: '100m'
+      memory: 1G
 
 infrahubServer:
   ingress:
