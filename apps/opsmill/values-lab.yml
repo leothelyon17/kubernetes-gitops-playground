@@ -1,3 +1,8 @@
+neo4j:
+  tolerations:
+    - key: "node.kubernetes.io/not-enough-cpu"
+      operator: "Exists"
+
 infrahubServer:
   ingress:
     enabled: false
