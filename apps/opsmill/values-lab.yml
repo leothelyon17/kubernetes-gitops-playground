@@ -1,0 +1,5 @@
+infrahubServer:
+  ingress:
+    enabled: false
+  persistence:
+    storageClass: "rook-cephfs"
