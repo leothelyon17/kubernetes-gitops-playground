@@ -1,0 +1,41 @@
+{{ if .Values.scraper.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "slurpit.name" . }}-scraper
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ include "slurpit.name" . }}-scraper-app
+spec:
+  {{- if not .Values.scraper.autoscaling.enabled }}
+  replicas: {{ .Values.scraper.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ include "slurpit.name" . }}-scraper-app
+  strategy:
+    type: {{ .Values.scraper.strategy }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "slurpit.name" . }}-scraper-app
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-scraper
+          image: {{ .Values.scraper.image.repository }}:{{ .Values.scraper.image.tag | default .Chart.AppVersion }}
+          imagePullPolicy: {{ .Values.scraper.image.pullPolicy }}
+          env:
+          {{- range .Values.scraper.env }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+          {{- end }}
+          {{- with .Values.scraper.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: {{ .Chart.Name }}-scraper-storage
+          persistentVolumeClaim:
+            claimName: {{ .Chart.Name }}-pvc
+      restartPolicy: {{ .Values.scraper.restartPolicy }}
+{{ end }}

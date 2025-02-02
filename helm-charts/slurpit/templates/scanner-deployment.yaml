@@ -1,0 +1,33 @@
+{{ if .Values.scanner.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "slurpit.name" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ include "slurpit.name" . }}-scanner-app
+spec:
+  {{- if not .Values.scanner.autoscaling.enabled }}
+  replicas: {{ .Values.scanner.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ include "slurpit.name" . }}-scanner-app
+  strategy:
+    type: {{ .Values.scanner.strategy }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "slurpit.name" . }}-scanner-app
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-scanner
+          image: {{ .Values.scanner.image.repository }}:{{ .Values.scanner.image.tag | default .Chart.AppVersion }}
+          imagePullPolicy: {{ .Values.scanner.image.pullPolicy }}
+          env:
+          {{- range .Values.scanner.env }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+          {{- end }}
+      restartPolicy: {{ .Values.scanner.restartPolicy }}
+{{ end }}

@@ -1,0 +1,190 @@
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+
+  persistence:
+    enabled: true
+    storageClass: "longhorn"
+    accessMode: ReadWriteMany
+    size: 10Gi
+    annotations: {}
+    persistentVolumeReclaimPolicy: Retain
+    # hostPath:
+    #   path: "/run/desktop/mnt/host/c/k8s-data/"
+
+portal:
+  enabled: true
+  autoscaling:
+    enabled: false
+  replicaCount: 1
+  strategy: Recreate
+  image:
+    repository: slurpit/portal
+    tag: latest
+    pullPolicy: IfNotPresent
+    #  [ Always, IfNotPresent, Never]
+  env:
+    - name: TZ
+      value: "Europe/Amsterdam"
+    - name: PORTAL_BASE_URL
+      value: "http://slurpit.gtc.local"
+    - name: PORTAL_WAREHOUSE_URL
+      value: "http://slurpit-warehouse-service"
+  ports:
+    containerPort: 80
+  volumeMounts:
+    - name: slurpit-portal-storage
+      mountPath: /var/log/nginx
+      subPath: logs/portal/nginx
+    - name: slurpit-portal-storage
+      mountPath: /var/log/mysql
+      subPath: logs/portal/mysql
+    - name: slurpit-portal-storage
+      mountPath: /var/log/php
+      subPath: logs/portal/php
+    - name: slurpit-portal-storage
+      mountPath: /etc/nginx/certs
+      subPath: certs
+    - name: slurpit-portal-storage
+      mountPath: /var/lib/mysql
+      subPath: database/portal
+    - name: slurpit-portal-storage
+      mountPath: /backup/files
+      subPath: backup/portal
+  volumes:
+    - name: slurpit-portal-storage
+      persistentVolumeClaim:
+        claimName: slurpit-pvc
+  restartPolicy: Always
+
+  service:
+    # type: NodePort
+    type: ClusterIP
+    port: 80
+    name: http
+    nodePort: 30000
+
+  ingress:
+    enabled: true
+    className: nginx
+    annotations: {}
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: slurpit.gtc.local
+        paths:
+          # - path: /*
+          #   backend:
+          #     serviceName: slurpit-portal-service
+          #     servicePort: http
+          - /
+
+    tls: []
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - chart-example.local
+
+scanner:
+  enabled: true
+  autoscaling:
+    enabled: false
+  replicaCount: 1
+  strategy: Recreate
+  image:
+    repository: slurpit/scanner
+    tag: latest
+    pullPolicy: IfNotPresent
+    #  [ Always, IfNotPresent, Never]
+  env:
+    - name: TZ
+      value: "Europe/Amsterdam"
+    - name: SCANNER_POOLSIZE
+      value: "4"
+    - name: SCANNER_TIMEOUT
+      value: "10"
+    - name: SCANNER_WAREHOUSE_URL
+      value: "http://slurpit-warehouse-service"
+  restartPolicy: Always
+
+scraper:
+  enabled: true
+  autoscaling:
+    enabled: false
+  replicaCount: 1
+  strategy: Recreate
+  image:
+    repository: slurpit/scraper
+    tag: latest
+    pullPolicy: IfNotPresent
+    #  [ Always, IfNotPresent, Never]
+  env:
+    - name: TZ
+      value: "Europe/Amsterdam"
+    - name: SCRAPER_POOLSIZE
+      value: "4"
+    - name: SCRAPER_TIMEOUT
+      value: "20"
+    - name: SCRAPER_WAREHOUSE_URL
+      value: "http://slurpit-warehouse-service"
+  volumeMounts:
+  - name: slurpit-scraper-storage
+    mountPath: /logs
+    subPath: logs/scraper
+  volumes:
+    - name: slurpit-scraper-storage
+      persistentVolumeClaim:
+        claimName: slurpit-pvc
+  restartPolicy: Always
+
+warehouse:
+  enabled: true
+  autoscaling:
+    enabled: false
+  replicaCount: 1
+  strategy: Recreate
+  image:
+    repository: slurpit/warehouse
+    tag: latest
+    pullPolicy: IfNotPresent
+    #  [ Always, IfNotPresent, Never]
+  env:
+    - name: TZ
+      value: "Europe/Amsterdam"
+    - name: WAREHOUSE_CALLBACK_SCANNER_URL
+      value: "http://slurpit-portal-service/callback/scanner"
+    - name: WAREHOUSE_CALLBACK_SCRAPER_URL
+      value: "http://slurpit-portal-service/callback/scraper"
+  livenessProbe:
+    exec:
+      command:
+        - curl
+        - -f
+        - http://localhost/services
+    failureThreshold: 360
+    periodSeconds: 10
+    timeoutSeconds: 10
+    initialDelaySeconds: 5
+  # readinessProbe: []
+  # resources: []
+  ports:
+    containerPort: 80
+  volumeMounts:
+    - name: slurpit-warehouse-storage
+      mountPath: /var/log/mongodb
+      subPath: logs/warehouse/mongodb
+    - name: slurpit-warehouse-storage
+      mountPath: /var/lib/mongodb
+      subPath: database/warehouse
+    - name: slurpit-warehouse-storage
+      mountPath: /backup/files
+      subPath: backup/warehouse
+  # volumes:
+  #   - name: slurpit-warehouse-storage
+  #     persistentVolumeClaim:
+  #       claimName: slurpit-pvc
+  restartPolicy: Always
+
+  service:
+    type: ClusterIP
+    port: 80
+    name: http

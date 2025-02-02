@@ -1,0 +1,44 @@
+{{ if .Values.portal.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "slurpit.name" . }}-portal
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ include "slurpit.name" . }}-portal-app
+spec:
+  {{- if not .Values.portal.autoscaling.enabled }}
+  replicas: {{ .Values.portal.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ include "slurpit.name" . }}-portal-app
+  strategy:
+    type: {{ .Values.portal.strategy }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "slurpit.name" . }}-portal-app
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-portal
+          image: {{ .Values.portal.image.repository }}:{{ .Values.portal.image.tag | default .Chart.AppVersion }}
+          imagePullPolicy: {{ .Values.portal.image.pullPolicy }}
+          env:
+          {{- range .Values.portal.env }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+          {{- end }}
+          ports:
+            - containerPort: {{ .Values.portal.ports.containerPort }}
+              name: http
+          {{- with .Values.portal.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: {{ .Chart.Name }}-portal-storage
+          persistentVolumeClaim:
+            claimName: {{ .Chart.Name }}-pvc
+      restartPolicy: {{ .Values.portal.restartPolicy }}
+{{ end }}

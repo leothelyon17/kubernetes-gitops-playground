@@ -1,0 +1,24 @@
+{{- if and .Values.global.persistence.enabled (not .Values.global.persistence.existingClaim) }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "slurpit.name" . }}-pvc
+  namespace: {{ .Release.Namespace }}
+{{- with .Values.global.persistence.annotations  }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+  accessModes:
+    - {{ .Values.global.persistence.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.global.persistence.size | quote }}
+{{- if .Values.global.persistence.storageClass }}
+{{- if (eq "-" .Values.global.persistence.storageClass) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: "{{ .Values.global.persistence.storageClass }}"
+{{- end }}
+{{- end }}
+{{- end }}

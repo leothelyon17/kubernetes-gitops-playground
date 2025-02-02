@@ -1,0 +1,53 @@
+{{ if .Values.warehouse.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "slurpit.name" . }}-warehouse
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ include "slurpit.name" . }}-warehouse-app
+spec:
+  {{- if not .Values.warehouse.autoscaling.enabled }}
+  replicas: {{ .Values.warehouse.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ include "slurpit.name" . }}-warehouse-app
+  strategy:
+    type: {{ .Values.warehouse.strategy }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "slurpit.name" . }}-warehouse-app
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-warehouse
+          image: {{ .Values.warehouse.image.repository }}:{{ .Values.warehouse.image.tag | default .Chart.AppVersion }}
+          imagePullPolicy: {{ .Values.warehouse.image.pullPolicy }}
+          env:
+          {{- range .Values.warehouse.env }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+          {{- end }}
+          livenessProbe:
+            {{- toYaml .Values.warehouse.livenessProbe | nindent 12 }}
+          {{- with .Values.warehouse.readinessProbe }}
+          readinessProbe:
+            {{- toYaml .Values.warehouse.readinessProbe | nindent 12 }}
+          {{ end }}
+          {{- with .Values.warehouse.resources }}
+          resources:
+            {{- toYaml .Values.warehouse.resources | nindent 12 }}
+          {{ end }}
+          ports:
+            - containerPort: {{ .Values.warehouse.ports.containerPort }}
+          {{- with .Values.warehouse.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: {{ .Chart.Name }}-warehouse-storage
+          persistentVolumeClaim:
+            claimName: {{ .Chart.Name }}-pvc
+      restartPolicy: {{ .Values.warehouse.restartPolicy }}
+{{ end }}

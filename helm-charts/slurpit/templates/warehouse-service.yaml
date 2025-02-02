@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "slurpit.name" . }}-warehouse-service
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    app: {{ include "slurpit.name" . }}-warehouse-app
+  type: {{ .Values.warehouse.service.type }}
+  ports:
+    - protocol: TCP
+      port: {{ .Values.warehouse.service.port }}
+      name: http
+      targetPort: {{ .Values.warehouse.ports.containerPort }}
