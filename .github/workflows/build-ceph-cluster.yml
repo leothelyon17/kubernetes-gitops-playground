@@ -47,4 +47,5 @@ jobs:
         ansible-playbook microceph_cluster_pb.yml -i inventory.yml \
             -e "ansible_password=${{ secrets.SSH_PASS }}" \
             -e "ansible_become_pass=${{ secrets.ROOT_SSH_PASS }}" \
-            --tags build-cluster,setup-gui
+            --tags build-cluster
+            ##,setup-gui
