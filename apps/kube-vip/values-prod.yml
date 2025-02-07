@@ -1,9 +1,9 @@
 config:
-  address: "172.30.100.17"
+  address: "192.168.101.160"
 
 # Check https://kube-vip.io/docs/installation/flags/
 env:
-  vip_interface: "ens192"
+  vip_interface: "eno1"
   vip_arp: "true"
   lb_enable: "true"
   lb_port: "6443"
