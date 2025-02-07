@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-vip-prod
+  namespace: argocd
+spec:
+  project: ahead-labs
+destination:
+  #server: https://lib-nautobot-04.lab.aheadaviation.com:6443
+  namespace: kube-vip-prod
+syncPolicy:
+  syncOptions:
+    - CreateNamespace=true
+sources:
+  - repoURL: https://kube-vip.github.io/helm-charts/
+    targetRevision: 0.6.6
+    helm:
+      valueFiles:
+        - $values/apps/kube-vip/values-prod.yml
+    chart: kube-vip
+  - repoURL: https://github.com/leothelyon17/kubernetes-gitops-playground.git
+    targetRevision: HEAD
+    ref: values
