@@ -5,8 +5,9 @@ config:
 env:
   vip_interface: "eno1"
   vip_arp: "true"
-  lb_enable: "true"
-  lb_port: "6443"
-  vip_cidr: "32"
+  #lb_enable: "true"
+  #lb_port: "6443"
+  #vip_cidr: "32"
   svc_enable: "false"
   cp_enable: "true"
+  inCluster: "true"
