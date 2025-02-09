@@ -1,0 +1,3 @@
+resources:
+  - ceph-cluster.yml
+  - ingress-route-gui.yml
