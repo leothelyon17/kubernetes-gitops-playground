@@ -1,5 +1,3 @@
 resources:
   - ../../base
-
-resources:
   - ingress-route-gui.yml
