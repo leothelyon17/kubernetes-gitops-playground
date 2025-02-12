@@ -129,7 +129,7 @@ jobs:
           -X PUT \
           -H "Authorization: Bearer $PAT_TOKEN" \
           -H "Accept: application/vnd.github.v3+json" \
-          https://api.github.com/repos/${{ github.repository }}/environments/${{ github.event.inputs.environment }}/secrets/ARGOCD_PASSWORD \
+          https://api.github.com/repos/${{ github.repository }}/environments/${{ github.event.inputs.environment }}/secrets/ARGOCD_ADMIN_PASSWORD \
               -d '{"encrypted_value": "'"$encrypted_secret"'",
                   "key_id":"'"$public_key_id"'"}'
     
