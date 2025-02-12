@@ -59,6 +59,13 @@ jobs:
       run: |
         kubectl config use-context "${{ env.ENV_NAME }}-kubernetes-admin@${{ env.ENV_NAME }}-cluster.jjland.local"
 
+    # Install required Python dependencies
+    - name: Install dependencies
+      run: |
+        python3.12 -m venv venv
+        . venv/bin/activate
+        pip3.12 install pynacl
+    
     # Install Argo CD
     - name: Install Argo CD on Kubernetes
       run: |
