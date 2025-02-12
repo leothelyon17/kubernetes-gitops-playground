@@ -84,6 +84,49 @@ jobs:
         kubectl patch svc argocd-server -n argocd \
           -p '{"spec": {"type": "NodePort", "ports": [{"port": 443, "targetPort": 8080, "nodePort": '"$ARGOCD_PORT"' }]}}'
 
+    # Grab ArgoCD admin password and set as variable
+    - name: Get/Set ArgoCD admin password
+      id: encode
+      run: |
+        export ARGO_ADMIN_PW_BASE64=$('kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}"')
+        echo "ARGO_ADMIN_PW_BASE64=$ARGO_ADMIN_PW_BASE64" >> $GITHUB_ENV
+
+    - name: Get Repo Public Key
+      env:
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+      run: |
+        response=$(curl \
+          -X GET \
+          -H "Authorization: Bearer $PAT_TOKEN" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${{ github.repository }}/environments/${{ github.event.inputs.environment }}/secrets/public-key)
+          echo "Public key API response: $response"
+          public_key_id=$(echo "$response" | jq -r '.key_id')
+          public_key=$(echo "$response" | jq -r '.key')
+          echo "public_key_id=$public_key_id" >> $GITHUB_ENV
+          echo "public_key=$public_key" >> $GITHUB_ENV
+
+    # Encrypt the secret
+    - name: Encrypt the secret
+      id: encrypt-secret
+      run: |
+        . venv/bin/activate
+        encrypted=$(python3.12 scripts/encrypt-secret.py "$public_key" "$ARGO_ADMIN_PW_BASE64")
+        echo "encrypted_secret=$encrypted" >> $GITHUB_ENV
+
+    # Store the Base64 encoded secret as a GitHub secret (requires admin token)
+    - name: Store Kubernetes Config as Secret
+      env:
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+      run: |
+        curl \
+          -X PUT \
+          -H "Authorization: Bearer $PAT_TOKEN" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${{ github.repository }}/environments/${{ github.event.inputs.environment }}/secrets/ARGOCD_PASSWORD \
+              -d '{"encrypted_value": "'"$encrypted_secret"'",
+                  "key_id":"'"$public_key_id"'"}'
+    
     # Log in to ArgoCD
     - name: Login to ArgoCD
       run: |
