@@ -1,0 +1,105 @@
+name: Kubespray Cluster Reset
+
+on:
+  push:
+    paths:
+      - 'clusters/**'  # Monitor changes in the clusters/ directory
+  workflow_dispatch:
+    inputs:
+        environment:
+          description: "The environment to deploy to"
+          required: true
+          default: "lab"
+          type: choice
+          options:
+            - lab
+            - prod
+
+env:
+  BASE_CLUSTER_DIR: clusters
+  CHANGED_CLUSTER: ${{ github.event.inputs.environment }}
+
+jobs:
+  detect-and-run:
+    name: Run Pipeline for Specific Cluster
+    runs-on: self-hosted
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch all history to ensure accurate comparisons
+
+      # Step 2: Stuff
+      - name: Find changed directories
+        id: detect-changes
+        run: |
+          # Handle cases where ${{ github.event.before }} might not be valid
+          BEFORE_COMMIT=${{ github.event.before }}
+          if [ "$BEFORE_COMMIT" = "0000000000000000000000000000000000000000" ] || [ -z "$BEFORE_COMMIT" ]; then
+            # Use HEAD~1 as a fallback for initial commits or invalid before SHAs
+            BEFORE_COMMIT=$(git rev-parse HEAD~1)
+          fi
+
+          # Find directories in clusters/ with changes
+          CHANGED_CLUSTER=$(git diff --name-only $BEFORE_COMMIT ${{ github.sha }} | grep '^clusters/' | awk -F'/' '{print $2}' | sort -u)
+          if [ -z "$CHANGED_CLUSTER" ]; then
+            echo "No changes detected in clusters/"
+            exit 0
+          fi
+
+          echo "Changed directories: $CHANGED_CLUSTER"
+          echo "CHANGED_CLUSTER=$CHANGED_CLUSTER" >> $GITHUB_ENV
+
+      # Use YAML Lint Action
+      # - name: Run YAML Lint Action
+      #   uses: github/super-linter@v5
+      #   with:
+      #     file_extensions: "yml,yaml"
+      #     validate_yaml: true
+
+      # Step 3: Run the Kubernetes-specific tasks
+      - name: Run tasks for changed cluster
+        if: env.CHANGED_CLUSTER != ''
+        run: |
+          echo "Running pipeline for cluster: $CHANGED_CLUSTER"
+
+      # Step 4: Clone down Kubespray
+      - name: Set up Python virtual environment
+        run: |
+          sudo rm -rf kubespray
+          git clone https://github.com/kubernetes-sigs/kubespray.git
+      
+      # Step 5: Set up Python virtual environment
+      - name: Set up Python virtual environment
+        working-directory: ./kubespray
+        run: |
+          python3.12 -m venv venv
+          source venv/bin/activate
+          python -m pip install --upgrade pip
+
+      # Step 6: Install Kubespray dependencies
+      - name: Install dependencies
+        working-directory: ./kubespray
+        run: |
+          source venv/bin/activate
+          pip install -r requirements.txt
+
+      # Step 7: Prepare inventory for the nested folder
+      - name: Prepare inventory for changed folder
+        working-directory: ./kubespray
+        run: |
+          source venv/bin/activate
+          sudo rm -rf inventory
+          mkdir -p inventory/${CHANGED_CLUSTER}
+          cp -r ../${BASE_CLUSTER_DIR}/${CHANGED_CLUSTER} inventory/
+          ls inventory/${CHANGED_CLUSTER}/
+
+      # Step 8: Run Kubespray Playbook
+      - name: Run Kubespray playbook
+        working-directory: ./kubespray
+        run: |
+          source venv/bin/activate
+          ansible-playbook -i inventory/${CHANGED_CLUSTER}/hosts.yml reset.yml \
+            --become --become-user=root -e "ansible_password=${{ secrets.SSH_PASS }}" -e "ansible_become_pass=${{ secrets.SSH_PASS }}" -e "reset_confirmation=yes"
