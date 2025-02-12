@@ -115,7 +115,7 @@ jobs:
         echo "encrypted_secret=$encrypted" >> $GITHUB_ENV
 
     # Store the Base64 encoded secret as a GitHub secret (requires admin token)
-    - name: Store Kubernetes Config as Secret
+    - name: Store ArgoCD password as Github Secret
       env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
       run: |
