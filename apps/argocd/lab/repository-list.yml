@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: List
+items:
+  - apiVersion: argoproj.io/v1alpha1
+    kind: Repository
+    metadata:
+      name: GitOps Playground
+    spec:
+      url: https://github.com/leothelyon17/kubernetes-gitops-playground.git
+      type: git
+      project: home-lab
+
+  - apiVersion: argoproj.io/v1alpha1
+    kind: Repository
+    metadata:
+      name: Kube VIP (Official)
+    spec:
+      url: https://kube-vip.github.io/helm-charts/
+      type: helm
+      project: home-lab
+      
+      # usernameSecret:
+      #   name: repo2-credentials
+      #   key: username
+      # passwordSecret:
+      #   name: repo2-credentials
+      #   key: password
