@@ -94,7 +94,7 @@ jobs:
     - name: Get/Set ArgoCD admin password
       id: encode
       run: |
-        export ARGO_ADMIN_PW=$('kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d')
+        export ARGO_ADMIN_PW=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
         echo "ARGO_ADMIN_PW=$ARGO_ADMIN_PW" >> $GITHUB_ENV
 
     - name: Get Repo Public Key
