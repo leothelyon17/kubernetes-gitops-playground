@@ -18,7 +18,6 @@ on:
 env:
   ARGOCD_PORT: ${{ vars.ARGOCD_PORT }}
   ARGOCD_SERVER: ${{ vars.ARGOCD_SERVER }}
-  ARGOCD_PASSWORD: ${{ secrets.ARGOCD_ADMIN_PASSWORD }}
   ARGOCD_USERNAME: ${{ secrets.ARGOCD_ADMIN_USER }}
   ADMIN_USERNAME: ${{ secrets.ARGOCD_MY_ADMIN_USER }}
   ADMIN_PASSWORD: ${{ secrets.ARGOCD_MY_ADMIN_PASSWORD }}
@@ -95,8 +94,8 @@ jobs:
     - name: Get/Set ArgoCD admin password
       id: encode
       run: |
-        export ARGO_ADMIN_PW_BASE64=$('kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}"')
-        echo "ARGO_ADMIN_PW_BASE64=$ARGO_ADMIN_PW_BASE64" >> $GITHUB_ENV
+        export ARGO_ADMIN_PW=$('kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}"')
+        echo "ARGO_ADMIN_PW=$ARGO_ADMIN_PW" >> $GITHUB_ENV
 
     - name: Get Repo Public Key
       env:
@@ -118,7 +117,7 @@ jobs:
       id: encrypt-secret
       run: |
         . venv/bin/activate
-        encrypted=$(python3.12 scripts/encrypt-secret.py "$public_key" "$ARGO_ADMIN_PW_BASE64")
+        encrypted=$(python3.12 scripts/encrypt-secret.py "$public_key" "$ARGO_ADMIN_PW")
         echo "encrypted_secret=$encrypted" >> $GITHUB_ENV
 
     # Store the Base64 encoded secret as a GitHub secret (requires admin token)
@@ -136,6 +135,8 @@ jobs:
     
     # Log in to ArgoCD
     - name: Login to ArgoCD
+      env:
+        ARGOCD_PASSWORD: ${{ secrets.ARGOCD_ADMIN_PASSWORD }}
       run: |
         argocd login $ARGOCD_SERVER:$ARGOCD_PORT \
           --username $ARGOCD_USERNAME \
