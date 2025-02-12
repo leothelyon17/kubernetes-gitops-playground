@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: home-lab
+  namespace: argocd
+spec:
+  # Define which Git repositories are allowed as sources for apps
+  # sourceRepos:
+  #   - 'https://github.com/my-org/*'
+    # Use '*' to allow all repositories (use with caution)
+    #- '*'
+  # Define allowed destinations where applications can be deployed
+  destinations:
+    - server: https://172.16.99.25:6443
+      name: lab-cluster
+      namespace: '*'
+  # Optionally, whitelist cluster-scoped resources that apps in this project can manage
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  # Optionally, whitelist namespace-scoped resources (example: ConfigMap)
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
