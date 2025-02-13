@@ -1,0 +1,20 @@
+---
+# --> (Example) Create an IngressRoute for your service...
+ apiVersion: traefik.io/v1alpha1
+ kind: IngressRoute
+ metadata:
+   name: vault-ingressroute-gui  # <-- Replace with your IngressRoute name
+   namespace: hashi-vault-prod  # <-- Replace with your namespace
+ spec:
+   entryPoints:
+     - websecure
+   routes:
+     - match: Host(`vault.nerdy-apps-prod.jjland.local`)  # <-- Replace with your FQDN
+       kind: Rule
+       services:
+         - name: hashi-vault-lab-ui  # <-- Replace with your service name
+           port: 8200
+# --> (Optional) Add certificate secret
+# tls:
+#     secretName: your-certificate-secret
+# <--
