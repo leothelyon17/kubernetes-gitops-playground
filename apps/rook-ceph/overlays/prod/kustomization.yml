@@ -2,4 +2,5 @@ resources:
   - ceph-cluster.yml
   - ingress-route-gui.yml
   - ceph-filesystem.yml
-  - ceph-storageclass.yml
+  - ceph-storageclass-delete.yml
+  - ceph-storageclass-retain.yml
