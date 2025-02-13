@@ -8,7 +8,7 @@ server:
     mountPath: "/vault/data"
     # Name of the storage class to use.  If null it will use the
     # configured default Storage Class.
-    storageClass: rook-cephfs-delete
+    storageClass: rook-cephfs-retain
     # Access Mode of the storage device being used for the PVC
     accessMode: ReadWriteOnce
 
