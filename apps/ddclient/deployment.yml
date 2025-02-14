@@ -20,8 +20,23 @@ spec:
             - name: DDCLIENT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: ddclient-secret
+                  name: ddclient-secrets
                   key: ddclient_password
+            - name: DDCLIENT_PROTOCOL
+              valueFrom:
+                secretKeyRef:
+                  name: ddclient-secrets
+                  key: ddclient_protocol
+            - name: DDCLIENT_LOGIN
+              valueFrom:
+                secretKeyRef:
+                  name: ddclient-secrets
+                  key: ddclient_login
+            - name: DDCLIENT_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  name: ddclient-secrets
+                  key: ddclient_domain
           command: [ "sh", "-c", "envsubst < /config-template/ddclient.conf.template > /config/ddclient/ddclient.conf" ]
           volumeMounts:
             - name: config-template
