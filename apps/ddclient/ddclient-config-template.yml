@@ -8,9 +8,9 @@ data:
     daemon=300
     syslog=yes
     ssl=yes
-    protocol='$DDCLIENT_PROTOCOL'
+    protocol=$DDCLIENT_PROTOCOL
     use=web, web=dynamicdns.park-your-domain.com/getip
     server=dynamicdns.park-your-domain.com
-    login='$DDCLIENT_LOGIN'
-    password='$DDCLIENT_PASSWORD'
-    @.'$DDCLIENT_DOMAIN'
+    login=$DDCLIENT_LOGIN
+    password=$DDCLIENT_PASSWORD
+    @.$DDCLIENT_DOMAIN
