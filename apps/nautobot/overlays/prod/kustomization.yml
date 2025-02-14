@@ -1,4 +1,5 @@
 resources:
+  - cluster-secret-store.yml
   - external-secrets.yml
   - external-secret-repo.yml
   - external-secret-superuser.yml
