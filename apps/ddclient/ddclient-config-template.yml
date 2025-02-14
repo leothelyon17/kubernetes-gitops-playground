@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ddclient-config-template
+  namespace: ddclient-prod
+data:
+  ddclient.conf.template: |
+    daemon=300
+    syslog=yes
+    ssl=yes
+    protocol='$DDCLIENT_PROTOCOL'
+    use=web, web=dynamicdns.park-your-domain.com/getip
+    server=dynamicdns.park-your-domain.com
+    login='$DDCLIENT_LOGIN'
+    password='$DDCLIENT_PASSWORD'
+    @.'$DDCLIENT_DOMAIN'
