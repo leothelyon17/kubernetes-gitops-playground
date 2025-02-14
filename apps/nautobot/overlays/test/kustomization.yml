@@ -1,0 +1,8 @@
+resources:
+  - ../../base
+  - external-secrets.yml
+  - external-secret-repo.yml
+  - external-secret-superuser.yml
+  - ingress-route.yml
+
+#patchesStrategicMerge:

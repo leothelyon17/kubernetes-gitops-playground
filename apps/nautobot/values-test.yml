@@ -1,0 +1,80 @@
+nautobot:
+  image:
+    registry: "ghcr.io"
+    repository: "ahead-labs/net-automation-k8s-lab/nautobot-k8s"
+    tag: "xcel"
+    pullSecrets: 
+      - net-automation-k8s-repo-credentials
+
+  command:
+    - /bin/sh
+    - -c
+    - |
+      cp /tmp/nautobot_config.py /opt/nautobot/nautobot_config.py && \
+      nautobot-server post_upgrade && \
+      nautobot-server start --ini /opt/nautobot/uwsgi.ini
+
+  livenessProbe:
+    enabled: false
+  readinessProbe:
+    enabled: false
+
+  initContainers:
+    - name: git-fetch
+      image: alpine/git
+      env:
+        - name: GIT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: nautobot-dev-secrets
+              key: dockerusername
+        - name: GIT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: nautobot-dev-secrets
+              key: dockerpassword
+      command:
+        - /bin/sh
+        - -c
+        - |
+          git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/ahead-labs/net-automation-k8s-lab.git /tmp \
+          && cp /tmp/apps/nautobot/overlays/xcel/configuration/nautobot_config.py /shared-volume/
+      volumeMounts:
+        - name: shared-volume
+          mountPath: /shared-volume
+
+  extraVolumes:
+    - name: shared-volume
+      emptyDir: {}
+
+  extraVolumeMounts:
+    - name: shared-volume
+      mountPath: /tmp
+
+  superUser:
+      existingSecret: "nautobot-xcel-superuser-secrets"
+      existingSecretPasswordKey: "password"
+      existingSecretApiTokenKey: "api_token"
+      username: "ahead"
+  
+
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      size: "2Gi"
+      storageClass: "rook-cephfs"
+      accessModes: ['ReadWriteOnce']
+  auth:
+    existingSecret: nautobot-dev-secrets
+
+redis:
+  master:
+    persistence:
+      enabled: true
+      size: "1Gi"
+      storageClass: "rook-cephfs"
+      accessModes: ['ReadWriteOnce']
+  auth:
+    enabled: true
+    existingSecret: nautobot-dev-secrets
