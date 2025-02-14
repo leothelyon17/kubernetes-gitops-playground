@@ -1,10 +1,4 @@
 nautobot:
-  image:
-    registry: "ghcr.io"
-    repository: "ahead-labs/net-automation-k8s-lab/nautobot-k8s"
-    tag: "xcel"
-    pullSecrets: 
-      - net-automation-k8s-repo-credentials
 
   command:
     - /bin/sh
@@ -22,22 +16,11 @@ nautobot:
   initContainers:
     - name: git-fetch
       image: alpine/git
-      env:
-        - name: GIT_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: nautobot-dev-secrets
-              key: dockerusername
-        - name: GIT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: nautobot-dev-secrets
-              key: dockerpassword
       command:
         - /bin/sh
         - -c
         - |
-          git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/ahead-labs/net-automation-k8s-lab.git /tmp \
+          git clone https://github.com/leothelyon17/kubernetes-gitops-playground.git /tmp \
           && cp /tmp/apps/nautobot/overlays/xcel/configuration/nautobot_config.py /shared-volume/
       volumeMounts:
         - name: shared-volume
@@ -52,10 +35,10 @@ nautobot:
       mountPath: /tmp
 
   superUser:
-      existingSecret: "nautobot-xcel-superuser-secrets"
+      existingSecret: "nautobot-prod-superuser-secrets"
       existingSecretPasswordKey: "password"
       existingSecretApiTokenKey: "api_token"
-      username: "ahead"
+      username: "jeff"
   
 
 postgresql:
@@ -63,7 +46,7 @@ postgresql:
     persistence:
       enabled: true
       size: "2Gi"
-      storageClass: "rook-cephfs"
+      storageClass: "rook-cephfsretain"
       accessModes: ['ReadWriteOnce']
   auth:
     existingSecret: nautobot-dev-secrets
@@ -73,7 +56,7 @@ redis:
     persistence:
       enabled: true
       size: "1Gi"
-      storageClass: "rook-cephfs"
+      storageClass: "rook-cephfs-delete"
       accessModes: ['ReadWriteOnce']
   auth:
     enabled: true
