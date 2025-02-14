@@ -13,4 +13,4 @@ data:
     server=dynamicdns.park-your-domain.com
     login=$DDCLIENT_LOGIN
     password=$DDCLIENT_PASSWORD
-    @.$DDCLIENT_DOMAIN
+    @$DDCLIENT_DOMAIN
