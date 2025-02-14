@@ -46,10 +46,10 @@ postgresql:
     persistence:
       enabled: true
       size: "2Gi"
-      storageClass: "rook-cephfsretain"
+      storageClass: "rook-cephfs-retain"
       accessModes: ['ReadWriteOnce']
   auth:
-    existingSecret: nautobot-dev-secrets
+    existingSecret: nautobot-prod-db-secrets
 
 redis:
   master:
@@ -60,4 +60,4 @@ redis:
       accessModes: ['ReadWriteOnce']
   auth:
     enabled: true
-    existingSecret: nautobot-dev-secrets
+    existingSecret: nautobot-prod-db-secrets
