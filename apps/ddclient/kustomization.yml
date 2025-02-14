@@ -1,0 +1,5 @@
+resources:
+  - cluster-secret-store.yml
+  - external-secret.yml
+  - ddclient-config-template.yml
+  - deployment.yml
