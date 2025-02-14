@@ -21,7 +21,7 @@ nautobot:
         - -c
         - |
           git clone https://github.com/leothelyon17/kubernetes-gitops-playground.git /tmp \
-          && cp /tmp/apps/nautobot/overlays/xcel/configuration/nautobot_config.py /shared-volume/
+          && cp /tmp/apps/nautobot/overlays/prod/configuration/nautobot_config.py /shared-volume/
       volumeMounts:
         - name: shared-volume
           mountPath: /shared-volume
