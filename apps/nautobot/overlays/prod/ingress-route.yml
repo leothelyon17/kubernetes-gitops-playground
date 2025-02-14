@@ -1,1 +1,21 @@
-TEST
+---
+# --> (Example) Create an IngressRoute for your service...
+ apiVersion: traefik.io/v1alpha1
+ kind: IngressRoute
+ metadata:
+   name: nautobot-prod-ingressroute  # <-- Replace with your IngressRoute name
+   namespace: nautobot-prod  # <-- Replace with your namespace
+ spec:
+   entryPoints:
+     - web
+     - websecure
+   routes:
+     - match: Host(`nautobot.nerdy-apps-prod.jjland.local`)  # <-- Replace with your FQDN
+       kind: Rule
+       services:
+         - name: nautobot-prod-default  # <-- Replace with your service name
+           port: 80
+# --> (Optional) Add certificate secret
+# tls:
+#     secretName: your-certificate-secret
+# <--
