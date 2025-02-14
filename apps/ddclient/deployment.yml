@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ddclient
+  namespace: ddclient-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ddclient
+  template:
+    metadata:
+      labels:
+        app: ddclient
+    spec:
+      initContainers:
+        - name: generate-config
+          image: busybox:latest
+          env:
+            - name: DDCLIENT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ddclient-secret
+                  key: ddclient_password
+          command: [ "sh", "-c", "envsubst < /config-template/ddclient.conf.template > /config/ddclient/ddclient.conf" ]
+          volumeMounts:
+            - name: config-template
+              mountPath: /config-template
+            - name: config
+              mountPath: /config/ddclient
+      containers:
+        - name: ddclient
+          image: linuxserver/ddclient:latest
+          # The image expects its configuration at /config/ddclient/ddclient.conf
+          volumeMounts:
+            - name: config
+              mountPath: /config/ddclient
+          env:
+            - name: TZ
+              value: "EST"
+      volumes:
+        - name: config-template
+          configMap:
+            name: ddclient-config-template
+        - name: config
+          emptyDir: {}
