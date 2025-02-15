@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-cert-stage
+  namespace: traefik
+spec:
+  secretName: wildcard-cert-stage
+  commonName: "*.nerdylyonsden.io"
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-stage
+  dnsNames:
+  - "*.nerdylyonsden.io"
