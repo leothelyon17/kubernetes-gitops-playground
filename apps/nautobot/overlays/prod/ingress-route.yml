@@ -13,7 +13,7 @@
      - web
      - websecure
    routes:
-     - match: Host(`nautobot.nerdy-apps-prod.jjland.local`)  # <-- Replace with your FQDN
+     - match: Host(`nautobot.nerdylyonsden.io`)  # <-- Replace with your FQDN
        kind: Rule
        services:
          - name: nautobot-prod-default  # <-- Replace with your service name
