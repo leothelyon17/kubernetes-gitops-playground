@@ -1,0 +1,11 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: nautobot-prod-cert
+spec:
+  secretName: nautobot-prod-cert-secret
+  issuerRef:
+    name: letsencrypt-namecheap
+    kind: ClusterIssuer
+  dnsNames:
+    - nautobot.nerdylyonsden.io
