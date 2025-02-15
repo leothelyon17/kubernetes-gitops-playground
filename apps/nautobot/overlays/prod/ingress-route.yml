@@ -3,9 +3,6 @@
  apiVersion: traefik.io/v1alpha1
  kind: IngressRoute
  metadata:
-   annotations:
-     # add an annotation indicating the issuer to use.
-     cert-manager.io/cluster-issuer: letsencrypt-namecheap
    name: nautobot-prod-ingressroute  # <-- Replace with your IngressRoute name
    namespace: nautobot-prod  # <-- Replace with your namespace
  spec:
