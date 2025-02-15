@@ -2,7 +2,6 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: wildcard-cert-stage
-  namespace: traefik
 spec:
   secretName: nautobot-prod-cert-secret
   commonName: "*.nerdylyonsden.io"
