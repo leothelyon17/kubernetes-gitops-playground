@@ -1,3 +1,4 @@
 resources:
   - rbac.yml
   - cluster-secret-store.yml
+  - external-secret.yml
