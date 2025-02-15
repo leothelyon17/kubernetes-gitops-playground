@@ -1,0 +1,20 @@
+---
+# --> (Example) Create an IngressRoute for your service...
+ apiVersion: traefik.io/v1alpha1
+ kind: IngressRoute
+ metadata:
+   name: heimdall-prod-ingressroute  # <-- Replace with your IngressRoute name
+   namespace: heimdall-prod  # <-- Replace with your namespace
+ spec:
+   entryPoints:
+     - websecure
+   routes:
+     - match: Host(`heimdall.home.nerdylyonsden.io`)  # <-- Replace with your FQDN
+       kind: Rule
+       services:
+         - name: heimdall-prod-service  # <-- Replace with your service name
+           port: 80
+# --> (Optional) Add certificate secret
+   tls:
+     secretName: prod-apps-certificate-secret # < cert-manager will store the created certificate in this secret.
+# <--
