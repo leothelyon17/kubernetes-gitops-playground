@@ -10,6 +10,7 @@ spec:
     name: letsencrypt-prod
   dnsNames:
   - "*.nerdylyonsden.io"
+  - "*.home.nerdylyonsden.io"
 
   secretTemplate:
     annotations:
