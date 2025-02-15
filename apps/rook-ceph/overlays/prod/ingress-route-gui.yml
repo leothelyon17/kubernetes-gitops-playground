@@ -7,15 +7,14 @@
    namespace: rook-ceph  # <-- Replace with your namespace
  spec:
    entryPoints:
-     - web
      - websecure
    routes:
-     - match: Host(`ceph-dashboard.nerdy-apps-prod.jjland.local`)  # <-- Replace with your FQDN
+     - match: Host(`ceph-dashboard.home.nerdylyonsden.io`)  # <-- Replace with your FQDN
        kind: Rule
        services:
          - name: rook-ceph-mgr-dashboard  # <-- Replace with your service name
            port: 7000
 # --> (Optional) Add certificate secret
-# tls:
-#     secretName: your-certificate-secret
+   tls:
+     secretName: prod-apps-certificate-secret
 # <--
