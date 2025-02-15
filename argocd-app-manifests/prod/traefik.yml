@@ -1,17 +1,23 @@
-project: prod-home
-destination:
-  server: https://prod-kube-vip.jjland.local:6443
-  namespace: kube-system
-syncPolicy:
-  syncOptions:
-    - CreateNamespace=true
-sources:
-  - repoURL: https://helm.traefik.io/traefik
-    targetRevision: 34.3.0
-    helm:
-      valueFiles:
-        - $values/apps/traefik/values-prod.yml
-    chart: traefik
-  - repoURL: https://github.com/leothelyon17/kubernetes-gitops-playground.git
-    targetRevision: HEAD
-    ref: values
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: traefik-prod
+  namespace: argocd
+spec:
+  project: prod-home
+  destination:
+    server: https://prod-kube-vip.jjland.local:6443
+    namespace: kube-system
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+  sources:
+    - repoURL: https://helm.traefik.io/traefik
+      targetRevision: 34.3.0
+      helm:
+        valueFiles:
+          - $values/apps/traefik/values-prod.yml
+      chart: traefik
+    - repoURL: https://github.com/leothelyon17/kubernetes-gitops-playground.git
+      targetRevision: HEAD
+      ref: values
