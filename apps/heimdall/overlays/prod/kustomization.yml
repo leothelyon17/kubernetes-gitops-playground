@@ -1,1 +1,5 @@
-##TEST
+resources:
+  - pvc.yml
+  - deployment.yml
+  - service.yml
+  - ingress-route.yml
