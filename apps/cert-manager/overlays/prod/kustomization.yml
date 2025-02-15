@@ -2,4 +2,4 @@ resources:
   - rbac.yml
   - cluster-secret-store.yml
   - external-secret.yml
-  - cert-stage.yml
+  - wildcard-certificate-prod.yml
