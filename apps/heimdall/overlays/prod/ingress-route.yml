@@ -12,7 +12,7 @@
      - match: Host(`heimdall.home.nerdylyonsden.io`)  # <-- Replace with your FQDN
        kind: Rule
        services:
-         - name: heimdall-prod-service  # <-- Replace with your service name
+         - name: heimdall-prod  # <-- Replace with your service name
            port: 80
 # --> (Optional) Add certificate secret
    tls:
