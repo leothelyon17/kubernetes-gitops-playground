@@ -9,12 +9,10 @@
    entryPoints:
      - websecure
    routes:
-     - match: Host(`vault.nerdy-apps-prod.jjland.local`)  # <-- Replace with your FQDN
+     - match: Host(`vault.home.nerdylyonsden.io`)  # <-- Replace with your FQDN
        kind: Rule
        services:
          - name: hashi-vault-prod-ui  # <-- Replace with your service name
            port: 8200
-# --> (Optional) Add certificate secret
-# tls:
-#     secretName: your-certificate-secret
-# <--
+   tls:
+     secretName: prod-apps-certificate-secret
