@@ -4,7 +4,7 @@ global:
 
   persistence:
     enabled: true
-    storageClass: "rook-cephfs"
+    storageClass: "rook-ceph-fs"
     accessMode: ReadWriteMany
     size: 2Gi
     annotations: {}
