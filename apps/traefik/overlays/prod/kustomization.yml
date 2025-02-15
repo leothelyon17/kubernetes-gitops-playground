@@ -1,6 +1,6 @@
 resources:
   #- cluster-issuer.yml
-  - cluster-secret-store.yml
-  - external-secret.yml
-  #- nautobot-cert.yml
-  - cert-stage.yml
+  #- cluster-secret-store.yml
+  #- external-secret.yml
+  - nautobot-cert.yml
+  #- cert-stage.yml
