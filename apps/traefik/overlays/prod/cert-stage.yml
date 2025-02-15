@@ -4,7 +4,7 @@ metadata:
   name: wildcard-cert-stage
   namespace: traefik
 spec:
-  secretName: wildcard-cert-stage
+  secretName: nautobot-prod-cert-secret
   commonName: "*.nerdylyonsden.io"
   issuerRef:
     kind: ClusterIssuer
