@@ -4,11 +4,11 @@ global:
 
   persistence:
     enabled: true
-    storageClass: "longhorn"
+    storageClass: "rook-cephfs"
     accessMode: ReadWriteMany
-    size: 10Gi
+    size: 2Gi
     annotations: {}
-    persistentVolumeReclaimPolicy: Retain
+    persistentVolumeReclaimPolicy: Delete
     # hostPath:
     #   path: "/run/desktop/mnt/host/c/k8s-data/"
 
@@ -65,7 +65,7 @@ portal:
     nodePort: 30000
 
   ingress:
-    enabled: true
+    enabled: false
     className: nginx
     annotations: {}
       # kubernetes.io/ingress.class: nginx
