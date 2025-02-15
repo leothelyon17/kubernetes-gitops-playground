@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: heimdall
+  namespace: heimdall-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: heimdall
+  template:
+    metadata:
+      labels:
+        app: heimdall
+    spec:
+      containers:
+      - name: heimdall
+        image: linuxserver/heimdall:latest
+        ports:
+        - containerPort: 80
+          name: http
+        env:
+        - name: PUID
+          value: "1000"          # Update with your user id
+        - name: PGID
+          value: "1000"          # Update with your group id
+        - name: TZ
+          value: "New_York/America" # Update to your timezone
+        volumeMounts:
+        - name: config
+          mountPath: /config
+      volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: heimdall-config
