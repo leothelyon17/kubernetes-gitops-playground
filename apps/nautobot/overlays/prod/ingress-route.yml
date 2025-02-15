@@ -7,7 +7,6 @@
    namespace: nautobot-prod  # <-- Replace with your namespace
  spec:
    entryPoints:
-     - web
      - websecure
    routes:
      - match: Host(`nautobot.nerdylyonsden.io`)  # <-- Replace with your FQDN
