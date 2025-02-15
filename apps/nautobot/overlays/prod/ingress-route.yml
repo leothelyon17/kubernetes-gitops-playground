@@ -22,5 +22,5 @@
 tls:
 - hosts:
   - nautobot.nerdylyonsden.io
-  secretName: nautobot-prod-ingress-cert # < cert-manager will store the created certificate in this secret.
+  secretName: prod-apps-certificate-secret # < cert-manager will store the created certificate in this secret.
 # <--
