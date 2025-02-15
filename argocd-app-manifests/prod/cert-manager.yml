@@ -1,18 +1,24 @@
-project: prod-home
-destination:
-  server: https://prod-kube-vip.jjland.local:6443
-  namespace: cert-manager-prod
-syncPolicy:
-  syncOptions:
-    - CreateNamespace=true
-sources:
-  - repoURL: https://charts.jetstack.io
-    targetRevision: v1.17.1
-    helm:
-      valueFiles:
-        - $values/apps/cert-manager/values-prod.yml
-    chart: cert-manager
-  - repoURL: https://github.com/leothelyon17/kubernetes-gitops-playground.git
-    path: apps/cert-manager/overlays/prod
-    targetRevision: HEAD
-    ref: values
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cert-manager-prod
+  namespace: argocd
+spec:
+  project: prod-home
+  destination:
+    server: https://prod-kube-vip.jjland.local:6443
+    namespace: cert-manager-prod
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+  sources:
+    - repoURL: https://charts.jetstack.io
+      targetRevision: v1.17.1
+      helm:
+        valueFiles:
+          - $values/apps/cert-manager/values-prod.yml
+      chart: cert-manager
+    - repoURL: https://github.com/leothelyon17/kubernetes-gitops-playground.git
+      path: apps/cert-manager/overlays/prod
+      targetRevision: HEAD
+      ref: values
