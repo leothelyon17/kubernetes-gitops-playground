@@ -1,5 +1,5 @@
 resources:
-  - cluster-issuer.yml
+  #- cluster-issuer.yml
   - cluster-secret-store.yml
   - external-secret.yml
   #- nautobot-cert.yml
