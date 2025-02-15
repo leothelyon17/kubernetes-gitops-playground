@@ -20,7 +20,5 @@
            port: 80
 # --> (Optional) Add certificate secret
 tls:
-- hosts:
-  - nautobot.nerdylyonsden.io
   secretName: prod-apps-certificate-secret # < cert-manager will store the created certificate in this secret.
 # <--
