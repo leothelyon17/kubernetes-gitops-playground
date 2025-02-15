@@ -1,18 +1,24 @@
-project: prod-home
-destination:
-  server: https://prod-kube-vip.jjland.local:6443
-  namespace: rook-ceph
-syncPolicy:
-  syncOptions:
-    - CreateNamespace=true
-sources:
-  - repoURL: https://charts.rook.io/release
-    targetRevision: v1.16.3
-    helm:
-      valueFiles:
-        - $values/apps/rook-ceph/values-prod.yml
-    chart: rook-ceph
-  - repoURL: https://github.com/leothelyon17/kubernetes-gitops-playground.git
-    path: apps/rook-ceph/overlays/prod
-    targetRevision: HEAD
-    ref: values
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rook-ceph-operator-prod
+  namespace: argocd
+spec:
+  project: prod-home
+  destination:
+    server: https://prod-kube-vip.jjland.local:6443
+    namespace: rook-ceph
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+  sources:
+    - repoURL: https://charts.rook.io/release
+      targetRevision: v1.16.3
+      helm:
+        valueFiles:
+          - $values/apps/rook-ceph/values-prod.yml
+      chart: rook-ceph
+    - repoURL: https://github.com/leothelyon17/kubernetes-gitops-playground.git
+      path: apps/rook-ceph/overlays/prod
+      targetRevision: HEAD
+      ref: values
