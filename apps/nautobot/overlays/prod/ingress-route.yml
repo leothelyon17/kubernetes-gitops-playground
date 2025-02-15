@@ -9,7 +9,7 @@
    entryPoints:
      - websecure
    routes:
-     - match: Host(`nautobot.nerdylyonsden.io`)  # <-- Replace with your FQDN
+     - match: Host(`nautobot.home.nerdylyonsden.io`)  # <-- Replace with your FQDN
        kind: Rule
        services:
          - name: nautobot-prod-default  # <-- Replace with your service name
