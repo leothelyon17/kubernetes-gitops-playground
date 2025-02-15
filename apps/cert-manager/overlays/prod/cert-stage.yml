@@ -1,12 +1,12 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: wildcard-cert-stage
+  name: wildcard-cert-prod
 spec:
-  secretName: nautobot-prod-cert-secret
+  secretName: prod-apps-certificate-secret
   commonName: "*.nerdylyonsden.io"
   issuerRef:
     kind: ClusterIssuer
-    name: letsencrypt-stage
+    name: letsencrypt-prod
   dnsNames:
   - "*.nerdylyonsden.io"
