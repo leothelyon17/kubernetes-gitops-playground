@@ -1,0 +1,14 @@
+project: prod-home
+destination:
+  server: https://prod-kube-vip.jjland.local:6443
+  namespace: metallb-prod
+syncPolicy:
+  syncOptions:
+    - CreateNamespace=true
+sources:
+  - repoURL: https://metallb.github.io/metallb
+    targetRevision: 0.14.9
+    chart: metallb
+  - repoURL: https://github.com/leothelyon17/kubernetes-gitops-playground.git
+    path: apps/metallb/overlays/prod
+    targetRevision: HEAD
