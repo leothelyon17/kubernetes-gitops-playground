@@ -1,2 +1,2 @@
 resources:
-  ingress-route-ui.yml
+  - ingress-route-ui.yml
