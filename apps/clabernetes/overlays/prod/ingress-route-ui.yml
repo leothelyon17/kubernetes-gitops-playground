@@ -1,0 +1,20 @@
+---
+# --> (Example) Create an IngressRoute for your service...
+ apiVersion: traefik.io/v1alpha1
+ kind: IngressRoute
+ metadata:
+   name: clabernetes-prod-ingressroute  # <-- Replace with your IngressRoute name
+   namespace: clabernetes-prod  # <-- Replace with your namespace
+ spec:
+   entryPoints:
+     - websecure
+   routes:
+     - match: Host(`ui-clabernetes.home.nerdylyonsden.io`)  # <-- Replace with your FQDN
+       kind: Rule
+       services:
+         - name: clabernetes-ui  # <-- Replace with your service name
+           port: 80
+# --> (Optional) Add certificate secret
+   tls:
+     secretName: prod-apps-certificate-secret # < cert-manager will store the created certificate in this secret.
+# <--
