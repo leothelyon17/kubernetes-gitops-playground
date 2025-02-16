@@ -1,0 +1,13 @@
+#
+# ui
+#
+# ya know, the ui, web thingy so you can click some buttons and see pretty pictures and stuff
+#
+ui:
+  enabled: true
+
+
+  ingress:
+    enabled: false
+
+    # host: ui.clabernetes.containerlab.dev
