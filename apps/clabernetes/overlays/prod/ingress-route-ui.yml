@@ -14,7 +14,7 @@
        kind: Rule
        services:
          - name: clabernetes-ui-test  # <-- Replace with your service name
-           port: 443
+           port: 80
 # --> (Optional) Add certificate secret
    tls:
      secretName: prod-apps-certificate-secret # < cert-manager will store the created certificate in this secret.
