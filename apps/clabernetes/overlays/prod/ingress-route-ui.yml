@@ -9,7 +9,7 @@
    entryPoints:
      - websecure
    routes:
-     - match: Host(`ui-clabernetes.home.nerdylyonsden.io`)  # <-- Replace with your FQDN
+     - match: Host(`ui.clabernetes.home.nerdylyonsden.io`) && PathPrefix(`/`)  # <-- Replace with your FQDN
        kind: Rule
        services:
          - name: clabernetes-ui  # <-- Replace with your service name
