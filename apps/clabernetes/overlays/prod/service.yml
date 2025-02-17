@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: clabernetes-prod
+    app.kubernetes.io/name: clabernetes-ui
+    chart: clabernetes-0.2.5
+    clabernetes/app: clabernetes
+    clabernetes/component: ui
+    clabernetes/name: clabernetes-ui
+    heritage: Helm
+    release: clabernetes-prod
+    revision: '1'
+  name: clabernetes-ui-test
+  namespace: clabernetes-prod
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 3000
+  selector:
+    clabernetes/app: clabernetes
+    clabernetes/component: ui
+    clabernetes/name: clabernetes-ui
+  sessionAffinity: None
+  type: ClusterIP
