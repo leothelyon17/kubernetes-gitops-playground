@@ -8,7 +8,7 @@
  spec:
    entryPoints:
      - web
-     #- websecure
+     - websecure
    routes:
      - match: Host(`ui-clabernetes.home.nerdylyonsden.io`) && PathPrefix(`/`)  # <-- Replace with your FQDN
        kind: Rule
