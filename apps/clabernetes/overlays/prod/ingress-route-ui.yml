@@ -12,8 +12,8 @@
      - match: Host(`ui-clabernetes.home.nerdylyonsden.io`) && PathPrefix(`/`)  # <-- Replace with your FQDN
        kind: Rule
        services:
-         - name: clabernetes-ui  # <-- Replace with your service name
-           port: 443
+         - name: clabernetes-ui-test  # <-- Replace with your service name
+           port: 80
 # --> (Optional) Add certificate secret
    tls:
      secretName: prod-apps-certificate-secret # < cert-manager will store the created certificate in this secret.
