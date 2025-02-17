@@ -6,8 +6,8 @@
 ui:
   enabled: true
 
-
-  enabled: true
+  ingress:
+    enabled: true
     ingressClass: traefik
     # you really almost certainly gotta do something with this if you want the ingress to work :)
     host: ui.clabernetes.home.nerdylyonsden.io
