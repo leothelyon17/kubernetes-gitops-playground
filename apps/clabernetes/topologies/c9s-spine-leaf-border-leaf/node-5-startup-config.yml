@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: spine-leaf-borderleaf-node-5-startup-config
+    namespace: c9s-spine-leaf-borderleaf
+data:
+  startup-config: |-
+    !
+    daemon TerminAttr
+       exec /usr/bin/TerminAttr -cvaddr=172.18.100.99:9910 -cvauth=token,/tmp/token -cvvrf=MGMT -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -taillogs
+       no shutdown
+    !
+    hostname dc1-border-leaf1
+    !
+    ! Configures username and password for the ansible user
+    username ansible privilege 15 role network-admin secret 0 lab123
+    !
+    ! Defines the VRF for MGMT
+    vrf instance MGMT
+    !
+    ! Defines the settings for the Management1 interface through which Ansible reaches the device
+    interface Management0 # Note the Management0 here.. not 1
+       description oob_management
+       no shutdown
+       vrf MGMT
+       ! IP address - must be set uniquely per device
+       ip address 192.168.20.6/24
+    !
+    ! Static default route for VRF MGMT
+    ip route vrf MGMT 0.0.0.0/0 192.168.20.1
+    !
+    ! Enables API access in VRF MGMT
+    management api http-commands
+       protocol https
+       no shutdown
+       !
+       vrf MGMT
+          no shutdown
+    !
+    end
+    !
+    ! Save configuration to flash
+    copy running-config startup-config
