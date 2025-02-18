@@ -1,0 +1,7 @@
+resources:
+  - node-1-startup-config.yml
+  - node-2-startup-config.yml
+  - node-3-startup-config.yml
+  - node-4-startup-config.yml
+  - node-5-startup-config.yml
+  - topology.yml
