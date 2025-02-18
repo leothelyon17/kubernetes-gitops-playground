@@ -1,4 +1,6 @@
 resources:
+  - cluster-secret-store.yml
+  - external-secret.yml
   - node-1-startup-config.yml
   - node-2-startup-config.yml
   - node-3-startup-config.yml
