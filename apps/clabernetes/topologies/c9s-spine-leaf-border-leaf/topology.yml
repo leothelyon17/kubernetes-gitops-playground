@@ -1,0 +1,79 @@
+apiVersion: clabernetes.containerlab.dev/v1alpha1
+kind: Topology
+metadata:
+  name: spine-leaf-borderleaf
+  namespace: c9s-spine-leaf-borderleaf
+spec:
+  imagePull:
+    dockerConfig: ghcr-secret
+  deployment:
+    filesFromConfigMap:
+        node-1:
+          - filePath: configs/node1-startup-config.cfg
+            configMapName: spine-leaf-borderleaf-node-1-startup-config
+            configMapPath: startup-config
+            mode: read
+        node-2:
+          - filePath: configs/node2-startup-config.cfg
+            configMapName: spine-leaf-borderleaf-node-2-startup-config
+            configMapPath: startup-config
+            mode: read
+        node-3:
+          - filePath: configs/node3-startup-config.cfg
+            configMapName: spine-leaf-borderleaf-node-3-startup-config
+            configMapPath: startup-config
+            mode: read
+        node-4:
+          - filePath: configs/node4-startup-config.cfg
+            configMapName: spine-leaf-borderleaf-node-4-startup-config
+            configMapPath: startup-config
+            mode: read
+        node-5:
+          - filePath: configs/node5-startup-config.cfg
+            configMapName: spine-leaf-borderleaf-node-5-startup-config
+            configMapPath: startup-config
+            mode: read
+  naming: non-prefixed
+  definition:
+    containerlab: |-
+          name: spine-leaf-borderleaf
+
+          mgmt:
+            network: custom_mgmt                # management network name
+            ipv4-subnet: 192.168.20.0/24       # ipv4 range
+
+          topology:
+            nodes:
+              node-1:
+                kind: arista_ceos
+                image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2F
+                startup-config: configs/node1-startup-config.cfg
+                mgmt-ipv4: 192.168.20.2
+              node-2:
+                kind: arista_ceos
+                image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2F
+                startup-config: configs/node2-startup-config.cfg
+                mgmt-ipv4: 192.168.20.3
+              node-3:
+                kind: arista_ceos
+                image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2F
+                startup-config: configs/node3-startup-config.cfg
+                mgmt-ipv4: 192.168.20.4
+              node-4:
+                kind: arista_ceos
+                image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2F
+                startup-config: configs/node4-startup-config.cfg
+                mgmt-ipv4: 192.168.20.5
+              node-5:
+                kind: arista_ceos
+                image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2F
+                startup-config: configs/node5-startup-config.cfg
+                mgmt-ipv4: 192.168.20.6
+
+            links:
+              - endpoints: ["node-3:eth1", "node-1:eth1"]
+              - endpoints: ["node-3:eth2", "node-2:eth1"]
+              - endpoints: ["node-4:eth1", "node-1:eth2"]
+              - endpoints: ["node-4:eth2", "node-2:eth2"]
+              - endpoints: ["node-5:eth1", "node-1:eth3"]
+              - endpoints: ["node-5:eth2", "node-2:eth3"]
