@@ -6,7 +6,30 @@ repositories:
     username: ""
     password: ""
     oci_enabled: false
-#  - url: "https://github.com/leothelyon17/kubernetes-gitops-playground.git"
-#    type: git
+    
+  - url: "https://charts.rook.io/release"
+    type: helm
+    name: "Rook Ceph (Official)"
+    project: "home-lab"
+    
+  - url: "https://github.com/leothelyon17/streamlit-nautobot-argo-app.git"
+    type: git
+    name: "Streamlit App"
+    project: "home-lab"
+    
+  - url: "https://helm.traefik.io/traefik"
+    type: helm
+    name: "Traefik (Official)"
+    project: "home-lab"
+    
+  - url: "https://kube-vip.github.io/helm-charts/"
+    type: helm
+    name: "Kube VIP (Official)"
+    project: "home-lab"
+    
+  - url: "https://metallb.github.io/metallb"
+    type: helm
+    name: "MetalLB (Official)"
+    project: "home-lab"
 
     
