@@ -69,6 +69,9 @@ spec:
                 image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2F
                 startup-config: configs/node5-startup-config.cfg
                 mgmt-ipv4: 192.168.20.6
+              node-6:
+                  kind: mikrotik_ros
+                  image: ghcr.io/leothelyon17/nautobot-avd-integration/mikrotik_routeros:7.17.2
 
             links:
               - endpoints: ["node-3:eth1", "node-1:eth1"]
