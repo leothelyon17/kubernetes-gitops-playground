@@ -41,3 +41,13 @@ repositories:
     type: helm
     name: "Cert Manager (Official)"
     project: "prod-home"
+
+  - url: "https://emberstack.github.io/helm-charts"
+    type: helm
+    name: "Emberstack"
+    project: "prod-home"
+
+  - url: "https://nautobot.github.io/helm-charts/"
+    type: helm
+    name: "Nautobot (Official)"
+    project: "prod-home"
