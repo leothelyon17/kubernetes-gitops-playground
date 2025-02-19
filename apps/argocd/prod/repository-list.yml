@@ -31,3 +31,8 @@ repositories:
     type: helm
     name: "MetalLB (Official)"
     project: "prod-home"
+
+  - url: "https://charts.external-secrets.io"
+    type: helm
+    name: "External Secrets (Official)"
+    project: "prod-home"
