@@ -38,9 +38,10 @@ jobs:
         run: |
           python3.12 <<'EOF'
           import yaml, os
+          env = os.environ.get("ENV")
 
           # Load repository definitions from repos.yml
-          with open("apps/argocd/$ENV/repository-list.yml", "r") as f:
+          with open("apps/argocd/{env}/repository-list.yml", "r") as f:
               data = yaml.safe_load(f)
 
           for repo in data.get("repositories", []):
