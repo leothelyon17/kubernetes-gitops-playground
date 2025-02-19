@@ -15,6 +15,6 @@ spec:
   secretTemplate:
     annotations:
       reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
-      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "nautobot-prod, rook-ceph, heimdall-prod, clabernetes-prod, hashi-vault-prod"  # Control destination namespaces
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "monitoring-prod, nautobot-prod, rook-ceph, heimdall-prod, clabernetes-prod, hashi-vault-prod"  # Control destination namespaces
       reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
-      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "nautobot-prod, rook-ceph, heimdall-prod, clabernetes-prod, hashi-vault-prod"
+      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "monitoring-prod, nautobot-prod, rook-ceph, heimdall-prod, clabernetes-prod, hashi-vault-prod"
