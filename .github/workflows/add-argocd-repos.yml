@@ -36,7 +36,7 @@ jobs:
 
       - name: Add Repositories from YAML
         run: |
-          python <<'EOF'
+          python3.12 <<'EOF'
           import yaml, os
 
           # Load repository definitions from repos.yml
@@ -55,7 +55,7 @@ jobs:
               cmd = f"argocd repo add {url}"
               if name:
                   cmd += f" --name {name}"
-               if type:
+              if type:
                   cmd += f" --type {type}"
               if username:
                   cmd += f" --username {username}"
