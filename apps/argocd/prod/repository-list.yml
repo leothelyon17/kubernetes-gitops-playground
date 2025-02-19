@@ -1,0 +1,38 @@
+repositories:
+  - url: "https://github.com/leothelyon17/kubernetes-gitops-playground.git"
+    type: git
+    name: "GitOps Playground"
+    project: "prod-home"
+    username: ""
+    password: ""
+    oci_enabled: false
+    
+  - url: "https://charts.rook.io/release"
+    type: helm
+    name: "Rook Ceph (Official)"
+    project: "prod-home"
+    
+  - url: "https://github.com/leothelyon17/streamlit-nautobot-argo-app.git"
+    type: git
+    name: "Streamlit App"
+    project: "prod-home"
+    
+  - url: "https://helm.traefik.io/traefik"
+    type: helm
+    name: "Traefik (Official)"
+    project: "prod-home"
+    
+  - url: "https://kube-vip.github.io/helm-charts/"
+    type: helm
+    name: "Kube VIP (Official)"
+    project: "prod-home"
+
+  - url: "https://helm.releases.hashicorp.com"
+    type: helm
+    name: "Hashicorp (Official)"
+    project: "prod-home"
+    
+  - url: "https://metallb.github.io/metallb"
+    type: helm
+    name: "MetalLB (Official)"
+    project: "prod-home"
