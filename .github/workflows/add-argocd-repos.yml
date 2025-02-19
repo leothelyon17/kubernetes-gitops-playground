@@ -51,6 +51,7 @@ jobs:
               type = repo.get("type", "git")
               username = repo.get("username", "")
               password = repo.get("password", "")
+              project = repo.get("project", "")
               oci_enabled = repo.get("oci_enabled", False)
 
               # Build the argocd repo add command
@@ -63,6 +64,8 @@ jobs:
                   cmd += f" --username {username}"
               if password:
                   cmd += f" --password {password}"
+              if project:
+                  cmd += f" --project {project}"
               if oci_enabled:
                   cmd += " --enable-oci"
 
