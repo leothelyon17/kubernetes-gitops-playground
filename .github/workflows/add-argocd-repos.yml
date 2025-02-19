@@ -1,0 +1,71 @@
+name: Add Repositories to ArgoCD
+
+on:
+  workflow_dispatch:
+    inputs:
+        environment:
+          description: "The environment to deploy to"
+          required: true
+          default: "lab"
+          type: choice
+          options:
+            - lab
+            - prod
+
+jobs:
+  add_repos:
+    environment: ${{ github.event.inputs.environment }}
+    runs-on: self-hosted
+
+    env:
+      ENV: ${{ github.event.inputs.environment }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install PyYAML
+        run: pip3.12 install pyyaml
+
+      - name: Log in to ArgoCD
+        run: |
+          argocd login "${{ vars.ARGOCD_SERVER }}:${{ vars.ARGOCD_PORT }}" \
+            --username "${{ secrets.ARGOCD_ADMIN_USER }}" \
+            --password "${{ secrets.ARGOCD_ADMIN_PASSWORD }}" \
+            --insecure
+
+      - name: Add Repositories from YAML
+        run: |
+          python <<'EOF'
+          import yaml, os
+
+          # Load repository definitions from repos.yml
+          with open("apps/argocd/$ENV/repository-list.yml", "r") as f:
+              data = yaml.safe_load(f)
+
+          for repo in data.get("repositories", []):
+              url = repo.get("url")
+              name = repo.get("name", "")
+              type = repo.get("type", "git")
+              username = repo.get("username", "")
+              password = repo.get("password", "")
+              oci_enabled = repo.get("oci_enabled", False)
+
+              # Build the argocd repo add command
+              cmd = f"argocd repo add {url}"
+              if name:
+                  cmd += f" --name {name}"
+               if type:
+                  cmd += f" --type {type}"
+              if username:
+                  cmd += f" --username {username}"
+              if password:
+                  cmd += f" --password {password}"
+              if oci_enabled:
+                  cmd += " --enable-oci"
+
+              print("Running:", cmd)
+              result = os.system(cmd)
+              if result != 0:
+                  print(f"Error adding repository: {url}")
+          EOF
