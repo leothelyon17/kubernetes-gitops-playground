@@ -57,7 +57,7 @@ jobs:
               # Build the argocd repo add command
               cmd = f"argocd repo add {url}"
               if name:
-                  cmd += f" --name {name}"
+                  cmd += f" --name '{name}'"
               if type:
                   cmd += f" --type {type}"
               if username:
@@ -65,7 +65,7 @@ jobs:
               if password:
                   cmd += f" --password {password}"
               if project:
-                  cmd += f" --project {project}"
+                  cmd += f" --project '{project}'"
               if oci_enabled:
                   cmd += " --enable-oci"
 
