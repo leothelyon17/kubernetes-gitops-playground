@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: prod-home
+  namespace: argocd
+spec:
+  # Define which Git repositories are allowed as sources for apps
+  # sourceRepos:
+  #   - 'https://github.com/my-org/*'
+    # Use '*' to allow all repositories (use with caution)
+    #- '*'
+  # Define allowed destinations where applications can be deployed
+  destinations:
+    - server: https://prod-kube-vip.jjland.local:6443
+      name: prod-cluster
+      namespace: '*'
+  # Optionally, whitelist cluster-scoped resources that apps in this project can manage
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  # Optionally, whitelist namespace-scoped resources (example: ConfigMap)
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
