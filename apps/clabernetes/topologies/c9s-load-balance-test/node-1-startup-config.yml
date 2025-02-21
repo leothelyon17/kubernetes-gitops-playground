@@ -24,7 +24,6 @@ data:
        description oob_management
        no shutdown
        vrf MGMT
-       ! IP address - must be set uniquely per device
        ip address 192.168.101.170/29
     !
     ip routing
