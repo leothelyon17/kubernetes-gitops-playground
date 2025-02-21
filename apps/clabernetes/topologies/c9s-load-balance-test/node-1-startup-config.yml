@@ -25,7 +25,7 @@ data:
        no shutdown
        vrf MGMT
        ! IP address - must be set uniquely per device
-       ip address 192.168.101.171/29
+       ip address 192.168.101.170/29
     !
     ! Static default route for VRF MGMT
     ip route vrf MGMT 0.0.0.0/0 192.168.101.169
