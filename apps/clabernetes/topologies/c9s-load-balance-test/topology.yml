@@ -1,0 +1,45 @@
+apiVersion: clabernetes.containerlab.dev/v1alpha1
+kind: Topology
+metadata:
+  name: c9s-load-balancer-test
+  namespace: c9s-load-balancer-test
+spec:
+  imagePull:
+    dockerConfig: ghcr-secret
+  deployment:
+    filesFromConfigMap:
+        node-1:
+          - filePath: configs/node1-startup-config.cfg
+            configMapName: spine-leaf-borderleaf-node-1-startup-config
+            configMapPath: startup-config
+            mode: read
+        node-2:
+          - filePath: configs/node2-startup-config.cfg
+            configMapName: spine-leaf-borderleaf-node-2-startup-config
+            configMapPath: startup-config
+            mode: read
+  naming: non-prefixed
+  definition:
+    containerlab: |-
+          name: c9s-load-balancer-test
+
+          mgmt:
+            network: custom_mgmt                # management network name
+            ipv4-subnet: 192.168.101.165 - 192.168.101.169       # ipv4 range
+
+          topology:
+            nodes:
+              node-1:
+                kind: arista_ceos
+                image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2F
+                startup-config: configs/node1-startup-config.cfg
+                mgmt-ipv4: 192.168.101.165
+              node-2:
+                kind: arista_ceos
+                image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2F
+                startup-config: configs/node2-startup-config.cfg
+                mgmt-ipv4: 192.168.101.166
+              
+
+            links:
+              - endpoints: ["node-2:eth1", "node-1:eth1"]
