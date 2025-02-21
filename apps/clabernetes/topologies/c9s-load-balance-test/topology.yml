@@ -26,8 +26,12 @@ spec:
           mgmt:
             network: custom_mgmt                # management network name
             ipv4-subnet: 192.168.101.168/29  # ipv4 range
-
+          
           topology:
+            kinds:
+              ceos:
+                env:
+                  CLAB_MGMT_VRF: MGMT  
             nodes:
               node-1:
                 kind: arista_ceos
