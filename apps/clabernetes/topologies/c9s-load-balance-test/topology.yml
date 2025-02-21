@@ -25,7 +25,7 @@ spec:
 
           mgmt:
             network: custom_mgmt                # management network name
-            ipv4-subnet: 192.168.101.165 - 192.168.101.169       # ipv4 range
+            ipv4-subnet: 192.168.101.164/30  # ipv4 range
 
           topology:
             nodes:
