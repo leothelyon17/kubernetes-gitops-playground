@@ -37,12 +37,12 @@ spec:
                 kind: ceos
                 image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2F
                 startup-config: configs/node1-startup-config.cfg
-                mgmt-ipv4: 192.168.101.170
+                #mgmt-ipv4: 192.168.101.170
               node-2:
                 kind: ceos
                 image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2F
                 startup-config: configs/node2-startup-config.cfg
-                mgmt-ipv4: 192.168.101.171
+                #mgmt-ipv4: 192.168.101.171
               
 
             links:
