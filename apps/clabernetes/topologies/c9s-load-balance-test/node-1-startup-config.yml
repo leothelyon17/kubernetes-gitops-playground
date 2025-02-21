@@ -29,7 +29,7 @@ data:
     !
     ip routing
     ip routing vrf MGMT
-    ! Static default route for VRF MGMT
+    !
     ip route vrf MGMT 0.0.0.0/0 192.168.101.169
     !
     !
