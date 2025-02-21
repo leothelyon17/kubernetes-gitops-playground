@@ -25,7 +25,7 @@ spec:
 
           mgmt:
             network: custom_mgmt                # management network name
-            ipv4-subnet: 192.168.101.164/30  # ipv4 range
+            ipv4-subnet: 192.168.101.168/29  # ipv4 range
 
           topology:
             nodes:
@@ -33,12 +33,12 @@ spec:
                 kind: arista_ceos
                 image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2F
                 startup-config: configs/node1-startup-config.cfg
-                mgmt-ipv4: 192.168.101.165
+                mgmt-ipv4: 192.168.101.170
               node-2:
                 kind: arista_ceos
                 image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2F
                 startup-config: configs/node2-startup-config.cfg
-                mgmt-ipv4: 192.168.101.166
+                mgmt-ipv4: 192.168.101.171
               
 
             links:
