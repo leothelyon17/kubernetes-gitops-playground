@@ -8,7 +8,7 @@ spec:
     dockerConfig: ghcr-secret
   deployment:
     persistence:
-      claimSize: "2Gi"
+      claimSize: "5Gi"
       enabled: true
       storageClassName: "rook-cephfs-delete"
     filesFromConfigMap:
