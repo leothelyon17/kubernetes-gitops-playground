@@ -7,6 +7,10 @@ spec:
   imagePull:
     dockerConfig: ghcr-secret
   deployment:
+    persistence:
+      claimSize: "2Gi"
+      enabled: true
+      storageClassName: "rook-cephfs-delete"
     filesFromConfigMap:
         node-1:
           - filePath: configs/node1-startup-config.cfg
