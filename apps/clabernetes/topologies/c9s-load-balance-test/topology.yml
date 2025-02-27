@@ -9,7 +9,7 @@ spec:
   deployment:
     persistence:
       claimSize: "2Gi"
-      enabled: false
+      enabled: true
       storageClassName: "rook-cephfs-delete"
     filesFromConfigMap:
         node-1:
