@@ -8,8 +8,6 @@ spec:
     dockerConfig: ghcr-secret
   deployment:
     persistence:
-      accessModes:
-        - ReadWriteMany
       claimSize: "2Gi"
       enabled: true
       storageClassName: "rook-cephfs-delete"
