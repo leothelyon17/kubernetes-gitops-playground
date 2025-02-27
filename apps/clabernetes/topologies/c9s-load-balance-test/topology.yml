@@ -11,17 +11,17 @@ spec:
       claimSize: "2Gi"
       enabled: true
       storageClassName: "rook-cephfs-delete"
-    # filesFromConfigMap:
-    #     node-1:
-    #       - filePath: configs/node1-startup-config.cfg
-    #         configMapName: spine-leaf-borderleaf-node-1-startup-config
-    #         configMapPath: startup-config
-    #         mode: read
-    #     node-2:
-    #       - filePath: configs/node2-startup-config.cfg
-    #         configMapName: spine-leaf-borderleaf-node-2-startup-config
-    #         configMapPath: startup-config
-    #         mode: read
+    filesFromConfigMap:
+        node-1:
+          - filePath: configs/node1-startup-config.cfg
+            configMapName: spine-leaf-borderleaf-node-1-startup-config
+            configMapPath: startup-config
+            mode: write
+        node-2:
+          - filePath: configs/node2-startup-config.cfg
+            configMapName: spine-leaf-borderleaf-node-2-startup-config
+            configMapPath: startup-config
+            mode: write
   naming: non-prefixed
   definition:
     containerlab: |-
