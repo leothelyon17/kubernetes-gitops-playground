@@ -16,12 +16,12 @@ spec:
           - filePath: configs/node1-startup-config.cfg
             configMapName: spine-leaf-borderleaf-node-1-startup-config
             configMapPath: startup-config
-            mode: write
+            mode: execute
         node-2:
           - filePath: configs/node2-startup-config.cfg
             configMapName: spine-leaf-borderleaf-node-2-startup-config
             configMapPath: startup-config
-            mode: write
+            mode: execute
   naming: non-prefixed
   definition:
     containerlab: |-
