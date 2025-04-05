@@ -1,0 +1,112 @@
+image:
+  registry: ghcr.io
+  repository: ahead-labs/net-automation-k8s-lab/netbox/dev
+  pullPolicy: Always
+  tag: "latest"
+  pullSecrets:
+    - net-automation-k8s-repo-credentials
+
+command:
+  - /bin/bash
+  - -c
+  - |
+    source /opt/netbox/venv/bin/activate && \
+    python3 /opt/netbox/netbox/manage.py migrate && \
+    python3 /opt/netbox/netbox/manage.py collectstatic --no-input && \
+    python3 /opt/netbox/netbox/manage.py reindex && \
+    /opt/netbox/docker-entrypoint.sh && \
+    /opt/netbox/launch-netbox.sh
+
+initContainers:
+  - name: git-fetch
+    image: alpine/git
+    env:
+      - name: GIT_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: netbox-dev-secrets
+            key: dockerusername
+      - name: GIT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: netbox-dev-secrets
+            key: dockerpassword
+            
+    command:
+      - /bin/sh
+      - -c
+      - |
+        git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/ahead-labs/net-automation-k8s-lab.git /tmp-netbox-dev && \
+        cp -r /tmp-netbox-dev/apps/netbox/overlays/dev/configuration/* /shared-volume/
+    volumeMounts:
+      - name: shared-volume
+        mountPath: /shared-volume
+
+extraVolumes:
+    - name: shared-volume
+      emptyDir: {}
+    - name: netbox-secrets-writable
+      emptyDir: {}
+    - name: netbox-branching-config
+      configMap:
+        name: netbox-branching-cm
+
+extraVolumeMounts:
+    - name: shared-volume
+      mountPath: /etc/netbox/config/
+    - name: netbox-secrets-writable
+      mountPath: /opt/netbox/netbox/static/netbox_secrets/
+    - name: netbox-branching-config
+      mountPath: /opt/netbox/netbox/netbox/local_settings.py
+      subPath: local_settings.py
+
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 25
+  periodSeconds: 30
+  timeoutSeconds: 10
+  failureThreshold: 30
+  successThreshold: 1
+livenessProbe:
+  enabled: false
+readinessProbe:
+  enabled: false
+
+clusterDomain: lab.aheadaviation.com
+
+extraEnvVarsSecret: netbox-dev-secrets
+
+superuser:
+  existingSecret: netbox-dev-superuser-secrets
+
+persistence:
+  enabled: true
+  storageClass: "rook-cephfs"
+  accessMode: ReadWriteMany
+  size: 1Gi
+
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      size: "5Gi"
+      storageClass: "rook-cephfs"
+      accessModes: ['ReadWriteOnce']
+  auth:
+    existingSecret: netbox-dev-secrets
+  
+  initdbScripts:
+    grant-create.sql: |
+      GRANT CREATE ON DATABASE ${POSTGRES_DB} TO ${POSTGRES_USER};
+
+redis:
+  architecture: "standalone"
+  master:
+    persistence:
+      enabled: true
+      size: "1Gi"
+      storageClass: "rook-cephfs"
+      accessModes: ['ReadWriteOnce']
+  auth:
+    enabled: true
+    existingSecret: netbox-dev-secrets

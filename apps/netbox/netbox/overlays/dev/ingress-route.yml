@@ -1,0 +1,21 @@
+---
+# --> (Example) Create an IngressRoute for your service...
+ apiVersion: traefik.io/v1alpha1
+ kind: IngressRoute
+ metadata:
+   name: netbox-dev-ingressroute  # <-- Replace with your IngressRoute name
+   namespace: netbox-dev  # <-- Replace with your namespace
+ spec:
+   entryPoints:
+     - web
+     - websecure
+   routes:
+     - match: Host(`netbox-dev.lib-nauto-apps.lab.aheadaviation.com`)  # <-- Replace with your FQDN
+       kind: Rule
+       services:
+         - name: netbox-dev  # <-- Replace with your service name
+           port: 80
+# --> (Optional) Add certificate secret
+# tls:
+#     secretName: your-certificate-secret
+# <--
