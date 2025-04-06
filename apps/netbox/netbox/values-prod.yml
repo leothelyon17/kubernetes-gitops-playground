@@ -72,7 +72,7 @@ livenessProbe:
 readinessProbe:
   enabled: false
 
-clusterDomain: lab.aheadaviation.com
+clusterDomain: jjland.local
 
 extraEnvVarsSecret: netbox-dev-secrets
 
