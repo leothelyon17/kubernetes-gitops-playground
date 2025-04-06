@@ -1,0 +1,13 @@
+
+env:
+  # -- Set the container timezone
+  TZ: "America/New York"
+
+# -- Configure persistence settings for the chart under this key.
+# @default -- See values.yaml
+persistence:
+  config:
+    enabled: true
+    size: "100Mi"
+    storageClass: "rook-cephfs-retain"
+    accessModes: ['ReadWriteOnce']
