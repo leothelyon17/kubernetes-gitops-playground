@@ -6,6 +6,9 @@ metadata:
     release: kube-prometheus-stack
   namespace: monitoring-prod
 spec:
+  namespaceSelector:
+    matchNames:
+    - altcoin-viability 
   selector:
     matchLabels:
       app: github-exporter
