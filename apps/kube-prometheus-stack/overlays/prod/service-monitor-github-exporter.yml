@@ -3,7 +3,7 @@ kind: ServiceMonitor
 metadata:
   name: github-exporter-servicemonitor
   labels:
-    release: kube-prometheus-stack
+    release: kube-prometheus-stack-prod
   namespace: monitoring-prod
 spec:
   namespaceSelector:
