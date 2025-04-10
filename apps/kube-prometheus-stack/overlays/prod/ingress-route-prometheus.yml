@@ -1,0 +1,21 @@
+---
+# --> (Example) Create an IngressRoute for your service...
+ apiVersion: traefik.io/v1alpha1
+ kind: IngressRoute
+ metadata:
+   name: prometheus-prod-ingressroute  # <-- Replace with your IngressRoute name
+   namespace: monitoring-prod  # <-- Replace with your namespace
+ spec:
+   entryPoints:
+     - web
+     - websecure
+   routes:
+     - match: Host(`prometheus.home.nerdylyonsden.io`)  # <-- Replace with your FQDN
+       kind: Rule
+       services:
+         - name: kube-prometheus-stack-prod-prometheus  # <-- Replace with your service name
+           port: 9090
+# --> (Optional) Add certificate secret
+   tls:
+     secretName: prod-apps-certificate-secret # < cert-manager will store the created certificate in this secret.
+# <--
