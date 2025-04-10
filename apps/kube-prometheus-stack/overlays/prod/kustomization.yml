@@ -1,3 +1,4 @@
 resources:
   - ingress-route-grafana.yml
   - ingress-route-prometheus.yml
+  - service-monitor-github-exporter.yml
