@@ -4,6 +4,7 @@ metadata:
   name: github-exporter-servicemonitor
   labels:
     release: kube-prometheus-stack
+  namespace: monitoring-prod
 spec:
   selector:
     matchLabels:
