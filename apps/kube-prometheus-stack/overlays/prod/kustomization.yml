@@ -1,2 +1,3 @@
 resources:
   - ingress-route-grafana.yml
+  - ingress-route-prometheus.yml
