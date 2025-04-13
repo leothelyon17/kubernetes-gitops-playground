@@ -1,9 +1,6 @@
 name: Install ArgoCD and CLI
 
 on:
-  # push:
-  #   branches:
-  #     - main
   workflow_dispatch:
     inputs:
         environment:
@@ -23,21 +20,6 @@ env:
   ADMIN_PASSWORD: ${{ secrets.ARGOCD_MY_ADMIN_PASSWORD }}
 
 jobs:
-  # set-environment:
-  #   runs-on: self-hosted
-  #   outputs:
-  #     ENV_NAME: ${{ steps.detect_env.outputs.env_name }}
-  #   steps:
-  #   - name: Determine Environment
-  #     id: detect_env
-  #     run: |
-  #       if git diff --name-only HEAD~1 | grep '^lab/'; then
-  #         echo "env_name=lab" >> $GITHUB_OUTPUT
-  #       elif git diff --name-only HEAD~1 | grep '^prod/'; then
-  #         echo "env_name=prod" >> $GITHUB_OUTPUT
-  #       else
-  #         echo "env_name=lab" >> $GITHUB_OUTPUT
-  #       fi
   
   install-argocd:
     #needs: set-environment
