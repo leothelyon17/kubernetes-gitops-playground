@@ -1,9 +1,9 @@
 name: Kubespray Cluster Create
 
 on:
-  push:
-    paths:
-      - 'clusters/**'  # Monitor changes in the clusters/ directory
+  # push:
+  #   paths:
+  #     - 'clusters/**'  # Monitor changes in the clusters/ directory
   workflow_dispatch:
     inputs:
         environment:
