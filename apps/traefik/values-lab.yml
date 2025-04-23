@@ -28,10 +28,6 @@ extraObjects:
       basicAuth:
         secret: traefik-dashboard-auth-secret
 
-additionalArguments:
-  - "--api.insecure=true" # Enables the dashboard
-  - "--api.dashboard=true"
-
 service:
   type: LoadBalancer
   loadBalancerIP: 172.16.99.30 # External IP from MetalLB
