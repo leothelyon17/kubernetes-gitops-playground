@@ -29,5 +29,5 @@ extraObjects:
         secret: traefik-dashboard-auth-secret
 
 service:
-  type: LoadBalancer
-  loadBalancerIP: 172.16.99.30 # External IP from MetalLB
+  spec:
+    loadBalancerIP: 172.16.99.30 # External IP from MetalLB
