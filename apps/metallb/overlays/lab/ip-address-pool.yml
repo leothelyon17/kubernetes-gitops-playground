@@ -2,7 +2,7 @@ apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
   name: lab-traefik-pool
-  namespace: metallb-lab
+  namespace: metallb-system
 spec:
   addresses:
   - 172.16.99.30/32
