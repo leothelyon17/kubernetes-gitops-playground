@@ -4,7 +4,7 @@
  kind: IngressRoute
  metadata:
    name: vault-ingressroute-gui  # <-- Replace with your IngressRoute name
-   namespace: hashi-vault-lab  # <-- Replace with your namespace
+   namespace: vault-lab  # <-- Replace with your namespace
  spec:
    entryPoints:
      - websecure
