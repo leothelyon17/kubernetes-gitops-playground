@@ -18,3 +18,22 @@ spec:
     useAllDevices: false
     # Only create OSDs on devices that match the regular expression filter, "sdb" in this example
     deviceFilter: nvme0n1p6
+  storage:
+    useAllNodes: false
+    useAllDevices: false
+    nodes:
+      - name: rocky9-prod-node1
+        devices:
+          - name: "nvme0n1p6"
+      - name: rocky9-prod-node2
+        devices:
+          - name: "nvme0n1p6"
+      - name: rocky9-prod-node3
+        devices:
+          - name: "nvme0n1p6"
+      - name: rocky9-prod-node4-ds
+        devices:
+          - name: "sdb"
+      - name: rocky9-prod-node5-un
+        devices:
+          - name: "vdb"
