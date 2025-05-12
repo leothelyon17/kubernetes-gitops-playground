@@ -13,11 +13,11 @@ spec:
   dashboard:
     enabled: true
   # cluster level storage configuration and selection
-  storage:
-    useAllNodes: true
-    useAllDevices: false
-    # Only create OSDs on devices that match the regular expression filter, "sdb" in this example
-    deviceFilter: nvme0n1p6
+  # storage:
+  #   useAllNodes: true
+  #   useAllDevices: false
+  #   # Only create OSDs on devices that match the regular expression filter, "sdb" in this example
+  #   deviceFilter: nvme0n1p6
   storage:
     useAllNodes: false
     useAllDevices: false
