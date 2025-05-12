@@ -96,12 +96,20 @@ jobs:
           cp -r ../${BASE_CLUSTER_DIR}/${CHANGED_CLUSTER} inventory/
           ls inventory/${CHANGED_CLUSTER}/
 
+      # Pre 8: Run Kubespray Facts Playbook
+      - name: Run Kubespray facts playbook
+        working-directory: ./kubespray
+        run: |
+          source venv/bin/activate
+          ansible-playbook -i inventory/${CHANGED_CLUSTER}/hosts.yml facts.yml \
+            --become --become-user=root -e "ansible_password=${{ secrets.SSH_PASS }}" -e "ansible_become_pass=${{ secrets.SSH_PASS }}" -e "reset_confirmation=yes"
+      
       # Step 8: Run Kubespray Playbook
       - name: Run Kubespray playbook
         working-directory: ./kubespray
         run: |
           source venv/bin/activate
-          ansible-playbook -i inventory/${CHANGED_CLUSTER}/hosts.yml cluster.yml \
+          ansible-playbook -i inventory/${CHANGED_CLUSTER}/hosts.yml scale.yml \
             --become --become-user=root --limit rocky9-prod-node4-ds -e "ansible_password=${{ secrets.SSH_PASS }}" -e "ansible_become_pass=${{ secrets.SSH_PASS }}" -e "reset_confirmation=yes"
 
       
