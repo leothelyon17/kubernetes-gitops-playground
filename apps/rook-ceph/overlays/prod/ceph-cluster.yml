@@ -19,11 +19,6 @@ spec:
   #   # Only create OSDs on devices that match the regular expression filter, "sdb" in this example
   #   deviceFilter: nvme0n1p6
   storage:
-    resources:
-      limits:
-        memory: 3Gi
-      requests:
-        memory: 2Gi
     config:
       osd_memory_target: "3221225472"  # 3GB in bytes
       
@@ -40,8 +35,14 @@ spec:
         devices:
           - name: "nvme0n1p6"
       - name: rocky9-prod-node4-ds
+        resources:
+          limits:
+            memory: "3072Mi"
         devices:
           - name: "sdb"
       - name: rocky9-prod-node5-un
+        resources:
+          limits:
+            memory: "3072Mi"
         devices:
           - name: "vdb"
