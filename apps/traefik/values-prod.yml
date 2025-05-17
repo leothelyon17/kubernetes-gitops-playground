@@ -1,6 +1,10 @@
 entryPoints:
   plex:
     address: ":32400"
+    forwardedHeaders:
+      insecure: true
+      trustedIPs:
+        - 192.168.0.0/16
 
 ingressRoute:
   dashboard:
