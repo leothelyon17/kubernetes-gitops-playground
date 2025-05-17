@@ -1,3 +1,7 @@
+entryPoints:
+  plex:
+    address: ":32400"
+
 ingressRoute:
   dashboard:
     enabled: true
