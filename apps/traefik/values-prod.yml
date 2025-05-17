@@ -45,3 +45,4 @@ extraObjects:
 service:
   spec:
     loadBalancerIP: 192.168.101.161
+    externalTrafficPolicy: Local
