@@ -1,17 +1,18 @@
-entryPoints:
-  websecure:
-    address: ":443"
-    forwardedHeaders:
-      trustedIPs:
-        - 192.168.0.0/16   # your LAN subnet (if Traefik receives traffic from these)
-        - 10.0.0.0/8       # any other trusted proxy ranges
+ports:
   plex:
-    address: ":32400"
+    port: 32400
+    expose:
+      default: true
+    exposedPort: 32400
+    protocol: TCP
     forwardedHeaders:
-      insecure: true
       trustedIPs:
         - 192.168.0.0/16
-
+      insecure: true
+    proxyProtocol:
+      trustedIPs: []
+      insecure: false
+      
 ingressRoute:
   dashboard:
     enabled: true
