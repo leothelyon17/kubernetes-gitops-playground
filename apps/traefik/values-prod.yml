@@ -1,4 +1,10 @@
 entryPoints:
+  websecure:
+    address: ":443"
+    forwardedHeaders:
+      trustedIPs:
+        - 192.168.0.0/16   # your LAN subnet (if Traefik receives traffic from these)
+        - 10.0.0.0/8       # any other trusted proxy ranges
   plex:
     address: ":32400"
     forwardedHeaders:
