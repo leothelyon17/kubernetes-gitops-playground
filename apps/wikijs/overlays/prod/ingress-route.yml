@@ -4,7 +4,7 @@
  kind: IngressRoute
  metadata:
    name: wiki-js-ingressroute  # <-- Replace with your IngressRoute name
-   namespace: wike-js-prod  # <-- Replace with your namespace
+   namespace: wiki-js-prod  # <-- Replace with your namespace
  spec:
    entryPoints:
      - websecure
