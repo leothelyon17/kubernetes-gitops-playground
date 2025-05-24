@@ -1,1 +1,18 @@
-TEST
+---
+# --> (Example) Create an IngressRoute for your service...
+ apiVersion: traefik.io/v1alpha1
+ kind: IngressRoute
+ metadata:
+   name: wiki-js-ingressroute  # <-- Replace with your IngressRoute name
+   namespace: wike-js-prod  # <-- Replace with your namespace
+ spec:
+   entryPoints:
+     - websecure
+   routes:
+     - match: Host(`wikijs.home.nerdylyonsden.io`)  # <-- Replace with your FQDN
+       kind: Rule
+       services:
+         - name: wiki-js-prod  # <-- Replace with your service name
+           port: 80
+   tls:
+     secretName: prod-apps-certificate-secret
