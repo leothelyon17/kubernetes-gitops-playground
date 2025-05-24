@@ -1,0 +1,12 @@
+ingress:
+  enabled: false
+
+postgresql:
+  enabled: true
+  replication:
+    enabled: false
+  persistence:
+    enabled: true
+    storageClass: rook-cephfs-retain
+    accessMode: ReadWriteOnce
+    size: 2Gi
