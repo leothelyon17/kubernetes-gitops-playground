@@ -1,3 +1,7 @@
+env:
+  - name: "MONGO_URL"
+    value: "mongodb://wekan-prod-mongodb:27017"
+
 endpoint: wekan.home.nerdylyonsden.io
 
 ## Main URL (including http:// or https://) where your Wekan
