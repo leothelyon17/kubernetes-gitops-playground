@@ -1,0 +1,65 @@
+endpoint: wekan.home.nerdylyonsden.io
+
+## Main URL (including http:// or https://) where your Wekan
+## instance is accessible
+##
+root_url: https://wekan.home.nerdylyonsden.io
+
+## Note: WeKan is usually run at subdomain. Using a subpath is not tested.
+## https://github.com/wekan/charts/issues/30
+## If configuring the Helm values to run wekan under a subpath,
+## the readiness and liveliness probes are still configured
+## to call the root path /. This returns a 404 Not Found and
+## results in the probe(s) failing, which ultimately results in Kubernetes killing the pod.
+##
+## Relevent config:
+##
+##  endpoint: yourcompany.com
+##  root_url: https://yourcompany.com/wekan
+##  ingress:
+##    path: /wekan
+##    hosts: [ yourcompany.com ]
+
+ingress:
+  enabled: false
+  
+autoscaling:
+  enabled: true
+  config:
+    minReplicas: 1
+    maxReplicas: 2
+    ## Note: when setting this, a `resources.request.cpu` is required. You
+    ## likely want to set it to `1` or some lower value.
+    ##
+    targetCPUUtilizationPercentage: 80
+
+sharedDataFolder:
+  enabled: true
+  path: /data
+  accessMode: ReadWriteOnce
+  storageClass: rook-cephfs-retain
+  resources:
+    requests:
+      storage: 1Gi
+
+# ------------------------------------------------------------------------------
+# MongoDB:
+# ref: https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
+# ------------------------------------------------------------------------------
+
+mongodb:
+  enabled: true
+  architecture: standalone
+  useStatefulSet: false
+  # https://github.com/wekan/charts/issues/34
+  #architecture: replicaset
+  #replicaCount: 3
+  #replicaSetName: rs0
+  auth:
+    enabled: false
+  # Optional specify an existing PVC
+  persistence:
+    storageClass: rook-cephfs-retain
+    accessModes:
+      - ReadWriteOnce
+    size: 1Gi
