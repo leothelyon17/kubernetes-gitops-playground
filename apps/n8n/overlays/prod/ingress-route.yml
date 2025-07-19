@@ -8,14 +8,12 @@
  spec:
    entryPoints:
      - websecure
-     - web
    routes:
-     - match: Host(`https://n8n.nerdy-apps-prod.jjland.local`)  # <-- Replace with your FQDN
+     - match: Host(`n8n.home.nerdylyonsden.io`)  # <-- Replace with your FQDN
        kind: Rule
        services:
          - name: n8n-prod  # <-- Replace with your service name
-           port: 443
+           port: 80
 # --> (Optional) Add certificate secret
    tls:
      secretName: prod-apps-certificate-secret # < cert-manager will store the created certificate in this secret.
-# <--
