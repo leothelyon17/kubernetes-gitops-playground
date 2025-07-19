@@ -1,0 +1,46 @@
+---
+- name: Cleanup unused container images via crictl on Kubernetes hosts
+  hosts: kube_node
+  gather_facts: false
+  become: true
+  vars:
+    # Disable strict host key checking for new or password-based SSH
+    ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+
+  pre_tasks:
+    - name: Ensure SSH host key is known for each target
+      ansible.builtin.known_hosts:
+        path: "{{ lookup('env','HOME') + '/.ssh/known_hosts' }}"
+        name: "{{ ansible_host | default(inventory_hostname) }}"
+        key: "{{ lookup('pipe','ssh-keyscan -p ' + (ansible_port | default('22')) + ' ' + (ansible_host | default(inventory_hostname))) }}"
+      delegate_to: localhost
+
+    - name: Gather facts after SSH host key is added
+      ansible.builtin.setup:
+
+  tasks:
+    - name: Locate existing crictl binary under non-root PATH
+      ansible.builtin.command: which crictl
+      register: crictl_path
+      become: false
+      failed_when: false
+      changed_when: false
+
+    - name: Symlink crictl into /usr/bin so root can find it
+      ansible.builtin.file:
+        src: "{{ crictl_path.stdout }}"
+        dest: /usr/bin/crictl
+        state: link
+        force: yes
+      when: crictl_path.stdout != ''
+
+    - name: Prune all unused images via full path to crictl
+      ansible.builtin.shell: /usr/bin/crictl rmi --prune
+
+    - name: Report image cleanup
+      ansible.builtin.debug:
+        msg: "All unused images have been pruned via crictl."
+
+    - name: Remove all 'Error' or 'Completed' pods
+      ansible.builtin.shell: kubectl get pods --all-namespaces | grep -E 'Completed|Error' | awk '{print "kubectl delete pod "$2" -n "$1}' | bash
+      delegate_to: localhost
