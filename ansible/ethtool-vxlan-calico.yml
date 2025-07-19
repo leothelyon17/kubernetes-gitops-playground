@@ -1,0 +1,39 @@
+---
+- name: Configure systemd service to disable ethtool offloading on vxlan.calico
+  hosts: all
+  become: true
+  tasks:
+
+    - name: Create systemd service unit file
+      copy:
+        dest: /etc/systemd/system/ethtool-vxlan-calico.service
+        content: |
+          [Unit]
+          Description=Disable RX/TX offloading on vxlan.calico
+          After=network.target
+          Wants=network-online.target
+
+          [Service]
+          Type=oneshot
+          ExecStart=/usr/sbin/ethtool --offload vxlan.calico rx off tx off
+          RemainAfterExit=true
+
+          [Install]
+          WantedBy=multi-user.target
+        mode: '0644'
+
+    - name: Reload systemd (daemon-reexec)
+      command: systemctl daemon-reexec
+
+    - name: Reload systemd (daemon-reload)
+      command: systemctl daemon-reload
+
+    - name: Enable the ethtool-vxlan-calico service
+      systemd:
+        name: ethtool-vxlan-calico.service
+        enabled: yes
+
+    - name: Start the ethtool-vxlan-calico service
+      systemd:
+        name: ethtool-vxlan-calico.service
+        state: started
