@@ -1,7 +1,7 @@
 netbox-bgp==0.16.0
 netbox-secrets==2.3.0
 slurpit_netbox==1.1.13
-netboxlabs-diode-netbox-plugin==1.2.0
+netboxlabs-diode-netbox-plugin==1.2.1
 netboxlabs-netbox-branching==0.6.0
 netbox_lifecycle==1.1.6
 netbox-slm==1.8.2
