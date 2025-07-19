@@ -1,0 +1,19 @@
+project: prod-home
+destination:
+  server: https://prod-kube-vip.jjland.local:6443
+  namespace: nautobot-prod
+syncPolicy:
+  automated: {}
+  syncOptions:
+    - CreateNamespace=true
+sources:
+  - repoURL: https://nautobot.github.io/helm-charts/
+    targetRevision: 2.4.4
+    helm:
+      valueFiles:
+        - $values/apps/nautobot/values-prod.yml
+    chart: nautobot
+  - repoURL: https://github.com/leothelyon17/kubernetes-gitops-playground.git
+    path: apps/nautobot/overlays/prod
+    targetRevision: HEAD
+    ref: values
