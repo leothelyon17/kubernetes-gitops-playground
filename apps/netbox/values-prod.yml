@@ -99,14 +99,20 @@ postgresql:
     grant-create.sql: |
       GRANT CREATE ON DATABASE ${POSTGRES_DB} TO ${POSTGRES_USER};
 
-redis:
-  architecture: "standalone"
-  master:
+valkey:
+  primary:
     persistence:
-      enabled: true
-      size: "1Gi"
-      storageClass: "rook-cephfs-delete"
-      accessModes: ['ReadWriteOnce']
-  auth:
-    enabled: true
-    existingSecret: netbox-prod-secrets
+      enabled: false
+    
+
+# redis:
+#   architecture: "standalone"
+#   master:
+#     persistence:
+#       enabled: true
+#       size: "1Gi"
+#       storageClass: "rook-cephfs-delete"
+#       accessModes: ['ReadWriteOnce']
+#   auth:
+#     enabled: true
+#     existingSecret: netbox-prod-secrets
