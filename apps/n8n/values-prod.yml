@@ -3,17 +3,11 @@
 #  tag: "1.95.2"  # Stable version without the bug
 
 main:
-  nodeSelector:
-      storage-ceph-a: "true"
-  tolerations:
-    - key: "rook-cephfs-retain"
-      operator: "Exists"
-      effect: "NoSchedule"
 
   persistence:
     enabled: true
     type: dynamic
-    storageClass: rook-cephfs-a-retain
+    storageClass: rook-cephfs-retain
     accessModes:
       - ReadWriteOnce
     size: 1Gi
