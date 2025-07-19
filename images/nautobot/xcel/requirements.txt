@@ -1,0 +1,2 @@
+nautobot-bgp-models==2.3.0
+nautobot-secrets-providers[hashicorp]==3.2.0

@@ -1,0 +1,9 @@
+nornir-nautobot==3.2.0
+nautobot-plugin-nornir==2.1.0
+nautobot-golden-config==2.3.0
+nautobot-ssot==3.5.0
+nautobot-device-onboarding==4.2.0
+nautobot-secrets-providers[hashicorp]==3.2.0
+nautobot-bgp-models==2.3.0
+nautobot-firewall-models==2.2.1
+slurpit_nautobot==1.0.15
