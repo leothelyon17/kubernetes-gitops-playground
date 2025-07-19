@@ -12,7 +12,7 @@ on:
       BASE_VERSION:
         description: 'Base version for the image (if applicable, e.g., Netbox version).'
         required: false
-        default: "4.2.6"
+        default: "4.3.4"
 
 jobs:
   set-matrix:
@@ -40,7 +40,7 @@ jobs:
       matrix:
         IMAGE_CONTEXT: ${{ fromJson(needs.set-matrix.outputs.matrix) }}
     env:
-      DEFAULT_BASE_VERSION: 4.2.6
+      DEFAULT_BASE_VERSION: 4.3.4
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
