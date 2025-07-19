@@ -1,6 +1,6 @@
 image:
   registry: ghcr.io
-  repository: ahead-labs/net-automation-k8s-lab/netbox/dev
+  repository: ghcr.io/leothelyon17/kubernetes-gitops-playground/netbox/dev
   pullPolicy: Always
   tag: "latest"
   pullSecrets:
