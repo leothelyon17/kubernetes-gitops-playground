@@ -7,12 +7,12 @@ PLUGINS_CONFIG = {
     'netbox_secrets': {},
     'slurpit_netbox': {},
     'netbox_branching': {},
-    'netbox_diode_plugin': {
+    #'netbox_diode_plugin': {
         # # Auto-provision users for Diode plugin
         # "auto_provision_users": False,
 
         # Diode gRPC target for communication with Diode server
-        "diode_target": "grpc://diode-marathon-srvc.lib-nauto-apps.lab.aheadaviation.com/diode",
+        #"diode_target": "grpc://diode-marathon-srvc.lib-nauto-apps.lab.aheadaviation.com/diode",
 
         # # User allowed for Diode to NetBox communication
         # "diode_to_netbox_username": "diode-to-netbox",
@@ -22,6 +22,6 @@ PLUGINS_CONFIG = {
 
         # User allowed for data ingestion
         #"diode_username": "diode-ingestion",
-        "diode_username": "diode",
-    }
+        #"diode_username": "diode",
+    #}
 }
