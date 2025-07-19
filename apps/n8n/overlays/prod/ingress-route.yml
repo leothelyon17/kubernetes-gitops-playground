@@ -15,6 +15,6 @@
          - name: n8n-prod  # <-- Replace with your service name
            port: 80
 # --> (Optional) Add certificate secret
-# tls:
-#     secretName: your-certificate-secret
+ tls:
+   secretName: prod-apps-certificate-secret # < cert-manager will store the created certificate in this secret.
 # <--
