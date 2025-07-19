@@ -6,7 +6,7 @@ main:
   nodeSelector:
       storage-ceph-a: "true"
   tolerations:
-    - key: "storage-ceph-a"
+    - key: "rook-cephfs-retain"
       operator: "Exists"
       effect: "NoSchedule"
 
