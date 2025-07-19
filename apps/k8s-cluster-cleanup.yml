@@ -1,0 +1,37 @@
+name: Cleanup K8s Cluster (Images and Containers)
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "The environment to generate the Kubernetes config for"
+        required: true
+        default: "prod"
+        type: choice
+        options:
+          - prod
+          - lab
+
+jobs:
+  cluster-cleanup:
+    runs-on: self-hosted
+    environment: ${{ github.event.inputs.environment }}
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      # Install required Python dependencies
+      - name: Install dependencies
+        run: |
+          python3 -m venv venv
+          source venv/bin/activate
+          pip3 install ansible
+
+      - name: Run Cleanup Playbook
+        run: |
+          export ENV_NAME=${{ github.event.inputs.environment }}
+          source venv/bin/activate
+          ansible-playbook -i ./clusters/$ENV_NAME/hosts.yml ./ansible/cluster-cleanup-pb.yml \
+              --become -e "ansible_password=${{ secrets.AHEAD_SSH_PASS }}"
