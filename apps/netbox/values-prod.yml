@@ -24,20 +24,20 @@ initContainers:
       - name: GIT_USERNAME
         valueFrom:
           secretKeyRef:
-            name: netbox-dev-secrets
+            name: netbox-prod-secrets
             key: dockerusername
       - name: GIT_PASSWORD
         valueFrom:
           secretKeyRef:
-            name: netbox-dev-secrets
+            name: netbox-prod-secrets
             key: dockerpassword
             
     command:
       - /bin/sh
       - -c
       - |
-        git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/ahead-labs/net-automation-k8s-lab.git /tmp-netbox-dev && \
-        cp -r /tmp-netbox-dev/apps/netbox/overlays/dev/configuration/* /shared-volume/
+        git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/leothelyon17/kubernetes-gitops-playground.git /tmp-netbox-prod && \
+        cp -r /tmp-netbox-prod/apps/netbox/overlays/prod/configuration/* /shared-volume/
     volumeMounts:
       - name: shared-volume
         mountPath: /shared-volume
@@ -74,14 +74,14 @@ readinessProbe:
 
 clusterDomain: jjland.local
 
-extraEnvVarsSecret: netbox-dev-secrets
+extraEnvVarsSecret: netbox-prod-secrets
 
 superuser:
-  existingSecret: netbox-dev-superuser-secrets
+  existingSecret: netbox-prod-superuser-secrets
 
 persistence:
   enabled: true
-  storageClass: "rook-cephfs"
+  storageClass: "rook-cephfs-delete"
   accessMode: ReadWriteMany
   size: 1Gi
 
@@ -90,10 +90,10 @@ postgresql:
     persistence:
       enabled: true
       size: "5Gi"
-      storageClass: "rook-cephfs"
+      storageClass: "rook-cephfs-retain"
       accessModes: ['ReadWriteOnce']
   auth:
-    existingSecret: netbox-dev-secrets
+    existingSecret: netbox-prod-secrets
   
   initdbScripts:
     grant-create.sql: |
@@ -105,8 +105,8 @@ redis:
     persistence:
       enabled: true
       size: "1Gi"
-      storageClass: "rook-cephfs"
+      storageClass: "rook-cephfs-delete"
       accessModes: ['ReadWriteOnce']
   auth:
     enabled: true
-    existingSecret: netbox-dev-secrets
+    existingSecret: netbox-prod-secrets
