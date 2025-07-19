@@ -1,0 +1,32 @@
+#image:  # Move this to root level
+#  repository: "n8nio/n8n"  # Explicit for safety
+#  tag: "1.95.2"  # Stable version without the bug
+
+main:
+  nodeSelector:
+      storage-ceph-a: "true"
+  tolerations:
+    - key: "storage-ceph-a"
+      operator: "Exists"
+      effect: "NoSchedule"
+
+  persistence:
+    enabled: true
+    type: dynamic
+    storageClass: rook-cephfs-a-retain
+    accessModes:
+      - ReadWriteOnce
+    size: 1Gi
+
+  service:
+    targetPort: 5678
+
+  extraEnv:  # Minimal set to override base URLs without port conflicts
+    - name: WEBHOOK_URL
+      value: "https://n8n-dev.lib-nauto-apps.lab.aheadaviation.com/"  # Sets OAuth callback and webhook base (trailing slash required)
+    - name: N8N_EDITOR_BASE_URL
+      value: "https://n8n-dev.lib-nauto-apps.lab.aheadaviation.com/"  # Sets editor UI base
+    - name: N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS
+      value: "true"  # Auto-fixes the 0660 permissions warning
+    - name: N8N_RUNNERS_ENABLED  # Optional: Addresses deprecation for future-proofing
+      value: "true"
