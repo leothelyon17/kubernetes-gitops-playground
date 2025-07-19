@@ -103,6 +103,9 @@ valkey:
   primary:
     persistence:
       enabled: false
+  replica:
+    persistence:
+      enabled: false
     
 
 # redis:
