@@ -6,10 +6,11 @@ on:
       environment:
         description: "The environment to generate the Kubernetes config for"
         required: true
-        default: "libertyville"
+        default: "lab"
         type: choice
         options:
-          - libertyville
+          - prod
+          - lab
 
 jobs:
   cluster-custom-settings:
@@ -33,4 +34,4 @@ jobs:
           export ENV_NAME=${{ github.event.inputs.environment }}
           source venv/bin/activate
           ansible-playbook -i ./clusters/$ENV_NAME/hosts.yml ./ansible/ethtool-vxlan-calico.yml \
-              --become -e "ansible_password=${{ secrets.AHEAD_SSH_PASS }}"
+              -e "ansible_password=${{ secrets.SSH_PASS }}" -e "ansible_become_pass=${{ secrets.SSH_PASS }}"
