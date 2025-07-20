@@ -35,3 +35,10 @@ jobs:
           source venv/bin/activate
           ansible-playbook -i ./clusters/$ENV_NAME/hosts.yml ./ansible/cluster-cleanup-pb.yml \
               -e "ansible_password=${{ secrets.SSH_PASS }}" -e "ansible_become_pass=${{ secrets.SSH_PASS }}"
+
+      - name: Run Restart Kube Services Playbook
+        run: |
+          export ENV_NAME=${{ github.event.inputs.environment }}
+          source venv/bin/activate
+          ansible-playbook -i ./clusters/$ENV_NAME/hosts.yml ./ansible/restart-kube-services.yml \
+              -e "ansible_password=${{ secrets.SSH_PASS }}" -e "ansible_become_pass=${{ secrets.SSH_PASS }}"
