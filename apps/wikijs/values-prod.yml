@@ -5,6 +5,7 @@ postgresql:
   enabled: true
   replication:
     enabled: false
+  existingSecret: wikijs-prod-secrets
   persistence:
     enabled: true
     storageClass: rook-cephfs-retain
