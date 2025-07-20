@@ -1,6 +1,6 @@
 ---
 - name: Restart containerd and kubelet (simple static restart)
-  hosts: kube_nodes          # define this group in your inventory
+  hosts: all         # define this group in your inventory
   become: true
   gather_facts: false
   serial: 1                  # remove if you really want all at once
