@@ -1,0 +1,19 @@
+---
+- name: Restart containerd and kubelet (simple static restart)
+  hosts: kube_nodes          # define this group in your inventory
+  become: true
+  gather_facts: false
+  serial: 1                  # remove if you really want all at once
+
+  vars:
+    services_to_restart:
+      - containerd
+      - kubelet
+
+  tasks:
+    - name: Restart services
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        state: restarted
+        daemon_reload: yes
+      loop: "{{ services_to_restart }}"
