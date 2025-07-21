@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-memory
+  namespace: ollama-mistral-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-memory
+  template:
+    metadata:
+      labels:
+        app: redis-memory
+    spec:
+      containers:
+        - name: redis
+          image: redis:7-alpine
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 6379
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          volumeMounts:
+            - name: redis-storage
+              mountPath: /data
+          command: ["redis-server"]
+          args:
+            # Append-only file (AOF) for durability; snapshotting is still enabled.
+            - "--appendonly"
+            - "yes"
+            - "--appendfilename"
+            - "appendonly.aof"
+            # Optional: limit memory to 256 MB and evict LRU keys on pressure
+            - "--maxmemory"
+            - "256mb"
+            - "--maxmemory-policy"
+            - "allkeys-lru"
+      nodeSelector:
+        storage-ceph-c: 'true'
+      volumes:
+        - name: redis-storage
+          persistentVolumeClaim:
+            claimName: redis-memory-pvc

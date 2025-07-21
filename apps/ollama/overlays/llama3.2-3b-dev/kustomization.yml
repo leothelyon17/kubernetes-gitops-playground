@@ -1,0 +1,8 @@
+resources:
+  - deployment.yml
+  - pvc.yml
+  - service.yml
+  - ingress-route.yml
+  - redis-deployment.yml
+  - redis-pvc.yml
+  - redis-service.yml

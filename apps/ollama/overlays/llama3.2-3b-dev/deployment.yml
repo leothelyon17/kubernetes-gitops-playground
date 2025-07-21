@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ollama-llama32-dev
+  namespace: ollama-llama32-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ollama-llama32
+  template:
+    metadata:
+      labels:
+        app: ollama-llama32
+    spec:
+      containers:
+        - name: ollama
+          image: ollama/ollama
+          ports:
+            - containerPort: 11434
+          env:
+            - name: OLLAMA_HOST
+              value: "0.0.0.0"
+          command: ["/bin/sh"]
+          args:
+            - -c
+            - |
+              ollama serve &
+              sleep 2
+              ollama run llama3.2
+              tail -f /dev/null
+          volumeMounts:
+            - name: model-cache
+              mountPath: /root/.ollama
+          resources:
+            requests:
+              cpu: "1"
+              memory: 4Gi
+            limits:
+              cpu: "4"
+              memory: 8Gi
+      nodeSelector:
+        storage-ceph-c: 'true'
+      tolerations:
+        - key: "storage-ceph-c"
+          operator: "Exists"
+          effect: "NoSchedule"
+      volumes:
+        - name: model-cache
+          persistentVolumeClaim:
+            claimName: ollama-llama32-dev-cache

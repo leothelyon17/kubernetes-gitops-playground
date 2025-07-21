@@ -1,0 +1,21 @@
+---
+# --> (Example) Create an IngressRoute for your service...
+ apiVersion: traefik.io/v1alpha1
+ kind: IngressRoute
+ metadata:
+   name: ollama-mistral-dev-ingressroute  # <-- Replace with your IngressRoute name
+   namespace: ollama-mistral-dev  # <-- Replace with your namespace
+ spec:
+   entryPoints:
+     - web
+     - websecure
+   routes:
+     - match: Host(`ollama-mistral-dev.lib-nauto-apps.lab.aheadaviation.com`)  # <-- Replace with your FQDN
+       kind: Rule
+       services:
+         - name: ollama-mistral-service  # <-- Replace with your service name
+           port: 80
+# --> (Optional) Add certificate secret
+# tls:
+#     secretName: your-certificate-secret
+# <--
