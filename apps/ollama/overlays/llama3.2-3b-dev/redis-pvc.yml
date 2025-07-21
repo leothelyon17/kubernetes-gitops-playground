@@ -11,4 +11,4 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  storageClassName: rook-cephfs-c-delete
+  storageClassName: rook-cephfs-delete
