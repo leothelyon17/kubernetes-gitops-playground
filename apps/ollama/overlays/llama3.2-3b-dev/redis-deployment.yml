@@ -41,8 +41,6 @@ spec:
             - "256mb"
             - "--maxmemory-policy"
             - "allkeys-lru"
-      nodeSelector:
-        storage-ceph-c: 'true'
       volumes:
         - name: redis-storage
           persistentVolumeClaim:
