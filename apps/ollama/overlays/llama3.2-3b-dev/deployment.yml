@@ -40,9 +40,9 @@ spec:
               cpu: "4"
               memory: 8Gi
       nodeSelector:
-        storage-ceph-c: 'true'
+        ai-workloads: 'cpu-only'
       tolerations:
-        - key: "storage-ceph-c"
+        - key: "ai-workloads"
           operator: "Exists"
           effect: "NoSchedule"
       volumes:
