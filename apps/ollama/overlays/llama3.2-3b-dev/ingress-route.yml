@@ -10,7 +10,7 @@
      - web
      - websecure
    routes:
-     - match: Host(`ollama-llama32-dev.lib-nauto-apps.lab.aheadaviation.com`)  # <-- Replace with your FQDN
+     - match: Host(`ollama-llama32-dev.home.nerdylyonsden.io`)  # <-- Replace with your FQDN
        kind: Rule
        services:
          - name: ollama-llama32-service  # <-- Replace with your service name
