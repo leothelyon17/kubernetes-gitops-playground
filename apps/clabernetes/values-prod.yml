@@ -1,8 +1,9 @@
-#
-# ui
-#
-# ya know, the ui, web thingy so you can click some buttons and see pretty pictures and stuff
-#
+globalConfig:
+  deployment:
+    # specifying a "custom" containerlab version will cause launcher pods to download and use this
+    # version of containerlab. generally don't set this unless you need to.
+    containerlabVersion: "0.69.1"
+
 ui:
   enabled: true
 
