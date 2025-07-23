@@ -15,7 +15,7 @@ spec:
     persistence:
       claimSize: "1Gi"
       enabled: true
-      storageClassName: "rook-cephrbd-c-delete"
+      storageClassName: "rook-cephfs-delete"
     filesFromConfigMap:
         dc1-spine1:
           - filePath: configs/dc1-spine1-startup-config.cfg
