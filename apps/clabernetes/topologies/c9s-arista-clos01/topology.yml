@@ -65,7 +65,7 @@ spec:
 
           mgmt:
             network: custom_mgmt                # management network name
-            ipv4-subnet: 172.30.101.240/28  # ipv4 range
+            ipv4-subnet: 192.168.101.224/27  # ipv4 range
           
           topology:
             kinds:
@@ -79,54 +79,54 @@ spec:
                 kind: ceos
                 image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2f
                 startup-config: configs/dc1-spine1-startup-config.cfg
-                mgmt-ipv4: 172.30.101.242
+                mgmt-ipv4: 192.168.101.226
               dc1-spine2:
                 kind: ceos
                 image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2f
                 startup-config: configs/dc1-spine2-startup-config.cfg
-                mgmt-ipv4: 172.30.101.243
+                mgmt-ipv4: 192.168.101.227
               dc1-leaf1a:
                 kind: ceos
                 image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2f
                 startup-config: configs/dc1-leaf1a-startup-config.cfg
                 startup-delay: 30
-                mgmt-ipv4: 172.30.101.244
+                mgmt-ipv4: 192.168.101.228
               dc1-leaf1b:
                 kind: ceos
                 image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2f
                 startup-config: configs/dc1-leaf1b-startup-config.cfg
                 startup-delay: 60
-                mgmt-ipv4: 172.30.101.245
+                mgmt-ipv4: 192.168.101.229
               dc1-leaf2a:
                 kind: ceos
                 image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2f
                 startup-config: configs/dc1-leaf2a-startup-config.cfg
                 startup-delay: 30
-                mgmt-ipv4: 172.30.101.246
+                mgmt-ipv4: 192.168.101.230
               dc1-leaf2b:
                 kind: ceos
                 image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2f
                 startup-config: configs/dc1-leaf2b-startup-config.cfg
                 startup-delay: 60
-                mgmt-ipv4: 172.30.101.247
+                mgmt-ipv4: 192.168.101.231
               dc1-leaf1c:
                 kind: ceos
                 image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2f
                 startup-config: configs/dc1-leaf1c-startup-config.cfg
                 startup-delay: 90
-                mgmt-ipv4: 172.30.101.248
+                mgmt-ipv4: 192.168.101.232
               dc1-leaf2c:
                 kind: ceos
                 image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2f
                 startup-config: configs/dc1-leaf2c-startup-config.cfg
                 startup-delay: 90
-                mgmt-ipv4: 172.30.101.249
+                mgmt-ipv4: 192.168.101.233
               dc1-leaf1-server1:
                 kind: linux
-                mgmt-ipv4: 172.30.101.250
+                mgmt-ipv4: 192.168.101.234
               dc1-leaf2-server1:
                 kind: linux
-                mgmt-ipv4: 172.30.101.251
+                mgmt-ipv4: 192.168.101.235
               
 
             links:
