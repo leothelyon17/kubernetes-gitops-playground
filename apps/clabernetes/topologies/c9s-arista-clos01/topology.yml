@@ -11,7 +11,7 @@ spec:
   deployment:
     scheduling:
       nodeSelector:
-        storage-ceph-c: "true"
+        clabernetes: "true"
     persistence:
       claimSize: "1Gi"
       enabled: true
