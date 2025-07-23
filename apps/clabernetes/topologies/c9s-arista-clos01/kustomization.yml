@@ -1,5 +1,4 @@
 resources:
-  - ../../base
   - topology.yml
   - external-secret.yml
   - dc1-spine1-startup-config.yml
