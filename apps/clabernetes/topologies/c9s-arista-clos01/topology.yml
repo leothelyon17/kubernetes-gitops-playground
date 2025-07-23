@@ -1,0 +1,154 @@
+apiVersion: clabernetes.containerlab.dev/v1alpha1
+kind: Topology
+metadata:
+  name: c9s-arista-clos01
+  namespace: c9s-arista-clos01
+spec:
+  imagePull:
+    dockerConfig: ghcr-secret
+  expose:
+    useNodeMgmtIpv4Address: True
+  deployment:
+    scheduling:
+      nodeSelector:
+        storage-ceph-c: "true"
+    persistence:
+      claimSize: "1Gi"
+      enabled: true
+      storageClassName: "rook-cephrbd-c-delete"
+    filesFromConfigMap:
+        dc1-spine1:
+          - filePath: configs/dc1-spine1-startup-config.cfg
+            configMapName: arista-clos01-dc1-spine1-startup-config
+            configMapPath: startup-config
+            mode: read
+        dc1-spine2:
+          - filePath: configs/dc1-spine2-startup-config.cfg
+            configMapName: arista-clos01-dc1-spine2-startup-config
+            configMapPath: startup-config
+            mode: read
+        dc1-leaf1a:
+          - filePath: configs/dc1-leaf1a-startup-config.cfg
+            configMapName: arista-clos01-dc1-leaf1a-startup-config
+            configMapPath: startup-config
+            mode: read
+        dc1-leaf1b:
+          - filePath: configs/dc1-leaf1b-startup-config.cfg
+            configMapName: arista-clos01-dc1-leaf1b-startup-config
+            configMapPath: startup-config
+            mode: read
+        dc1-leaf2a:
+          - filePath: configs/dc1-leaf2a-startup-config.cfg
+            configMapName: arista-clos01-dc1-leaf2a-startup-config
+            configMapPath: startup-config
+            mode: read
+        dc1-leaf2b:
+          - filePath: configs/dc1-leaf2b-startup-config.cfg
+            configMapName: arista-clos01-dc1-leaf2b-startup-config
+            configMapPath: startup-config
+            mode: read
+        dc1-leaf1c:
+          - filePath: configs/dc1-leaf1c-startup-config.cfg
+            configMapName: arista-clos01-dc1-leaf1c-startup-config
+            configMapPath: startup-config
+            mode: read
+        dc1-leaf2c:
+          - filePath: configs/dc1-leaf2c-startup-config.cfg
+            configMapName: arista-clos01-dc1-leaf2c-startup-config
+            configMapPath: startup-config
+            mode: read
+      
+  naming: non-prefixed
+  definition:
+    containerlab: |-
+          name: c9s-arista-clos01
+
+          mgmt:
+            network: custom_mgmt                # management network name
+            ipv4-subnet: 172.30.101.240/28  # ipv4 range
+          
+          topology:
+            kinds:
+              ceos:
+                env:
+                  CLAB_MGMT_VRF: MGMT
+              linux:
+                image: ghcr.io/hellt/network-multitool
+            nodes:
+              dc1-spine1:
+                kind: ceos
+                image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2f
+                startup-config: configs/dc1-spine1-startup-config.cfg
+                mgmt-ipv4: 172.30.101.242
+              dc1-spine2:
+                kind: ceos
+                image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2f
+                startup-config: configs/dc1-spine2-startup-config.cfg
+                mgmt-ipv4: 172.30.101.243
+              dc1-leaf1a:
+                kind: ceos
+                image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2f
+                startup-config: configs/dc1-leaf1a-startup-config.cfg
+                startup-delay: 30
+                mgmt-ipv4: 172.30.101.244
+              dc1-leaf1b:
+                kind: ceos
+                image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2f
+                startup-config: configs/dc1-leaf1b-startup-config.cfg
+                startup-delay: 60
+                mgmt-ipv4: 172.30.101.245
+              dc1-leaf2a:
+                kind: ceos
+                image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2f
+                startup-config: configs/dc1-leaf2a-startup-config.cfg
+                startup-delay: 30
+                mgmt-ipv4: 172.30.101.246
+              dc1-leaf2b:
+                kind: ceos
+                image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2f
+                startup-config: configs/dc1-leaf2b-startup-config.cfg
+                startup-delay: 60
+                mgmt-ipv4: 172.30.101.247
+              dc1-leaf1c:
+                kind: ceos
+                image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2f
+                startup-config: configs/dc1-leaf1c-startup-config.cfg
+                startup-delay: 90
+                mgmt-ipv4: 172.30.101.248
+              dc1-leaf2c:
+                kind: ceos
+                image: ghcr.io/leothelyon17/nautobot-avd-integration/ceos:4.32.2f
+                startup-config: configs/dc1-leaf2c-startup-config.cfg
+                startup-delay: 90
+                mgmt-ipv4: 172.30.101.249
+              dc1-leaf1-server1:
+                kind: linux
+                mgmt-ipv4: 172.30.101.250
+              dc1-leaf2-server1:
+                kind: linux
+                mgmt-ipv4: 172.30.101.251
+              
+
+            links:
+              - endpoints: ["dc1-spine1:eth1", "dc1-leaf1a:eth1"]
+              - endpoints: ["dc1-spine1:eth2", "dc1-leaf1b:eth1"]
+              - endpoints: ["dc1-spine1:eth3", "dc1-leaf2a:eth1"]
+              - endpoints: ["dc1-spine1:eth4", "dc1-leaf2b:eth1"]
+              - endpoints: ["dc1-spine2:eth1", "dc1-leaf1a:eth2"]
+              - endpoints: ["dc1-spine2:eth2", "dc1-leaf1b:eth2"]
+              - endpoints: ["dc1-spine2:eth3", "dc1-leaf2a:eth2"]
+              - endpoints: ["dc1-spine2:eth4", "dc1-leaf2b:eth2"]
+              - endpoints: ["dc1-leaf1a:eth3", "dc1-leaf1b:eth3"]
+              - endpoints: ["dc1-leaf1a:eth4", "dc1-leaf1b:eth4"]
+              - endpoints: ["dc1-leaf2a:eth3", "dc1-leaf2b:eth3"]
+              - endpoints: ["dc1-leaf2a:eth4", "dc1-leaf2b:eth4"]
+              - endpoints: ["dc1-leaf1a:eth8", "dc1-leaf1c:eth1"]
+              - endpoints: ["dc1-leaf1b:eth8", "dc1-leaf1c:eth2"]
+              - endpoints: ["dc1-leaf2a:eth8", "dc1-leaf2c:eth1"]
+              - endpoints: ["dc1-leaf2b:eth8", "dc1-leaf2c:eth2"]
+              - endpoints: ["dc1-leaf1a:eth5", "dc1-leaf1-server1:eth1"]
+              - endpoints: ["dc1-leaf1b:eth5", "dc1-leaf1-server1:eth2"]
+              - endpoints: ["dc1-leaf1c:eth5", "dc1-leaf1-server1:eth3"]
+              - endpoints: ["dc1-leaf2a:eth5", "dc1-leaf2-server1:eth1"]
+              - endpoints: ["dc1-leaf2b:eth5", "dc1-leaf2-server1:eth2"]
+              - endpoints: ["dc1-leaf2c:eth5", "dc1-leaf2-server1:eth3"]

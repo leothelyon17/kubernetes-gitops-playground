@@ -1,0 +1,45 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: arista-clos01-dc1-spine1-startup-config
+    namespace: c9s-arista-clos01
+data:
+  startup-config: |-
+    !
+    daemon TerminAttr
+       exec /usr/bin/TerminAttr -cvaddr=172.18.100.99:9910 -cvauth=token,/tmp/token -cvvrf=MGMT -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -taillogs
+       no shutdown
+    !
+    hostname dc1-spine1
+    !
+    ! 
+    username ahead privilege 15 role network-admin secret 0 lab123
+    !
+    ! 
+    vrf instance MGMT
+    !
+    !
+    interface Management0
+       description oob_management
+       no shutdown
+       vrf MGMT
+       ip address 172.30.101.242/28
+    !
+    ip routing
+    ip routing vrf MGMT
+    !
+    ip route vrf MGMT 0.0.0.0/0 172.30.101.241
+    !
+    !
+    management api http-commands
+       protocol https
+       no shutdown
+       !
+       vrf MGMT
+          no shutdown
+    !
+    end
+    !
+    !
+    copy running-config startup-config
