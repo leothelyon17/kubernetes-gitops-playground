@@ -24,7 +24,7 @@ data:
        description oob_management
        no shutdown
        vrf MGMT
-       ip address 192.168.101.226/27
+       ip address 192.168.101.228/28
     !
     ip routing
     ip routing vrf MGMT
