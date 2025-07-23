@@ -1,6 +1,7 @@
 resources:
   - topology.yml
   - external-secret.yml
+  - cluster-secret-store.yml
   - dc1-spine1-startup-config.yml
   - dc1-spine2-startup-config.yml
   - dc1-leaf1a-startup-config.yml
