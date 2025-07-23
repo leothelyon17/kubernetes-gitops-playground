@@ -11,7 +11,7 @@ spec:
   deployment:
     scheduling:
       nodeSelector:
-        clabernetes: "true"
+        clabernetes-nodes: "true"
     persistence:
       claimSize: "1Gi"
       enabled: true
