@@ -43,12 +43,9 @@ spec:
             memory: "3072Mi"
         devices:
           - name: "nvme0n1p6"
-      - name: rocky9-prod-node4-ds
-        resources:
-          limits:
-            memory: "3072Mi"
+      - name: rocky9-prod-node4-cs
         devices:
-          - name: "sdb"
+          - name: "sda"
       - name: rocky9-prod-node5-un
         resources:
           limits:
