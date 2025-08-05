@@ -110,9 +110,5 @@ jobs:
         run: |
           source venv/bin/activate
           ansible-playbook -i inventory/${CHANGED_CLUSTER}/hosts.yml scale.yml \
-            --become --become-user=root --limit rocky9-prod-node5-un -e "ansible_password=${{ secrets.SSH_PASS }}" -e "ansible_become_pass=${{ secrets.SSH_PASS }}" -e "reset_confirmation=yes"
+            --become --become-user=root --limit rocky9-prod-node4-sc -e "ansible_password=${{ secrets.SSH_PASS }}" -e "ansible_become_pass=${{ secrets.SSH_PASS }}" -e "reset_confirmation=yes"
 
-      
-    
-    
-    #uses: .github/workflows/install-argocd.yml  # Path to the reusable workflow
