@@ -43,7 +43,7 @@ spec:
             memory: "3072Mi"
         devices:
           - name: "nvme0n1p6"
-      - name: rocky9-prod-node4-cs
+      - name: rocky9-prod-node4-sc
         devices:
           - name: "sda"
       - name: rocky9-prod-node5-un
