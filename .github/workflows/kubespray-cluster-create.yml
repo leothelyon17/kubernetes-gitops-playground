@@ -102,7 +102,7 @@ jobs:
         run: |
           source venv/bin/activate
           ansible-playbook -i inventory/${CHANGED_CLUSTER}/hosts.yml playbooks/facts.yml \
-            --become --become-user=root -e "ansible_password=${{ secrets.SSH_PASS }}" -e "ansible_become_pass=${{ secrets.SSH_PASS }}" -e "reset_confirmation=yes"
+            --become --become-user=root --flush-cache -e "ansible_password=${{ secrets.SSH_PASS }}" -e "ansible_become_pass=${{ secrets.SSH_PASS }}" -e "reset_confirmation=yes"
       
       # Step 8: Run Kubespray Playbook
       - name: Run Kubespray playbook
