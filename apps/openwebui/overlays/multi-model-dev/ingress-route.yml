@@ -2,7 +2,7 @@
  apiVersion: traefik.io/v1alpha1
  kind: IngressRoute
  metadata:
-   name: openwebui-mm-dev-ingressroute  # <-- Replace with your IngressRoute name
+   name: openwebui-mm-prod-ingressroute  # <-- Replace with your IngressRoute name
    namespace: openwebui-multi-model-prod  # <-- Replace with your namespace
  spec:
    entryPoints:
