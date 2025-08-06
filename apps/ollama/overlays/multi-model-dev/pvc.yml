@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: ollama-multi-model-dev-cache
-  namespace: ollama-multi-model-dev
+  namespace: ollama-multi-model-prod
   labels:
     app: ollama-multi-model
 spec:
