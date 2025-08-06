@@ -37,12 +37,12 @@ spec:
               mountPath: /root/.ollama
           resources:
             requests:
+              cpu: "4"
+              memory: 16Gi
+            limits:
               cpu: "8"
               memory: 32Gi
-            limits:
-              cpu: "16"
-              memory: 64Gi
-              nvidia.com/gpu: 2
+              nvidia.com/gpu: 1
       nodeSelector:
         nvidia.com/gpu.present: "true" # whatever label the operator applies
       tolerations:
