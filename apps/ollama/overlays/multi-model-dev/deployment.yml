@@ -1,8 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ollama-multi-model-dev
-  namespace: ollama-multi-model-dev
+  name: ollama-multi-model-prod
+  namespace: ollama-multi-model-prod
 spec:
   replicas: 1
   selector:
