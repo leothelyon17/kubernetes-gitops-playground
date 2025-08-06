@@ -10,5 +10,5 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 400Gi
-  storageClassName: "rook-cephfs-d-delete"
+      storage: 50Gi
+  storageClassName: "rook-cephfs-delete"
