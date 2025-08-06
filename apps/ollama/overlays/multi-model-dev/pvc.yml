@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ollama-multi-model-dev-cache
+  namespace: ollama-multi-model-dev
+  labels:
+    app: ollama-multi-model
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 400Gi
+  storageClassName: "rook-cephfs-d-delete"

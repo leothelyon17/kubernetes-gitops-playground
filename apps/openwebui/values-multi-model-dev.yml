@@ -1,0 +1,26 @@
+ollama:
+  # -- Automatically install Ollama Helm chart from https://otwld.github.io/ollama-helm/. Use [Helm Values](https://github.com/otwld/ollama-helm/#helm-values) to configure
+  enabled: false
+
+pipelines:
+  # -- Automatically install Pipelines chart to extend Open WebUI functionality using Pipelines: https://github.com/open-webui/pipelines
+  enabled: false
+
+ollamaUrls:
+  - "http://ollama-multi-model-service.ollama-multi-model-dev.svc.cluster.local:11434"
+
+nodeSelector:
+  storage-ceph-d: "true"
+  
+tolerations:
+  - key: "storage-ceph-d"
+    operator: "Exists"
+    effect: "NoSchedule"
+
+persistence:
+  enabled: true
+  size: 2Gi
+  # -- If using multiple replicas, you must update accessModes to ReadWriteMany
+  accessModes:
+    - ReadWriteOnce
+  storageClass: "rook-cephfs-d-delete"

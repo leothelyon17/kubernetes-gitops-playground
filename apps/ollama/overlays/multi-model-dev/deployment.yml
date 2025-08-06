@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ollama-multi-model-dev
+  namespace: ollama-multi-model-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ollama-multi-model
+  template:
+    metadata:
+      labels:
+        app: ollama-multi-model
+    spec:
+      runtimeClassName: nvidia
+      containers:
+        - name: ollama
+          image: ollama/ollama
+          ports:
+            - containerPort: 11434
+          env:
+            - name: OLLAMA_HOST
+              value: "0.0.0.0"
+            - name: CUDA_VISIBLE_DEVICES
+              value: "0,1"   # Ex - 0,1,2,3
+          command: ["/bin/sh"]
+          args:
+            - -c
+            - |
+              ollama serve &
+              sleep 2
+              ollama run mistral
+              tail -f /dev/null
+          volumeMounts:
+            - name: model-cache
+              mountPath: /root/.ollama
+          resources:
+            requests:
+              cpu: "8"
+              memory: 32Gi
+            limits:
+              cpu: "16"
+              memory: 64Gi
+              nvidia.com/gpu: 2
+      nodeSelector:
+        nvidia.com/gpu.present: "true" # whatever label the operator applies
+      tolerations:
+      - key: "nvidia.com/gpu"
+        operator: "Exists"
+        effect: "NoSchedule"
+      volumes:
+        - name: model-cache
+          persistentVolumeClaim:
+            claimName: ollama-multi-model-dev-cache
