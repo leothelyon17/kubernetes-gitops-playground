@@ -9,7 +9,7 @@
      - web
      - websecure
    routes:
-     - match: Host(`openwebui-multi-model-dev.lib-nauto-apps.lab.aheadaviation.com`)  # <-- Replace with your FQDN
+     - match: Host(`openwebui-mm.home.nerdylyonsden.io`)  # <-- Replace with your FQDN
        kind: Rule
        services:
          - name: open-webui  # <-- Replace with your service name
