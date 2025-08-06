@@ -3,7 +3,7 @@
  kind: IngressRoute
  metadata:
    name: openwebui-mm-dev-ingressroute  # <-- Replace with your IngressRoute name
-   namespace: openwebui-multi-model-dev  # <-- Replace with your namespace
+   namespace: openwebui-multi-model-prod  # <-- Replace with your namespace
  spec:
    entryPoints:
      - web
