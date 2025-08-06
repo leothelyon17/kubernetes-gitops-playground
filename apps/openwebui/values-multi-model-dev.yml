@@ -9,18 +9,10 @@ pipelines:
 ollamaUrls:
   - "http://ollama-multi-model-service.ollama-multi-model-dev.svc.cluster.local:11434"
 
-nodeSelector:
-  storage-ceph-d: "true"
-  
-tolerations:
-  - key: "storage-ceph-d"
-    operator: "Exists"
-    effect: "NoSchedule"
-
 persistence:
   enabled: true
   size: 2Gi
   # -- If using multiple replicas, you must update accessModes to ReadWriteMany
   accessModes:
     - ReadWriteOnce
-  storageClass: "rook-cephfs-d-delete"
+  storageClass: "rook-cephfs-delete"
