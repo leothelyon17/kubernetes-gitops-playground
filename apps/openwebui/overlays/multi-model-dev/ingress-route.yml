@@ -14,3 +14,5 @@
        services:
          - name: open-webui  # <-- Replace with your service name
            port: 80
+   tls:
+     secretName: prod-apps-certificate-secret
