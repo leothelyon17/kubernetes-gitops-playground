@@ -7,7 +7,7 @@
    namespace: slurpit-prod  # <-- Replace with your namespace
  spec:
    entryPoints:
-     - web
+     - websecure
    routes:
      - match: Host(`slurpit-prod.home.nerdylyonsden.io`)  # <-- Replace with your FQDN
        kind: Rule
