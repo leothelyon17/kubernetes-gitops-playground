@@ -70,8 +70,8 @@ portal:
   service:
     # type: NodePort
     type: ClusterIP
-    port: 443
-    name: https
+    port: 80
+    name: http
     nodePort: 30000
 
   ingress:
