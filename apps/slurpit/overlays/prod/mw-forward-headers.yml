@@ -7,7 +7,4 @@ spec:
   headers:
     customRequestHeaders:
       X-Forwarded-Proto: "https"
----
-# Attach it to the HTTPS route (add under routes[].middlewares[])
-middlewares:
-  - name: forward-headers
+
