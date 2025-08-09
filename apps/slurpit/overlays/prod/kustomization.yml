@@ -1,2 +1,5 @@
 resources:
   - ingress-route.yml
+  - ingress-route-redirect.yml
+  - mw-forward-headers.yml
+  - mw-http-redirect.yml
