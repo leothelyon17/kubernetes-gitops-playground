@@ -15,5 +15,8 @@
          - name: slurpit-portal-service  # <-- Replace with your service name
            port: 80
            passHostHeader: true
+       middlewares:
+        - name: forward-headers
+   
    tls:
      secretName: prod-apps-certificate-secret
