@@ -7,7 +7,6 @@
    namespace: slurpit-prod  # <-- Replace with your namespace
  spec:
    entryPoints:
-     - web
      - websecure
    routes:
      - match: Host(`slurpit-prod.home.nerdylyonsden.io`)  # <-- Replace with your FQDN
@@ -15,5 +14,6 @@
        services:
          - name: slurpit-portal-service  # <-- Replace with your service name
            port: 80
+           passHostHeader: true
    tls:
      secretName: prod-apps-certificate-secret
