@@ -3,3 +3,4 @@ resources:
   - ingress-route-redirect.yml
   - mw-forward-headers.yml
   - mw-http-redirect.yml
+  - mw-csp-upgrade.yml
