@@ -193,8 +193,8 @@ warehouse:
   #       claimName: slurpit-pvc
   restartPolicy: Always
 
-  # service:
-  #   type: ClusterIP
+  service:
+    type: ClusterIP
   #   ports:
   #   - name: http
   #     port: 80
