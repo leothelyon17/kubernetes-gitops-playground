@@ -41,7 +41,7 @@ portal:
     timeoutSeconds: 10
     initialDelaySeconds: 5
   ports:
-    containerPort: 443
+    containerPort: 80
   volumeMounts:
     - name: slurpit-portal-storage
       mountPath: /var/log/nginx
