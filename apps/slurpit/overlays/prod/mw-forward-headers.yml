@@ -1,0 +1,13 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: forward-headers
+  namespace: slurpit-prod
+spec:
+  headers:
+    customRequestHeaders:
+      X-Forwarded-Proto: "https"
+---
+# Attach it to the HTTPS route (add under routes[].middlewares[])
+middlewares:
+  - name: forward-headers
