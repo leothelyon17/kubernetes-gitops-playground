@@ -75,7 +75,7 @@ portal:
     nodePort: 30000
 
   ingress:
-    enabled: true
+    enabled: false
     className: nginx
     annotations: {}
       # kubernetes.io/ingress.class: nginx
