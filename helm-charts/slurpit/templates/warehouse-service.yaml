@@ -8,7 +8,15 @@ spec:
     app: {{ include "slurpit.name" . }}-warehouse-app
   type: {{ .Values.warehouse.service.type }}
   ports:
-    - protocol: TCP
-      port: {{ .Values.warehouse.service.port }}
-      name: http
-      targetPort: {{ .Values.warehouse.ports.containerPort }}
+    # - protocol: TCP
+    #   port: {{ .Values.warehouse.service.port }}
+    #   name: http
+    #   targetPort: {{ .Values.warehouse.ports.containerPort }}
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP
+    - name: grpc
+      port: 50051
+      targetPort: 50051
+      protocol: TCP
