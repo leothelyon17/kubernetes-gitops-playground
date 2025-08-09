@@ -30,6 +30,16 @@ portal:
       value: "http://slurpit.gtc.local"
     - name: PORTAL_WAREHOUSE_URL
       value: "http://slurpit-warehouse-service"
+  livenessProbe:
+    exec:
+      command:
+        - curl
+        - -f
+        - http://localhost
+    failureThreshold: 360
+    periodSeconds: 10
+    timeoutSeconds: 10
+    initialDelaySeconds: 5
   ports:
     containerPort: 80
   volumeMounts:
@@ -65,7 +75,7 @@ portal:
     nodePort: 30000
 
   ingress:
-    enabled: false
+    enabled: true
     className: nginx
     annotations: {}
       # kubernetes.io/ingress.class: nginx
@@ -99,11 +109,11 @@ scanner:
     - name: TZ
       value: "Europe/Amsterdam"
     - name: SCANNER_POOLSIZE
-      value: "4"
-    - name: SCANNER_TIMEOUT
-      value: "10"
-    - name: SCANNER_WAREHOUSE_URL
-      value: "http://slurpit-warehouse-service"
+      value: "16"
+    - name: SCANNER_SNMP_TIMEOUT
+      value: "6"
+    - name: SCANNER_WAREHOUSE_HOSTNAME
+      value: "slurpit-warehouse-service"
   restartPolicy: Always
 
 scraper:
@@ -121,11 +131,11 @@ scraper:
     - name: TZ
       value: "Europe/Amsterdam"
     - name: SCRAPER_POOLSIZE
-      value: "4"
+      value: "16"
     - name: SCRAPER_TIMEOUT
       value: "20"
-    - name: SCRAPER_WAREHOUSE_URL
-      value: "http://slurpit-warehouse-service"
+    - name: SCRAPER_WAREHOUSE_HOSTNAME
+      value: "slurpit-warehouse-service"
   volumeMounts:
   - name: slurpit-scraper-storage
     mountPath: /logs
@@ -150,10 +160,8 @@ warehouse:
   env:
     - name: TZ
       value: "Europe/Amsterdam"
-    - name: WAREHOUSE_CALLBACK_SCANNER_URL
-      value: "http://slurpit-portal-service/callback/scanner"
-    - name: WAREHOUSE_CALLBACK_SCRAPER_URL
-      value: "http://slurpit-portal-service/callback/scraper"
+    - name: WAREHOUSE_PORTAL_URL
+      value: "http://slurpit-portal-service"
   livenessProbe:
     exec:
       command:
@@ -168,6 +176,7 @@ warehouse:
   # resources: []
   ports:
     containerPort: 80
+    containerPort: 50051
   volumeMounts:
     - name: slurpit-warehouse-storage
       mountPath: /var/log/mongodb
@@ -188,3 +197,4 @@ warehouse:
     type: ClusterIP
     port: 80
     name: http
+
