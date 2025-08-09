@@ -1,0 +1,19 @@
+---
+# --> (Example) Create an IngressRoute for your service...
+ apiVersion: traefik.io/v1alpha1
+ kind: IngressRoute
+ metadata:
+   name: slurpit-prod-ingressroute  # <-- Replace with your IngressRoute name
+   namespace: slurpit-prod  # <-- Replace with your namespace
+ spec:
+   entryPoints:
+     - web
+     - websecure
+   routes:
+     - match: Host(`slurpit-prod.home.nerdylyonsden.io`)  # <-- Replace with your FQDN
+       kind: Rule
+       services:
+         - name: slurpit-portal-service  # <-- Replace with your service name
+           port: 80
+   tls:
+     secretName: prod-apps-certificate-secret
