@@ -1,0 +1,18 @@
+---
+# Plain HTTP route that only redirects
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: slurpit-prod-redirect
+  namespace: slurpit-prod
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`slurpit-prod.home.nerdylyonsden.io`)
+      kind: Rule
+      middlewares:
+        - name: https-redirect
+      services:
+        - name: slurpit-portal-service
+          port: 80
