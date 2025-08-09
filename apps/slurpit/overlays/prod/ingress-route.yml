@@ -17,6 +17,7 @@
            passHostHeader: true
        middlewares:
         - name: forward-headers
+        - name: csp-upgrade
    
    tls:
      secretName: prod-apps-certificate-secret
