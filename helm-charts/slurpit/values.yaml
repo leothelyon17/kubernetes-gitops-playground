@@ -195,6 +195,6 @@ warehouse:
 
   service:
     type: ClusterIP
-    port: 80
+    port: 50051
     name: http
 
