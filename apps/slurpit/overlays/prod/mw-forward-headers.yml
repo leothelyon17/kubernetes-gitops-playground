@@ -7,4 +7,5 @@ spec:
   headers:
     customRequestHeaders:
       X-Forwarded-Proto: "https"
+      X-Forwarded-Host:  "slurpit-prod.home.nerdylyonsden.io"
 
