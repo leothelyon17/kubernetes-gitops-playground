@@ -27,7 +27,7 @@ portal:
     - name: TZ
       value: "Europe/Amsterdam"
     - name: PORTAL_BASE_URL
-      value: "http://slurpit-prod.home.nerdylyonsden.io"
+      value: "https://slurpit-prod.home.nerdylyonsden.io"
     - name: PORTAL_WAREHOUSE_URL
       value: "http://slurpit-warehouse-service"
   livenessProbe:
