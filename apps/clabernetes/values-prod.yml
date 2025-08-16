@@ -2,7 +2,7 @@ globalConfig:
   deployment:
     # specifying a "custom" containerlab version will cause launcher pods to download and use this
     # version of containerlab. generally don't set this unless you need to.
-    containerlabVersion: "0.69.1"
+    containerlabVersion: "0.69.3"
 
 ui:
   enabled: true
