@@ -48,7 +48,7 @@ spec:
               #   startup-config: configs/node2-startup-config.cfg
               #   #mgmt-ipv4: 192.168.101.171
               node-2:
-                  kind: mikrotik_ros
+                  kind: paloalto_panos
                   image: ghcr.io/leothelyon17/kubernetes-gitops-playground/pa-vm:11.0.0
               
 
