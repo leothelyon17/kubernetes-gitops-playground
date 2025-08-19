@@ -1,6 +1,6 @@
-#image:  # Move this to root level
-#  repository: "n8nio/n8n"  # Explicit for safety
-#  tag: "1.95.2"  # Stable version without the bug
+image:  # Move this to root level
+  repository: "n8nio/n8n"  # Explicit for safety
+  tag: "latest"  # Stable version without the bug
 
 main:
 
