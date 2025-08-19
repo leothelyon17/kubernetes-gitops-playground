@@ -6,7 +6,12 @@ metadata:
 spec:
   imagePull:
     dockerConfig: ghcr-secret
+    expose:
+      useNodeMgmtIpv4Address: True
   deployment:
+    scheduling:
+      nodeSelector:
+        clabernetes-nodes: "true"
     persistence:
       claimSize: "1Gi"
       enabled: true
