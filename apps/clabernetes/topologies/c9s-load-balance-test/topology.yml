@@ -55,7 +55,7 @@ spec:
               node-2:
                   kind: paloalto_panos
                   image: ghcr.io/leothelyon17/kubernetes-gitops-playground/pa-vm:11.0.0
-                  mgmt-ipv4: 192.168.101.230
+                  #mgmt-ipv4: 192.168.101.230
               
 
             links:
