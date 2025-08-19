@@ -30,7 +30,8 @@ spec:
             - |
               ollama serve &
               sleep 2
-              ollama run mistral
+              ollama pull mistral
+              ollama pull command-r7b
               tail -f /dev/null
           volumeMounts:
             - name: model-cache
