@@ -6,8 +6,8 @@ metadata:
 spec:
   imagePull:
     dockerConfig: ghcr-secret
-    expose:
-      useNodeMgmtIpv4Address: True
+  expose:
+    useNodeMgmtIpv4Address: True
   deployment:
     scheduling:
       nodeSelector:
