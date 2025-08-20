@@ -473,21 +473,21 @@ INSTALLATION_METRICS_ENABLED = is_truthy(os.getenv("NAUTOBOT_INSTALLATION_METRIC
 # if "NAUTOBOT_PER_PAGE_DEFAULTS" in os.environ and os.environ["NAUTOBOT_PER_PAGE_DEFAULTS"] != "":
 #     PER_PAGE_DEFAULTS = [int(val) for val in os.environ["NAUTOBOT_PER_PAGE_DEFAULTS"].split(",")]
 
-# PLUGINS = [
-#     "nautobot_bgp_models", "nautobot_secrets_providers"
-# ]
+PLUGINS = [
+    "nautobot_bgp_models", "nautobot_secrets_providers"
+]
 
-# PLUGINS_CONFIG = {
-#     "nautobot-bgp-models": {},
-#     "nautobot_secrets_providers": {
-#         "hashicorp_vault": {
-#             "url": "http://hashicorp-vault-dev-0.hashicorp-vault-dev-internal.vault-dev:8200",
-#             "auth_method": "kubernetes",
-#             "role_name": "nautobot"
-#         }
-#     },
+PLUGINS_CONFIG = {
+    "nautobot-bgp-models": {},
+    "nautobot_secrets_providers": {
+        "hashicorp_vault": {
+            "url": "http://hashicorp-vault-dev-0.hashicorp-vault-dev-internal.vault-dev:8200",
+            "auth_method": "kubernetes",
+            "role_name": "nautobot"
+        }
+    },
 
-# }
+}
 
 # Prefer IPv6 addresses or IPv4 addresses in selecting a device's primary IP address? Default False
 #
