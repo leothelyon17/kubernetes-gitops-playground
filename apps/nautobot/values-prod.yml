@@ -1,4 +1,11 @@
 nautobot:
+  image:
+    registry: ghcr.io
+    repository: ghcr.io/leothelyon17/kubernetes-gitops-playground/netbox/dev
+    pullPolicy: Always
+    tag: "latest"
+    pullSecrets:
+      - net-automation-k8s-repo-credentials
 
   command:
     - /bin/sh
