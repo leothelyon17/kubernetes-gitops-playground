@@ -1,4 +1,4 @@
-name: Build and Push Netbox Images
+name: Build and Push Nautobot Images
 
 on:
   # push:
