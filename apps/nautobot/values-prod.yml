@@ -52,6 +52,35 @@ nautobot:
 celery:
   replicaCount: 1
 
+  command:
+    - /bin/sh
+    - -c
+    - |
+      cp /tmp/nautobot_config.py /opt/nautobot/nautobot_config.py && \
+      nautobot-server post_upgrade && \
+      nautobot-server celery worker --loglevel $(NAUTOBOT_LOG_LEVEL) --queues $(CELERY_TASK_QUEUES) --events
+
+   initContainers:
+    - name: git-fetch
+      image: alpine/git
+      command:
+        - /bin/sh
+        - -c
+        - |
+          git clone https://github.com/leothelyon17/kubernetes-gitops-playground.git /tmp \
+          && cp /tmp/apps/nautobot/overlays/prod/configuration/nautobot_config.py /shared-volume/
+      volumeMounts:
+        - name: shared-volume
+          mountPath: /shared-volume
+
+  extraVolumes:
+    - name: shared-volume
+      emptyDir: {}
+
+  extraVolumeMounts:
+    - name: shared-volume
+      mountPath: /tmp
+
 postgresql:
   primary:
     persistence:
