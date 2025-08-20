@@ -60,7 +60,7 @@ celery:
       nautobot-server post_upgrade && \
       nautobot-server celery worker --loglevel $(NAUTOBOT_LOG_LEVEL) --queues $(CELERY_TASK_QUEUES) --events
 
-   initContainers:
+  initContainers:
     - name: git-fetch
       image: alpine/git
       command:
