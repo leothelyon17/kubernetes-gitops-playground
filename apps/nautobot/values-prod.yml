@@ -1,7 +1,7 @@
 nautobot:
   image:
     registry: ghcr.io
-    repository: ghcr.io/leothelyon17/kubernetes-gitops-playground/netbox/dev
+    repository: ghcr.io/leothelyon17/kubernetes-gitops-playground/nautobot/dev
     pullPolicy: Always
     tag: "latest"
     pullSecrets:
