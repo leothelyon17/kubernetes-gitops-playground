@@ -8,6 +8,8 @@ nautobot:
       nautobot-server post_upgrade && \
       nautobot-server start --ini /opt/nautobot/uwsgi.ini
 
+  replicaCount: 1
+
   livenessProbe:
     enabled: false
   readinessProbe:
@@ -39,7 +41,9 @@ nautobot:
       existingSecretPasswordKey: "password"
       existingSecretApiTokenKey: "api_token"
       username: "jeff"
-  
+
+celery:
+  replicaCount: 1
 
 postgresql:
   primary:
