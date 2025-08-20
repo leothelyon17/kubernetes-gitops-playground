@@ -474,11 +474,22 @@ INSTALLATION_METRICS_ENABLED = is_truthy(os.getenv("NAUTOBOT_INSTALLATION_METRIC
 #     PER_PAGE_DEFAULTS = [int(val) for val in os.environ["NAUTOBOT_PER_PAGE_DEFAULTS"].split(",")]
 
 PLUGINS = [
-    "nautobot_bgp_models", "nautobot_secrets_providers"
+    "nautobot_bgp_models", "nautobot_secrets_providers","nautobot_plugin_nornir", "nautobot_ssot", "nautobot_device_onboarding"
 ]
 
 PLUGINS_CONFIG = {
     "nautobot-bgp-models": {},
+    "nautobot_plugin_nornir": {
+        "nornir_settings": {
+            "credentials": "nautobot_plugin_nornir.plugins.credentials.nautobot_secrets.CredentialsNautobotSecrets",
+            "runner": {
+                "plugin": "threaded",
+                "options": {
+                    "num_workers": 20,
+                },
+            },
+        },
+    },
     "nautobot_secrets_providers": {
         "hashicorp_vault": {
             "url": "http://hashicorp-vault-dev-0.hashicorp-vault-dev-internal.vault-dev:8200",
