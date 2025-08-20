@@ -1,0 +1,96 @@
+name: Build and Push Netbox Images
+
+on:
+  # push:
+  #   branches:
+  #     - main
+  #     - auto_container_builder
+  #   paths:
+  #     - 'images/nautobot/**/Dockerfile'
+  workflow_dispatch:
+    inputs:
+      BASE_VERSION:
+        description: 'Base version for the image (if applicable, e.g., Nautobot version).'
+        required: false
+        default: "2.4.14"
+
+jobs:
+  set-matrix:
+    name: Generate Image Matrix
+    runs-on: self-hosted
+    outputs:
+      matrix: ${{ steps.set_matrix.outputs.matrix }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Generate Matrix from images folder
+        id: set_matrix
+        run: |
+          echo "Finding subdirectories in images/nautobot/ folder..."
+          # List only subdirectory names (e.g. dev, xcel)
+          matrix=$(find images/nautobot -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | jq -R -s -c 'split("\n")[:-1]')
+          echo "Matrix: $matrix"
+          echo "::set-output name=matrix::$matrix"
+
+  build-and-push:
+    name: Build and Push Docker Images
+    needs: set-matrix
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        IMAGE_CONTEXT: ${{ fromJson(needs.set-matrix.outputs.matrix) }}
+    env:
+      DEFAULT_BASE_VERSION: 2.4.14
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set Variables from Matrix and Defaults
+        run: |
+          IMAGE_CONTEXT="${{ matrix.IMAGE_CONTEXT }}"
+          BASE_VERSION="${{ github.event.inputs.BASE_VERSION || env.DEFAULT_BASE_VERSION }}"
+          echo "IMAGE_CONTEXT=$IMAGE_CONTEXT" >> $GITHUB_ENV
+          echo "BASE_VERSION=$BASE_VERSION" >> $GITHUB_ENV
+
+      - name: Set IMAGE_NAME
+        run: |
+          IMAGE_NAME=ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')/nautobot/${{ env.IMAGE_CONTEXT }}
+          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set APPS from requirements.txt
+        run: |
+          if [ -f "images/nautobot/${{ env.IMAGE_CONTEXT }}/requirements.txt" ]; then
+            APPS=$(grep -v '^#' images/nautobot/${{ env.IMAGE_CONTEXT }}/requirements.txt | tr '\n' ',' | sed 's/,$//')
+          else
+            APPS=""
+          fi
+          echo "APPS=$APPS" >> $GITHUB_ENV
+          echo "Found APPS: $APPS"
+
+      - name: Compute IMAGE_TAG
+        run: |
+          IMAGE_TAG="${{ env.BASE_VERSION }}"
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+          echo "Using IMAGE_TAG: $IMAGE_TAG"
+
+      - name: Build and Push Docker Image
+        run: |
+          docker buildx build \
+            --platform linux/amd64 \
+            --build-arg APPS="${{ env.APPS }}" \
+            --build-arg NETBOX_VERSION="${{ env.BASE_VERSION }}" \
+            --push \
+            --tag $IMAGE_NAME:latest \
+            --tag $IMAGE_NAME:${{ env.IMAGE_TAG }} \
+            --file ./images/nautobot/${{ env.IMAGE_CONTEXT }}/Dockerfile \
+            ./images/nautobot/${{ env.IMAGE_CONTEXT }}
