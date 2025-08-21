@@ -492,7 +492,7 @@ PLUGINS_CONFIG = {
     },
     "nautobot_secrets_providers": {
         "hashicorp_vault": {
-            "url": "http://hashicorp-vault-dev-0.hashicorp-vault-dev-internal.vault-dev:8200",
+            "url": "http://hashicorp-vault-prod.hashicorp-vault-prod-internal.svc.cluster.local:8200",
             "auth_method": "kubernetes",
             "role_name": "nautobot"
         }
