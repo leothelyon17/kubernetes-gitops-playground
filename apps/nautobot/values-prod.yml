@@ -81,6 +81,9 @@ celery:
     - name: shared-volume
       mountPath: /tmp
 
+serviceAccount:
+  automountServiceAccountToken: true
+
 postgresql:
   primary:
     persistence:
