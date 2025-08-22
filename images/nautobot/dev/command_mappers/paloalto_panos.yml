@@ -36,4 +36,4 @@ sync_devices:
       - command: "show system info"
         parser: "ttp"
         jpath: "[*].manufacturer"
-        post_processor: "{{ obj[0] | default("Palo Alto", true) }}"
+        post_processor: "{{ obj[0] | default('Palo Alto', true) }}"
