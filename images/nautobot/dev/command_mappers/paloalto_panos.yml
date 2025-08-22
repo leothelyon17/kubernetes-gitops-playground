@@ -34,6 +34,6 @@ sync_devices:
   manufacturer:
     commands:
       - command: "show system info"
-        parser: "ttp"
-        jpath: "[*].manufacturer"
-        post_processor: "{{ obj[0] | default('Palo Alto', true) }}"
+        parser: "raw"
+        jpath: "raw"
+        post_processor: "'Palo Alto Networks'"
