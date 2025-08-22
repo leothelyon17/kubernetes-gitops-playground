@@ -8,3 +8,4 @@ nautobot-bgp-models==2.3.0
 nautobot-firewall-models==2.2.1
 slurpit_nautobot==1.0.15
 netutils==1.14.1
+napalm-panos==0.7.0
