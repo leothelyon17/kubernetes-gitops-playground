@@ -39,6 +39,8 @@ COPY requirements.txt /tmp/
 
 RUN pip install -r /tmp/requirements.txt
 
+COPY /command_mappers/paloalto_panos.yml /opt/nautobot/lib64/python${PYTHON_VER}/site-packages/nautobot_device_onboarding/command_mappers/
+
 # -------------------------------------------------------------------------------------
 # Build Apps in plugins folder
 # -------------------------------------------------------------------------------------
