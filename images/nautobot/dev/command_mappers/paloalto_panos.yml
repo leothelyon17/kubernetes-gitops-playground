@@ -11,7 +11,7 @@ sync_devices:
       - command: "show system info"
         parser: "raw"
         jpath: "raw"
-        post_processor: "Palo Alto Networks"
+        post_processor: "{{ 'Palo Alto Networks' }}"
   serial:
     commands:
       - command: "show system info"
