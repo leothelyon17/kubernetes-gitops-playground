@@ -481,14 +481,14 @@ PLUGINS_CONFIG = {
     "nautobot-bgp-models": {},
     "nautobot_plugin_nornir": {
         "connection_options": {
-          "netmiko": {
-            "extras": {
-              "read_timeout_override": 60,
-              "global_delay_factor": 2,
-              "fast_cli": False,
+            "netmiko": {
+                "extras": {
+                  "read_timeout_override": 60,
+                  "global_delay_factor": 2,
+                  "fast_cli": False,
             }
           }
-        }
+        },
         "nornir_settings": {
             "credentials": "nautobot_plugin_nornir.plugins.credentials.nautobot_secrets.CredentialsNautobotSecrets",
             "runner": {
