@@ -482,7 +482,7 @@ PLUGINS_CONFIG = {
     "nautobot_device_onboarding": {
         "create_platform_if_missing": False,
         "create_manufacturer_if_missing": False,
-    }
+    },
     "nautobot_plugin_nornir": {
         "connection_options": {
             "netmiko": {
