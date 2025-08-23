@@ -25,12 +25,18 @@ sync_devices:
         jpath: "[*].netmask"
         post_processor: "{{ obj[0] | netmask_to_cidr }}"
         iterable_type: "int"
-  vendor:
+  manufacturer:
     commands:
-      - command: "show system info"
+      - command: "show system info | match 'vendor'"
         parser: "raw"
         jpath: "raw"
         post_processor: "{{ 'Palo Alto Networks' }}"
+  platform:
+    commands:
+      - command: "show system info | match 'platform'"
+        parser: "raw"
+        jpath: "raw"
+        post_processor: "{{ 'PAN-OS' }}"
   mgmt_interface:
     commands:
       - command: "show interface management | match Name"
