@@ -482,6 +482,9 @@ PLUGINS_CONFIG = {
     "nautobot_device_onboarding": {
         "create_platform_if_missing": False,
         "create_manufacturer_if_missing": False,
+        "platform_map": {
+            "paloalto_panos": "pan-os_d6f6"
+        }
     },
     "nautobot_plugin_nornir": {
         "connection_options": {
