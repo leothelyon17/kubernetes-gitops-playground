@@ -15,9 +15,11 @@ sync_devices:
   device_type:
     commands:
       - command: "show system info"
-        parser: "ttp"
-        jpath: "[*].model"
-        post_processor: "{{ obj[0] }}"
+        #parser: "ttp"
+        #jpath: "[*].model"
+        parser: "raw"
+        jpath: "raw"
+        post_processor: "{{ 'PA-VM' }}"
   mask_length:
     commands:
       - command: "show system info"
