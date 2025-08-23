@@ -24,6 +24,7 @@ sync_devices:
         parser: "ttp"
         jpath: "[*].netmask"
         post_processor: "{{ obj[0] | netmask_to_cidr }}"
+        iterable_type: "int"
   # manufacturer:
   #   commands:
   #     - command: "show system info"
