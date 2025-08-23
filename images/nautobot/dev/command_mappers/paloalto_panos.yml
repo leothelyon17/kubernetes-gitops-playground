@@ -1,11 +1,11 @@
 ---
 sync_devices:
-  # hostname:
-  #   commands:
-  #     - command: "show system info"
-  #       parser: "ttp"
-  #       jpath: "[*].hostname"
-  #       post_processor: "{{ obj[0] }}"
+  hostname:
+    commands:
+      - command: "show system info"
+        parser: "ttp"
+        jpath: "[*].hostname"
+        post_processor: "{{ obj[0] }}"
   # serial:
   #   commands:
   #     - command: "show system info"
