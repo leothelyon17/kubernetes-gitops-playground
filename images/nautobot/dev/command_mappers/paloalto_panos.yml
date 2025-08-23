@@ -1,48 +1,11 @@
 ---
-# sync_devices:
-#   hostname:
-#     commands:
-#       - command: "show system info"
-#         parser: "ttp"
-#         jpath: "[*].hostname"
-#         post_processor: "{{ obj[0] }}"
-#   manufacturer:
-#     commands:
-#       - command: "show system info"
-#         parser: "raw"
-#         jpath: "raw"
-#         post_processor: "{{ 'Palo Alto Networks' }}"
-#   serial:
-#     commands:
-#       - command: "show system info"
-#         parser: "ttp"
-#         jpath: "[*].serial"
-#         post_processor: "{{ obj[0] }}"
-#   device_type:
-#     commands:
-#       - command: "show system info"
-#         parser: "ttp"
-#         jpath: "[*].model"
-#         post_processor: "{{ obj[0] }}"
-#   mgmt_interface:
-#     commands:
-#       - command: "show interface management | match Name"
-#         parser: "raw"
-#         jpath: "raw"
-#         post_processor: "{{ obj.split('Name: ')[1] }}"
-#   mask_length:
-#     commands:
-#       - command: "show system info"
-#         parser: "ttp"
-#         jpath: "[*].netmask"
-#         post_processor: "{{ obj[0] | netmask_to_cidr }}"
 sync_devices:
   hostname:
     commands:
       - command: "show system info"
-        parser: "raw"
-        jpath: "raw"
-        post_processor: "{{ 'PA-VM' }}"
+        parser: "ttp"
+        jpath: "[*].hostname"
+        post_processor: "{{ obj[0] }}"
   manufacturer:
     commands:
       - command: "show system info"
@@ -52,25 +15,24 @@ sync_devices:
   serial:
     commands:
       - command: "show system info"
-        parser: "raw"
-        jpath: "raw"
-        post_processor: "{{ '0123456789' }}"
+        parser: "ttp"
+        jpath: "[*].serial"
+        post_processor: "{{ obj[0] }}"
   device_type:
     commands:
       - command: "show system info"
-        parser: "raw"
-        jpath: "raw"
-        post_processor: "{{ 'PA-VM' }}"
+        parser: "ttp"
+        jpath: "[*].model"
+        post_processor: "{{ obj[0] }}"
   mgmt_interface:
     commands:
       - command: "show interface management | match Name"
         parser: "raw"
         jpath: "raw"
-        post_processor: "{{ 'Management' }}"
+        post_processor: "{{ obj.split('Name: ')[1] }}"
   mask_length:
     commands:
       - command: "show system info"
-        parser: "raw"
-        jpath: "raw"
-        post_processor: "{{ '24' }}"
-        iterable_type: "int"
+        parser: "ttp"
+        jpath: "[*].netmask"
+        post_processor: "{{ obj[0] | netmask_to_cidr }}"
