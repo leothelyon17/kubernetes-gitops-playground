@@ -42,7 +42,7 @@ sync_devices:
       - command: "show system info"
         parser: "raw"
         jpath: "raw"
-        post_processor: "{{ 'PA-VM' }}""
+        post_processor: "{{ 'PA-VM' }}"
   manufacturer:
     commands:
       - command: "show system info"
