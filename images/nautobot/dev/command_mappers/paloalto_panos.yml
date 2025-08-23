@@ -15,10 +15,8 @@ sync_devices:
   device_type:
     commands:
       - command: "show system info"
-        #parser: "ttp"
-        #jpath: "[*].model"
-        parser: "raw"
-        jpath: "raw"
+        parser: "ttp"
+        jpath: "[*].model"
         post_processor: "{{ 'PA-VM' }}"
   mask_length:
     commands:
@@ -26,12 +24,12 @@ sync_devices:
         parser: "ttp"
         jpath: "[*].netmask"
         post_processor: "{{ obj[0] | netmask_to_cidr }}"
-  manufacturer:
-    commands:
-      - command: "show system info"
-        parser: "raw"
-        jpath: "raw"
-        post_processor: "{{ 'Palo Alto Networks' }}"
+  # manufacturer:
+  #   commands:
+  #     - command: "show system info"
+  #       parser: "raw"
+  #       jpath: "raw"
+  #       post_processor: "{{ 'Palo Alto Networks' }}"
   mgmt_interface:
     commands:
       - command: "show interface management | match Name"
