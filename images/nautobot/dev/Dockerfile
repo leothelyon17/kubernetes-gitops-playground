@@ -40,7 +40,10 @@ COPY requirements.txt /tmp/
 RUN pip install -r /tmp/requirements.txt
 
 COPY /command_mappers/paloalto_panos.yml /usr/local/lib/python3.11/site-packages/nautobot_device_onboarding/command_mappers/
+COPY /command_mappers/bigip_f5.yml /usr/local/lib/python3.11/site-packages/nautobot_device_onboarding/command_mappers/
+
 COPY /parsers/ttp/paloalto_panos_show_system_info.ttp /usr/local/lib/python3.11/site-packages/nautobot_device_onboarding/parsers/ttp/
+COPY /parsers/ttp/bigip_f5_get_facts.ttp /usr/local/lib/python3.11/site-packages/nautobot_device_onboarding/parsers/ttp/
 
 RUN pip install --no-cache-dir "napalm-f5 @ git+https://github.com/jdrew82/napalm-f5@feat-update_rest"
 
