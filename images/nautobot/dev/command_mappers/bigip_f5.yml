@@ -22,7 +22,7 @@ sync_devices:
     commands:
       - command: "get_facts"
         parser: "ttp"
-        jpath: "[*].mgmt_interface_ip"
+        jpath: "[*].mgmt_interface_netmask"
         post_processor: "{{ obj.split('/')[1] }}"
         iterable_type: "int"
   manufacturer:
@@ -42,4 +42,4 @@ sync_devices:
       - command: "get_facts"
         parser: "ttp"
         jpath: "[*].mgmt_interface_ip"
-        post_processor: "{{ obj.split('/')[0] }}"
+        post_processor: "{{ obj[0] }}"
