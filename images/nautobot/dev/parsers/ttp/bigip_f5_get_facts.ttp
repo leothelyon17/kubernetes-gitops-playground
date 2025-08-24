@@ -1,52 +1,7 @@
 hostname: {{ hostname }}
 ip-address: {{ ip_address }}
-netmask: {{ netmask }}
-serial: {{ serial }}
+mgmt_interface_ip: {{ mgmt_interface_ip }}
+mgmt_interface_netmask: {{ mgmt_interface_netmask }}
+serial_number: {{ serial_number }}
 model: {{ model }}
-device_type: {{ device_type }}
-
----
-sync_devices:
-  hostname:
-    commands:
-      - command: "get_facts"
-        parser: "ttp"
-        jpath: "[*].hostname"
-        post_processor: "{{ obj[0] }}"
-  serial:
-    commands:
-      - command: "get_facts"
-        parser: "ttp"
-        jpath: "[*].serial_number"
-        post_processor: "{{ obj[0] }}"
-  device_type:
-    commands:
-      - command: "get_facts"
-        parser: "ttp"
-        jpath: "[*].model"
-        post_processor: "{{ obj[0] }}"
-  mask_length:
-    commands:
-      - command: "get_facts"
-        parser: "ttp"
-        jpath: "[*].mgmt_interface_ip"
-        post_processor: "{{ obj.split('/')[1] }}"
-        iterable_type: "int"
-  manufacturer:
-    commands:
-      - command: "get_facts"
-        parser: "ttp"
-        jpath: "[*].vendor"
-        post_processor: "{{ obj[0] }}"
-  platform:
-    commands:
-      - command: "get_raw | match 'platform'"
-        parser: "raw"
-        jpath: "raw"
-        post_processor: "{{ 'BIG-IP' }}"
-  mgmt_interface:
-    commands:
-      - command: "get_facts"
-        parser: "ttp"
-        jpath: "[*].mgmt_interface_ip"
-        post_processor: "{{ obj.split('/')[0] }}"
+vendor: {{ vendor }}
