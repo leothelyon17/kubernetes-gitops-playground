@@ -1,0 +1,20 @@
+---
+# --> (Example) Create an IngressRoute for your service...
+ apiVersion: traefik.io/v1alpha1
+ kind: IngressRoute
+ metadata:
+   name: ollama-multi-model-prod-ingressroute  # <-- Replace with your IngressRoute name
+   namespace: ollama-multi-model-prod  # <-- Replace with your namespace
+ spec:
+   entryPoints:
+     - websecure
+   routes:
+     - match: Host(`ollama-mm.home.nerdylyonsden.io`)  # <-- Replace with your FQDN
+       kind: Rule
+       services:
+         - name: ollama-multi-model-service  # <-- Replace with your service name
+           port: 11434
+# --> (Optional) Add certificate secret
+   tls:
+     secretName: prod-apps-certificate-secret # < cert-manager will store the created certificate in this secret.
+# <--
