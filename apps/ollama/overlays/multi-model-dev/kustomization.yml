@@ -2,3 +2,4 @@ resources:
   - deployment.yml
   - pvc.yml
   - service.yml
+  - ingress-route.yml
