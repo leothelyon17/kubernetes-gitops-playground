@@ -7,7 +7,7 @@ pipelines:
   enabled: false
 
 ollamaUrls:
-  - "http://ollama-multi-model-service.ollama-multi-model-prod.svc.cluster.local:11434"
+  - "https://ollama-mm.home.nerdylyonsden.io:11434"
 
 persistence:
   enabled: true
