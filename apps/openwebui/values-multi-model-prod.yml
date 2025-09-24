@@ -7,7 +7,7 @@ pipelines:
   enabled: false
 
 ollamaUrls:
-  - "https://ollama-mm.home.nerdylyonsden.io:11434"
+  - "https://ollama-mm.home.nerdylyonsden.io"
 
 persistence:
   enabled: true
