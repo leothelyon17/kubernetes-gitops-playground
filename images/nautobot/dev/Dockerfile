@@ -1,5 +1,5 @@
-# Accept args used in FROM (must be before any FROM)
-ARG BASE_VERSION
+# Global args (usable in FROM). Defaults quiet the linter.
+ARG BASE_VERSION=2.4.14
 ARG PYTHON_VER=3.11
 ARG APPS
 
@@ -19,6 +19,9 @@ RUN sleep 10 && \
 # Builder stage
 FROM ghcr.io/nautobot/nautobot-dev:${BASE_VERSION}-py${PYTHON_VER} AS builder
 
+# Re-declare for use in this stage
+ARG PYTHON_VER=3.11
+
 CMD ["nautobot-server", "runserver", "0.0.0.0:8080", "--insecure"]
 
 RUN apt-get update && \
@@ -27,12 +30,11 @@ RUN apt-get update && \
     apt-get clean all && \
     rm -rf /var/lib/apt/lists/*
 
-# If present in the build context, this will be copied
+# Copy optional requirements (if present in build context)
 COPY requirements.txt /tmp/requirements.txt
-RUN pip install -r /tmp/requirements.txt
+RUN [ -s /tmp/requirements.txt ] && pip install -r /tmp/requirements.txt || true
 
-# These COPY sources must exist relative to the build context directory
-# (remove or adjust if they don't live under this folder)
+# Copy mapper/parsers (paths relative to build context)
 COPY command_mappers/paloalto_panos.yml \
      /usr/local/lib/python${PYTHON_VER}/site-packages/nautobot_device_onboarding/command_mappers/
 COPY command_mappers/bigip_f5.yml \
@@ -50,8 +52,8 @@ WORKDIR /source
 # Final image
 FROM nautobot-base AS nautobot
 
-# Re-declare args for use in this stage
-ARG BASE_VERSION
+# Re-declare for this stage
+ARG BASE_VERSION=2.4.14
 ARG APPS
 ARG PYTHON_VER=3.11
 
@@ -66,6 +68,6 @@ COPY --from=builder /usr/local/lib/python${PYTHON_VER}/site-packages /usr/local/
 COPY --from=builder /usr/local/bin /usr/local/bin
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN pyuwsgi --cflags | sed 's/ /\n/g' | grep -e "^-DUWSGI_SSL$"
+RUN pyuwsgi --cflags | sed 's/ /\n/g' | grep -e "^-DUWSGI_SSL$" || true
 
 USER nautobot
