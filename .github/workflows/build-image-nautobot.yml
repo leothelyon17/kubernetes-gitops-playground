@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
     inputs:
       BASE_VERSION:
-        description: 'Base version for the image (if applicable, e.g., Nautobot version).'
+        description: 'Base version for the image (e.g., Nautobot version).'
         required: false
         default: "2.4.14"
 
@@ -23,11 +23,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
       - name: Generate Matrix from images folder
         id: set_matrix
         run: |
           echo "Finding subdirectories in images/nautobot/ folder..."
-          # List only subdirectory names (e.g. dev, xcel)
           matrix=$(find images/nautobot -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | jq -R -s -c 'split("\n")[:-1]')
           echo "Matrix: $matrix"
           echo "::set-output name=matrix::$matrix"
@@ -41,6 +41,7 @@ jobs:
         IMAGE_CONTEXT: ${{ fromJson(needs.set-matrix.outputs.matrix) }}
     env:
       DEFAULT_BASE_VERSION: 2.4.14
+      DEFAULT_PY_VER: 3.11
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -49,8 +50,10 @@ jobs:
         run: |
           IMAGE_CONTEXT="${{ matrix.IMAGE_CONTEXT }}"
           BASE_VERSION="${{ github.event.inputs.BASE_VERSION || env.DEFAULT_BASE_VERSION }}"
+          PYTHON_VER="${{ env.DEFAULT_PY_VER }}"
           echo "IMAGE_CONTEXT=$IMAGE_CONTEXT" >> $GITHUB_ENV
           echo "BASE_VERSION=$BASE_VERSION" >> $GITHUB_ENV
+          echo "PYTHON_VER=$PYTHON_VER" >> $GITHUB_ENV
 
       - name: Set IMAGE_NAME
         run: |
@@ -88,8 +91,14 @@ jobs:
           docker buildx build \
             --platform linux/amd64 \
             --build-arg APPS="${{ env.APPS }}" \
-            --build-arg NETBOX_VERSION="${{ env.BASE_VERSION }}" \
+            --build-arg BASE_VERSION="${{ env.BASE_VERSION }}" \
+            --build-arg PYTHON_VER="${{ env.PYTHON_VER }}" \
             --push \
+            --tag $IMAGE_NAME:latest \
+            --tag $IMAGE_NAME:${{ env.IMAGE_TAG }} \
+            --file ./images/nautobot/${{ env.IMAGE_CONTEXT }}/Dockerfile \
+            ./images/nautobot/${{ env.IMAGE_CONTEXT }}
+
             --tag $IMAGE_NAME:latest \
             --tag $IMAGE_NAME:${{ env.IMAGE_TAG }} \
             --file ./images/nautobot/${{ env.IMAGE_CONTEXT }}/Dockerfile \
