@@ -1,7 +1,7 @@
-#ARG NAUTOBOT_VERSION=2.4.2
+ARG BASE_VERSION
 ARG PYTHON_VER=3.11
 ARG APPS
-FROM ghcr.io/nautobot/nautobot:${NAUTOBOT_VERSION}-py${PYTHON_VER} as nautobot-base
+FROM ghcr.io/nautobot/nautobot:${BASE_VERSION}-py${PYTHON_VER} as nautobot-base
 
 USER 0
 
@@ -15,7 +15,7 @@ RUN sleep 10 && \
 
 
 
-FROM ghcr.io/nautobot/nautobot-dev:${NAUTOBOT_VERSION}-py${PYTHON_VER} as builder
+FROM ghcr.io/nautobot/nautobot-dev:${BASE_VERSION}-py${PYTHON_VER} as builder
 
 CMD ["nautobot-server", "runserver", "0.0.0.0:8080", "--insecure"]
 
@@ -70,12 +70,12 @@ WORKDIR /source
 FROM nautobot-base as nautobot
 
 # Accept build arguments with defaults to ensure they are set in this stage.
-ARG NAUTOBOT_VERSION
+ARG BASE_VERSION
 ARG APPS
 ARG PYTHON_VER=3.11
 
 # Add labels for metadata
-LABEL nautobot.base.version="${NAUTOBOT_VERSION}" \
+LABEL nautobot.base.version="${BASE_VERSION}" \
       nautobot.apps="${APPS}"
 LABEL org.opencontainers.image.description ""
 
