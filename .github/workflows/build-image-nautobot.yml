@@ -47,6 +47,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set Variables from Matrix and Defaults
+        shell: bash
         run: |
           IMAGE_CONTEXT="${{ matrix.IMAGE_CONTEXT }}"
           BASE_VERSION="${{ github.event.inputs.BASE_VERSION || env.DEFAULT_BASE_VERSION }}"
@@ -56,6 +57,7 @@ jobs:
           echo "PYTHON_VER=$PYTHON_VER" >> $GITHUB_ENV
 
       - name: Set IMAGE_NAME
+        shell: bash
         run: |
           IMAGE_NAME=ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')/nautobot/${{ env.IMAGE_CONTEXT }}
           echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
@@ -71,6 +73,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set APPS from requirements.txt
+        shell: bash
         run: |
           if [ -f "images/nautobot/${{ env.IMAGE_CONTEXT }}/requirements.txt" ]; then
             APPS=$(grep -v '^#' images/nautobot/${{ env.IMAGE_CONTEXT }}/requirements.txt | tr '\n' ',' | sed 's/,$//')
@@ -81,25 +84,26 @@ jobs:
           echo "Found APPS: $APPS"
 
       - name: Compute IMAGE_TAG
+        shell: bash
         run: |
           IMAGE_TAG="${{ env.BASE_VERSION }}"
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
           echo "Using IMAGE_TAG: $IMAGE_TAG"
 
       - name: Build and Push Docker Image
+        shell: bash
         run: |
-          docker buildx build \
-            --platform linux/amd64 \
-            --build-arg APPS="${{ env.APPS }}" \
-            --build-arg BASE_VERSION="${{ env.BASE_VERSION }}" \
-            --build-arg PYTHON_VER="${{ env.PYTHON_VER }}" \
-            --push \
-            --tag $IMAGE_NAME:latest \
-            --tag $IMAGE_NAME:${{ env.IMAGE_TAG }} \
-            --file ./images/nautobot/${{ env.IMAGE_CONTEXT }}/Dockerfile \
-            ./images/nautobot/${{ env.IMAGE_CONTEXT }}
-
-            --tag $IMAGE_NAME:latest \
-            --tag $IMAGE_NAME:${{ env.IMAGE_TAG }} \
-            --file ./images/nautobot/${{ env.IMAGE_CONTEXT }}/Dockerfile \
-            ./images/nautobot/${{ env.IMAGE_CONTEXT }}
+          set -euo pipefail
+          echo "Building ${IMAGE_NAME}:${IMAGE_TAG} (BASE_VERSION=${BASE_VERSION}, PYTHON_VER=${PYTHON_VER})"
+          args=(
+            --platform linux/amd64
+            --build-arg "APPS=${APPS:-}"
+            --build-arg "BASE_VERSION=${BASE_VERSION}"
+            --build-arg "PYTHON_VER=${PYTHON_VER}"
+            --push
+            --tag "${IMAGE_NAME}:latest"
+            --tag "${IMAGE_NAME}:${IMAGE_TAG}"
+            --file "./images/nautobot/${IMAGE_CONTEXT}/Dockerfile"
+            "./images/nautobot/${IMAGE_CONTEXT}"
+          )
+          docker buildx build "${args[@]}"
