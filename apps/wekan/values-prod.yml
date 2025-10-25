@@ -60,8 +60,5 @@ mongodb:
   auth:
     enabled: false
   # Optional specify an existing PVC
-  persistence:
-    storageClass: rook-cephfs-retain
-    accessModes:
-      - ReadWriteOnce
-    size: 1Gi
+  storage:
+    requestedSize: 1Gi
