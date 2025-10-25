@@ -61,4 +61,4 @@ mongodb:
     enabled: false
   # Optional specify an existing PVC
   storage:
-    requestedSize: 1Gi
+    persistentVolumeClaimName: wekan-mongodb-pvc
