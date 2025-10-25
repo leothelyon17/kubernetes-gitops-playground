@@ -53,12 +53,10 @@ sharedDataFolder:
 
 mongodb:
   enabled: true
-  architecture: standalone
-  useStatefulSet: false
-  # https://github.com/wekan/charts/issues/34
-  #architecture: replicaset
-  #replicaCount: 3
-  #replicaSetName: rs0
+  image:
+    # At the time of writing the mongodb chart defaults to version 8, but WeKan
+    # needs 7.
+    tag: 7.0.23
   auth:
     enabled: false
   # Optional specify an existing PVC
