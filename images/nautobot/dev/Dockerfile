@@ -11,6 +11,7 @@ USER 0
 RUN sleep 10 && \
     apt-get update -o Acquire::Check-Valid-Until=false && \
     apt-get upgrade -y && \
+    apt-get install iputils-ping -y && \
     apt-get autoremove -y && \
     apt-get clean all && \
     rm -rf /var/lib/apt/lists/* && \
