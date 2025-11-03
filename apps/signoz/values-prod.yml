@@ -1,0 +1,13 @@
+global:
+  clusterDomain: jjland.local
+  clusterName: prod-cluster
+
+clickhouse:
+  persistence:
+    storageClass: rook-cephfs-retain
+    size: 5Gi
+
+signoz:
+  persistence:
+    storageClass: rook-cephfs-retain
+    size: 1Gi
