@@ -1,0 +1,50 @@
+global:
+  clusterName: "prod-cluster"
+  deploymentEnvironment: "prod"          # or "homelab", etc.
+  cloud: "other"
+
+# Send to your SigNoz collector (same cluster)
+otelCollectorEndpoint: "signoz-prod-otel-collector.signoz-prod.svc.cluster.local:4317"
+otelInsecure: true                       # set false if you enable TLS on the collector
+insecureSkipVerify: false                # true only for self-signed TLS
+
+# Optional: TLS/mTLS to collector
+# otelTlsSecrets:
+#   enabled: true
+#   existingSecretName: signoz-otlp-tls  # contains cert.pem, key.pem, ca.pem
+
+presets:
+  logsCollection:
+    enabled: true
+    blacklist:
+      namespaces: []                     # remove kube-system from blacklist if you want its logs
+  hostMetrics:
+    enabled: true
+    collectionInterval: 30s
+  kubeletMetrics:
+    enabled: true
+    authType: serviceAccount
+    endpoint: "${env:K8S_HOST_IP}:10250"
+    insecureSkipVerify: true             # tighten if your kubelet uses TLS properly
+  clusterMetrics:
+    enabled: true
+  k8sEvents:
+    enabled: true                        # set to false if too noisy
+  prometheus:
+    enabled: false                       # set true if scraping annotated pods
+
+otelAgent:
+  # Avoid hostPort collisions if you don't need them
+  ports:
+    otlp:
+      hostPort: ""                       # was 4317 by default
+    otlp-http:
+      hostPort: ""                       # was 4318 by default
+    health-check:
+      hostPort: ""                       # was 13133 by default
+  tolerations:
+    - operator: "Exists"
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
