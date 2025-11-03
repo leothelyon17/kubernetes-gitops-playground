@@ -1,0 +1,18 @@
+---
+# --> (Example) Create an IngressRoute for your service...
+ apiVersion: traefik.io/v1alpha1
+ kind: IngressRoute
+ metadata:
+   name: signoz-prod-ingressroute  # <-- Replace with your IngressRoute name
+   namespace: signoz-prod  # <-- Replace with your namespace
+ spec:
+   entryPoints:
+     - websecure
+   routes:
+     - match: Host(`signoz.home.nerdylyonsden.io`)  # <-- Replace with your FQDN
+       kind: Rule
+       services:
+         - name: signoz-prod  # <-- Replace with your service name
+           port: 8080
+   tls:
+     secretName: prod-apps-certificate-secret
