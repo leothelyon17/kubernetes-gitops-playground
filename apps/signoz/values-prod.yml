@@ -3,6 +3,10 @@ global:
   clusterName: prod-cluster
 
 clickhouse:
+  zookeeper:
+    persistence:
+    storageClass: rook-cephfs-retain
+    size: 2Gi
   persistence:
     storageClass: rook-cephfs-retain
     size: 5Gi
