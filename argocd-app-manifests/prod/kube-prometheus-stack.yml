@@ -1,0 +1,18 @@
+project: prod-home
+destination:
+  server: https://prod-kube-vip.jjland.local:6443
+  namespace: monitoring-prod
+syncPolicy:
+  syncOptions:
+    - CreateNamespace=true
+sources:
+  - repoURL: https://prometheus-community.github.io/helm-charts
+    targetRevision: 70.4.2
+    helm:
+      valueFiles:
+        - $values/apps/kube-prometheus-stack/values-prod.yml
+    chart: kube-prometheus-stack
+  - repoURL: https://github.com/leothelyon17/kubernetes-gitops-playground.git
+    path: apps/kube-prometheus-stack/overlays/prod
+    targetRevision: HEAD
+    ref: values
