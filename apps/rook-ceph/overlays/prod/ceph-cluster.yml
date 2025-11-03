@@ -44,6 +44,9 @@ spec:
         devices:
           - name: "nvme0n1p6"
       - name: rocky9-prod-node4-sc
+        resources:
+          limits:
+            memory: "8192Mi"
         devices:
           - name: "sda"
       - name: rocky9-prod-node5-un
