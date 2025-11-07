@@ -20,31 +20,25 @@ spec:
         runAsGroup: 10001
       containers:
         - name: inspector
-          # Pin to a release for reproducibility; 0.17.2 is latest as of Oct 22, 2025
-          # https://github.com/modelcontextprotocol/inspector/releases
           image: ghcr.io/modelcontextprotocol/inspector:0.17.2
           imagePullPolicy: IfNotPresent
           env:
-            # Required to listen in-cluster (default is 127.0.0.1)
             - name: HOST
-              value: "0.0.0.0"   # :contentReference[oaicite:2]{index=2}
-            # Use defaults; Traefik/Service will handle ports
+              value: "0.0.0.0"
             - name: CLIENT_PORT
-              value: "6274"      # UI port :contentReference[oaicite:3]{index=3}
+              value: "6274"
             - name: SERVER_PORT
-              value: "6277"      # Proxy port :contentReference[oaicite:4]{index=4}
-            # Avoid trying to auto-open a browser in a container
+              value: "6277"
             - name: MCP_AUTO_OPEN_ENABLED
-              value: "false"     # :contentReference[oaicite:5]{index=5}
-            # Lock down origins to your UI host(s)
+              value: "false"
             - name: ALLOWED_ORIGINS
-              value: "https://YOUR_UI_HOST,http://YOUR_UI_HOST"  # :contentReference[oaicite:6]{index=6}
-            # Keep auth ON; token is required by default
+              value: "https://YOUR_UI_HOST,http://YOUR_UI_HOST"
+            # ✔ Pull token from ExternalSecret target Secret
             - name: MCP_PROXY_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: mcp-proxy-token
-                  key: MCP_PROXY_AUTH_TOKEN  # :contentReference[oaicite:7]{index=7}
+                  name: mcp-inspector-prod-proxy-token
+                  key: proxy-token
           ports:
             - name: ui
               containerPort: 6274
@@ -69,3 +63,4 @@ spec:
             limits:
               cpu: "500m"
               memory: 1Gi
+
