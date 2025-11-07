@@ -1,0 +1,36 @@
+---
+# Traefik CRD: IngressRoute for the UI
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: mcp-inspector-ui
+  namespace: mcp-inspector-prod
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`mcp-inspector.home.nerdylyonsden.io`)
+      kind: Rule
+      services:
+        - name: mcp-inspector
+          port: 6274
+  tls:
+    secretName: prod-apps-certificate-secret
+---
+# Traefik CRD: IngressRoute for the Proxy (separate host)
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: mcp-inspector-proxy
+  namespace: mcp-inspector-prod
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`mcp-inspector-proxy.home.nerdylyonsden.io`)
+      kind: Rule
+      services:
+        - name: mcp-inspector
+          port: 6277
+  tls:
+    secretName: prod-apps-certificate-secret
