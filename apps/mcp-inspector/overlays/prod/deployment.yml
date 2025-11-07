@@ -32,7 +32,7 @@ spec:
             - name: MCP_AUTO_OPEN_ENABLED
               value: "false"
             - name: ALLOWED_ORIGINS
-              value: "mcp-inspector.home.nerdylyonsden.io,mcp-inspector-proxy.home.nerdylyonsden.io"
+              value: "https://mcp-inspector.home.nerdylyonsden.io,https://mcp-inspector-proxy.home.nerdylyonsden.io"
             # ✔ Pull token from ExternalSecret target Secret
             - name: MCP_PROXY_AUTH_TOKEN
               valueFrom:
