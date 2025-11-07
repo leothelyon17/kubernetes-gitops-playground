@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mcp-inspector
-  namespace: mcp-inspector
+  namespace: mcp-inspector-prod
 spec:
   replicas: 1
   selector:
