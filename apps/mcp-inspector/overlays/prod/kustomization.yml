@@ -2,3 +2,5 @@ resources:
   - deployment.yml
   - service.yml
   - ingress-routes.yml
+  - cluster-secret-store.yml
+  - external-secret-proxy-token.yml
