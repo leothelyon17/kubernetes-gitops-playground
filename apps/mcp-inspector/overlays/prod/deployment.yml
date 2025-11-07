@@ -1,0 +1,71 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcp-inspector
+  namespace: mcp-inspector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mcp-inspector
+  template:
+    metadata:
+      labels:
+        app: mcp-inspector
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+      containers:
+        - name: inspector
+          # Pin to a release for reproducibility; 0.17.2 is latest as of Oct 22, 2025
+          # https://github.com/modelcontextprotocol/inspector/releases
+          image: ghcr.io/modelcontextprotocol/inspector:0.17.2
+          imagePullPolicy: IfNotPresent
+          env:
+            # Required to listen in-cluster (default is 127.0.0.1)
+            - name: HOST
+              value: "0.0.0.0"   # :contentReference[oaicite:2]{index=2}
+            # Use defaults; Traefik/Service will handle ports
+            - name: CLIENT_PORT
+              value: "6274"      # UI port :contentReference[oaicite:3]{index=3}
+            - name: SERVER_PORT
+              value: "6277"      # Proxy port :contentReference[oaicite:4]{index=4}
+            # Avoid trying to auto-open a browser in a container
+            - name: MCP_AUTO_OPEN_ENABLED
+              value: "false"     # :contentReference[oaicite:5]{index=5}
+            # Lock down origins to your UI host(s)
+            - name: ALLOWED_ORIGINS
+              value: "https://YOUR_UI_HOST,http://YOUR_UI_HOST"  # :contentReference[oaicite:6]{index=6}
+            # Keep auth ON; token is required by default
+            - name: MCP_PROXY_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: mcp-proxy-token
+                  key: MCP_PROXY_AUTH_TOKEN  # :contentReference[oaicite:7]{index=7}
+          ports:
+            - name: ui
+              containerPort: 6274
+            - name: proxy
+              containerPort: 6277
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 6274
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 6274
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 50m
+              memory: 256Mi
+            limits:
+              cpu: "500m"
+              memory: 1Gi
