@@ -31,7 +31,8 @@ spec:
               ollama serve &
               sleep 2
               ollama pull mistral
-              ollama pull command-r7b
+              qwen3:14b
+              #ollama pull command-r7b
               ollama pull gpt-oss:20b
               tail -f /dev/null
           volumeMounts:
