@@ -2,7 +2,13 @@ ingress:
   enabled: false
 
 postgresql:
-  image: wunderio/bitnami-postgresql:11.5.0-debian-9-r60
+  image:
+    # Specify the image registry (e.g., Docker Hub, a private registry)
+    registry: "docker.io"
+    # Specify the image repository (e.g., bitnami/postgresql)
+    repository: "wunderio/bitnami-postgresql"
+    # Specify the exact image tag/version (e.g., 16.0.0, latest is not recommended for production)
+    tag: "11.5.0-debian-9-r60"
   enabled: true
   replication:
     enabled: false
