@@ -2,6 +2,7 @@ ingress:
   enabled: false
 
 postgresql:
+  image: wunderio/bitnami-postgresql:11.5.0-debian-9-r60
   enabled: true
   replication:
     enabled: false
