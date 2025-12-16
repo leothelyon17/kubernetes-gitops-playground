@@ -1,0 +1,129 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rook-ceph-tools
+  namespace: rook-ceph
+  labels:
+    app: rook-ceph-tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rook-ceph-tools
+  template:
+    metadata:
+      labels:
+        app: rook-ceph-tools
+    spec:
+      dnsPolicy: ClusterFirstWithHostNet
+      serviceAccountName: rook-ceph-default
+      containers:
+        - name: rook-ceph-tools
+          image: quay.io/ceph/ceph:v19.2.1
+          imagePullPolicy: IfNotPresent
+          tty: true
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 2016
+            runAsGroup: 2016
+            capabilities:
+              drop: ["ALL"]
+          env:
+            - name: ROOK_CEPH_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: rook-ceph-mon
+                  key: ceph-username
+          command:
+            - /bin/bash
+            - -c
+            - |
+              set -euo pipefail
+
+              CEPH_CONFIG="/etc/ceph/ceph.conf"
+              MON_CONFIG="/etc/rook/mon-endpoints"
+              KEYRING_FILE="/etc/ceph/keyring"
+              CONFIG_OVERRIDE="/etc/rook-config-override/config"
+
+              write_endpoints() {
+                endpoints="$(cat "${MON_CONFIG}")"
+                mon_endpoints="$(echo "${endpoints}" | sed 's/[a-z0-9_-]\+=//g')"
+                DATE="$(date)"
+                echo "$DATE writing mon endpoints to ${CEPH_CONFIG}: ${endpoints}"
+
+                cat > "${CEPH_CONFIG}" <<EOF
+              [global]
+              mon_host = ${mon_endpoints}
+
+              [client.admin]
+              keyring = ${KEYRING_FILE}
+              EOF
+
+                if [ -f "${CONFIG_OVERRIDE}" ] && [ -s "${CONFIG_OVERRIDE}" ]; then
+                  echo "$DATE merging config override from ${CONFIG_OVERRIDE}"
+                  echo "" >> "${CEPH_CONFIG}"
+                  cat "${CONFIG_OVERRIDE}" >> "${CEPH_CONFIG}"
+                fi
+              }
+
+              watch_endpoints() {
+                real_path="$(realpath "${MON_CONFIG}")"
+                initial_time="$(stat -c %Z "${real_path}")"
+                while true; do
+                  real_path="$(realpath "${MON_CONFIG}")"
+                  latest_time="$(stat -c %Z "${real_path}")"
+                  if [[ "${latest_time}" != "${initial_time}" ]]; then
+                    write_endpoints
+                    initial_time="${latest_time}"
+                  fi
+                  sleep 10
+                done
+              }
+
+              ceph_secret="${ROOK_CEPH_SECRET:-}"
+              if [[ -z "${ceph_secret}" ]]; then
+                ceph_secret="$(cat /var/lib/rook-ceph-mon/secret.keyring)"
+              fi
+
+              cat > "${KEYRING_FILE}" <<EOF
+              [${ROOK_CEPH_USERNAME}]
+              key = ${ceph_secret}
+              EOF
+
+              write_endpoints
+              watch_endpoints
+          volumeMounts:
+            - name: ceph-config
+              mountPath: /etc/ceph
+            - name: mon-endpoint-volume
+              mountPath: /etc/rook
+            - name: ceph-admin-secret
+              mountPath: /var/lib/rook-ceph-mon
+              readOnly: true
+            - name: rook-config-override
+              mountPath: /etc/rook-config-override
+              readOnly: true
+      volumes:
+        - name: ceph-admin-secret
+          secret:
+            secretName: rook-ceph-mon
+            items:
+              - key: ceph-secret
+                path: secret.keyring
+        - name: mon-endpoint-volume
+          configMap:
+            name: rook-ceph-mon-endpoints
+            items:
+              - key: data
+                path: mon-endpoints
+        - name: rook-config-override
+          configMap:
+            name: rook-config-override
+            optional: true
+        - name: ceph-config
+          emptyDir: {}
+      tolerations:
+        - key: "node.kubernetes.io/unreachable"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 5
