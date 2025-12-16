@@ -4,3 +4,4 @@ resources:
   - ceph-filesystem.yml
   - ceph-storageclass-delete.yml
   - ceph-storageclass-retain.yml
+  - deployment-toolbox.yml
