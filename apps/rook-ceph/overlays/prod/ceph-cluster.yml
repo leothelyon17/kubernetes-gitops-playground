@@ -52,6 +52,6 @@ spec:
       - name: rocky9-prod-node5-un
         resources:
           limits:
-            memory: "3072Mi"
+            memory: "6144Mi"
         devices:
           - name: "vdb"
