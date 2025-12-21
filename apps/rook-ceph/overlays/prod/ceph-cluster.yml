@@ -37,12 +37,12 @@ spec:
             memory: "3072Mi"
         devices:
           - name: "nvme0n1p6"
-      - name: rocky9-prod-node3
+      - name: fedora-prod-node3
         resources:
           limits:
             memory: "3072Mi"
         devices:
-          - name: "nvme0n1p6"
+          - name: "nvme0n1p3"
       - name: rocky9-prod-node4-sc
         resources:
           limits:
