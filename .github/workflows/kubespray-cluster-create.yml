@@ -111,6 +111,6 @@ jobs:
           source venv/bin/activate
           # ansible-playbook -i inventory/${CHANGED_CLUSTER}/hosts.yml upgrade_cluster.yml \
           #   --become --become-user=root -e "ansible_password=${{ secrets.SSH_PASS }}" -e "ansible_become_pass=${{ secrets.SSH_PASS }}" -e "reset_confirmation=yes"
-          ansible-playbook -i inventory/${CHANGED_CLUSTER}/hosts.yml cluster.yml \
+          ansible-playbook -i inventory/${CHANGED_CLUSTER}/hosts.yml scale.yml --limit fedora-prod-node5-un \
             --become --become-user=root -e "ansible_password=${{ secrets.SSH_PASS }}" -e "ansible_become_pass=${{ secrets.SSH_PASS }}" -e "reset_confirmation=yes"
 
