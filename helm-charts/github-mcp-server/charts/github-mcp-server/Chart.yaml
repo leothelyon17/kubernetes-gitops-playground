@@ -1,0 +1,10 @@
+apiVersion: v2
+name: github-mcp-server
+description: A Helm chart for GitHub MCP server
+type: application
+version: 0.1.0
+appVersion: "latest"
+maintainers:
+  - name: 1995parham
+    url: https://github.com/1995parham
+    email: parham.alvani@gmail.com
