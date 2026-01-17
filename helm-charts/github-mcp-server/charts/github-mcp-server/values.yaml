@@ -133,9 +133,9 @@ env:
         name: github-repo-credentials
         key: github-pat
       
-toolsets:
-  - repos
-  - issues
-  - pull_requests
-  - code_security
-  - experiments
+  toolsets:
+    - repos
+    - issues
+    - pull_requests
+    - code_security
+    - experiments
