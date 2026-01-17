@@ -130,8 +130,8 @@ env:
 - name: personalAccessToken
   valueFrom:
     secretKeyRef:
-      name: mcp-inspector-prod-proxy-token
-      key: pat
+      name: github-repo-credentials
+      key: github-pat
   toolsets:
     - repos
     - issues
