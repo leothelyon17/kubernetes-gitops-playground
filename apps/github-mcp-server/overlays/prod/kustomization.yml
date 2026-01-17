@@ -1,2 +1,3 @@
 resources:
   - ingress-route.yml
+  - external-secrets-github.yml
