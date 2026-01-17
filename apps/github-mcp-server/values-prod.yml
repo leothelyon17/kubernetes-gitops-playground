@@ -1,1 +1,8 @@
-#
+env:
+  personalAccessToken: ""
+  toolsets:
+    - repos
+    - issues
+    - pull_requests
+    - code_security
+    - experiments
