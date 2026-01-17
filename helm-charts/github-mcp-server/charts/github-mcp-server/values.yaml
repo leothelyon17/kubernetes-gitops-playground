@@ -127,7 +127,11 @@ tolerations: []
 affinity: {}
 
 env:
-  personalAccessToken: ""
+- name: personalAccessToken
+  valueFrom:
+    secretKeyRef:
+      name: mcp-inspector-prod-proxy-token
+      key: pat
   toolsets:
     - repos
     - issues
