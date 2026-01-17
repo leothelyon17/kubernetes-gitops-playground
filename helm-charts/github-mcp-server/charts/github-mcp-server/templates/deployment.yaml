@@ -56,27 +56,44 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+
           env:
-          - name: GITHUB_TOOLSETS
-            value: "{{ join "," .Values.env.toolsets }}"
-          - name: GITHUB_PERSONAL_ACCESS_TOKEN
-            value: "{{ .Values.env.personalAccessToken }}"
+            - name: GITHUB_TOOLSETS
+              value: "{{ join "," .Values.env.toolsets }}"
+
+            - name: GITHUB_PERSONAL_ACCESS_TOKEN
+              {{- if .Values.env.personalAccessTokenSecretRef }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.env.personalAccessTokenSecretRef.name | quote }}
+                  key: {{ .Values.env.personalAccessTokenSecretRef.key | quote }}
+                  {{- if hasKey .Values.env.personalAccessTokenSecretRef "optional" }}
+                  optional: {{ .Values.env.personalAccessTokenSecretRef.optional }}
+                  {{- end }}
+              {{- else }}
+              value: {{ .Values.env.personalAccessToken | quote }}
+              {{- end }}
+
           {{- with .Values.volumeMounts }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+
       {{- with .Values.volumes }}
       volumes:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+
       {{- with .Values.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
