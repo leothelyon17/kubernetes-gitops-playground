@@ -127,14 +127,15 @@ tolerations: []
 affinity: {}
 
 env:
-- name: personalAccessToken
-  valueFrom:
-    secretKeyRef:
-      name: github-repo-credentials
-      key: github-pat
-  toolsets:
-    - repos
-    - issues
-    - pull_requests
-    - code_security
-    - experiments
+  - name: personalAccessToken
+    valueFrom:
+      secretKeyRef:
+        name: github-repo-credentials
+        key: github-pat
+      
+toolsets:
+  - repos
+  - issues
+  - pull_requests
+  - code_security
+  - experiments
