@@ -37,12 +37,12 @@ spec:
             - name: GITLAB_PERSONAL_ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: gitlab-repo-credentials
+                  name: gitlab-mcp-credentials
                   key: gitlab-pat
             - name: GITLAB_API_URL
               valueFrom:
                 secretKeyRef:
-                  name: gitlab-repo-credentials
+                  name: gitlab-mcp-credentials
                   key: gitlab-api-url
                   optional: true
           ports:
