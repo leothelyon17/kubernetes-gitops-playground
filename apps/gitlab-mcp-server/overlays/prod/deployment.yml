@@ -27,9 +27,11 @@ spec:
             - name: PORT
               value: "3002"
             - name: GITLAB_READ_ONLY_MODE
-              value: "true"
+              value: "false"
             - name: USE_PIPELINE
               value: "true"
+            - name: REMOTE_AUTHORIZATION
+              value: "false"
             - name: GITLAB_PERSONAL_ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:
