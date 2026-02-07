@@ -23,9 +23,10 @@ spec:
             - npx
           args:
             - "-y"
-            - "supergateway"
+            - "--prefer-offline"
+            - "supergateway@3.4.3"
             - "--stdio"
-            - "npx -y --prefer-offline @modelcontextprotocol/server-gitlab"
+            - "npx -y --prefer-offline @modelcontextprotocol/server-gitlab@2025.4.25"
             - "--outputTransport"
             - "streamableHttp"
             - "--stateful"
@@ -46,6 +47,8 @@ spec:
               value: "false"
             - name: NPM_CONFIG_AUDIT
               value: "false"
+            - name: NPM_CONFIG_CACHE
+              value: "/tmp/npm-cache"
             - name: GITLAB_PERSONAL_ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:
@@ -56,13 +59,17 @@ spec:
           ports:
             - name: http
               containerPort: 8000
+          volumeMounts:
+            - name: npm-cache
+              mountPath: /tmp/npm-cache
           startupProbe:
             httpGet:
               path: /healthz
               port: 8000
+            initialDelaySeconds: 10
             periodSeconds: 5
-            timeoutSeconds: 2
-            failureThreshold: 30
+            timeoutSeconds: 3
+            failureThreshold: 90
           readinessProbe:
             httpGet:
               path: /healthz
@@ -86,3 +93,7 @@ spec:
             limits:
               cpu: "1000m"
               memory: 1Gi
+      volumes:
+        - name: npm-cache
+          emptyDir: {}
+
