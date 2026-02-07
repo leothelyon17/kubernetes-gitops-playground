@@ -17,38 +17,13 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: gitlab-mcp-server
-          image: node:22-alpine
+          image: zereight050/gitlab-mcp:latest
           imagePullPolicy: IfNotPresent
-          command:
-            - npx
-          args:
-            - "-y"
-            - "--prefer-offline"
-            - "supergateway@3.4.3"
-            - "--stdio"
-            - "npx -y --prefer-offline @modelcontextprotocol/server-gitlab@2025.4.25"
-            - "--outputTransport"
-            - "streamableHttp"
-            - "--stateful"
-            - "--sessionTimeout"
-            - "900000"
-            - "--streamableHttpPath"
-            - "/mcp"
-            - "--port"
-            - "8000"
-            - "--healthEndpoint"
-            - "/healthz"
-            - "--logLevel"
-            - "info"
           env:
-            - name: NPM_CONFIG_UPDATE_NOTIFIER
-              value: "false"
-            - name: NPM_CONFIG_FUND
-              value: "false"
-            - name: NPM_CONFIG_AUDIT
-              value: "false"
-            - name: NPM_CONFIG_CACHE
-              value: "/tmp/npm-cache"
+            - name: STREAMABLE_HTTP
+              value: "true"
+            - name: PORT
+              value: "3002"
             - name: GITLAB_PERSONAL_ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:
@@ -58,42 +33,35 @@ spec:
               value: "https://gitlab.com/api/v4"
           ports:
             - name: http
-              containerPort: 8000
-          volumeMounts:
-            - name: npm-cache
-              mountPath: /tmp/npm-cache
+              containerPort: 3002
           startupProbe:
             httpGet:
-              path: /healthz
-              port: 8000
-            initialDelaySeconds: 20
-            periodSeconds: 5
-            timeoutSeconds: 3
-            failureThreshold: 90
-          readinessProbe:
-            httpGet:
-              path: /healthz
-              port: 8000
+              path: /health
+              port: 3002
             initialDelaySeconds: 5
             periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 24
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3002
+            initialDelaySeconds: 3
+            periodSeconds: 5
             timeoutSeconds: 2
-            failureThreshold: 6
+            failureThreshold: 3
           livenessProbe:
             httpGet:
-              path: /healthz
-              port: 8000
-            initialDelaySeconds: 60
+              path: /health
+              port: 3002
+            initialDelaySeconds: 20
             periodSeconds: 10
             timeoutSeconds: 2
-            failureThreshold: 6
+            failureThreshold: 3
           resources:
             requests:
-              cpu: 250m
-              memory: 512Mi
+              cpu: 100m
+              memory: 256Mi
             limits:
-              cpu: "1000m"
-              memory: 1Gi
-      volumes:
-        - name: npm-cache
-          emptyDir: {}
-
+              cpu: 500m
+              memory: 512Mi
