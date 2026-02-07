@@ -22,8 +22,14 @@ spec:
           env:
             - name: STREAMABLE_HTTP
               value: "true"
+            - name: HOST
+              value: "0.0.0.0"
             - name: PORT
               value: "3002"
+            - name: GITLAB_READ_ONLY_MODE
+              value: "true"
+            - name: USE_PIPELINE
+              value: "true"
             - name: GITLAB_PERSONAL_ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:
