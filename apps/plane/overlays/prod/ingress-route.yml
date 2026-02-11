@@ -14,6 +14,8 @@ spec:
     - match: Host(`plane-pm.home.nerdylyonsden.io`) && (PathPrefix(`/api`) || PathPrefix(`/auth`) || PathPrefix(`/graphql`) || PathPrefix(`/marketplace`))
       kind: Rule
       priority: 100
+      middlewares:
+      - name: plane-forwarded-https
       services:
         - name: plane-prod-api
           port: 8000
@@ -24,6 +26,8 @@ spec:
     - match: Host(`plane-pm.home.nerdylyonsden.io`) && PathPrefix(`/spaces`)
       kind: Rule
       priority: 90
+      middlewares:
+      - name: plane-forwarded-https
       services:
         - name: plane-prod-space
           port: 3000
@@ -31,6 +35,8 @@ spec:
     - match: Host(`plane-pm.home.nerdylyonsden.io`) && PathPrefix(`/god-mode`)
       kind: Rule
       priority: 90
+      middlewares:
+      - name: plane-forwarded-https
       services:
         - name: plane-prod-admin
           port: 3000
@@ -38,6 +44,8 @@ spec:
     - match: Host(`plane-pm.home.nerdylyonsden.io`) && PathPrefix(`/live`)
       kind: Rule
       priority: 90
+      middlewares:
+      - name: plane-forwarded-https
       services:
         - name: plane-prod-live
           port: 3000
@@ -48,6 +56,8 @@ spec:
     - match: Host(`plane-pm.home.nerdylyonsden.io`) && PathPrefix(`/uploads`)
       kind: Rule
       priority: 80
+      middlewares:
+      - name: plane-forwarded-https
       services:
         - name: plane-prod-minio
           port: 9000
@@ -58,6 +68,8 @@ spec:
     - match: Host(`plane-pm.home.nerdylyonsden.io`) && PathPrefix(`/`)
       kind: Rule
       priority: 1
+      middlewares:
+      - name: plane-forwarded-https
       services:
         - name: plane-prod-web
           port: 3000
