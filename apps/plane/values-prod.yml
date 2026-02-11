@@ -3,6 +3,7 @@ dockerRegistry:
 
 ingress:
   enabled: false
+  appHost: "plane-pm.home.nerdylyonsden.io"
 
 redis:
   local_setup: true
@@ -64,7 +65,7 @@ external_secrets:
 
 env:
 
-  NEXT_PUBLIC_DEPLOY_URL:  "https://plane-pm.home.nerdylyonsden.io"
+  #NEXT_PUBLIC_DEPLOY_URL:  ""
   
   # REDIS
   remote_redis_url: "" #INCASE OF REMOTE REDIS ONLY
