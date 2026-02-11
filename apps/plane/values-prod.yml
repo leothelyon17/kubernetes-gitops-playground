@@ -1,5 +1,5 @@
 dockerRegistry:
-  enabled: false
+  enabled: true
 
 ingress:
   enabled: false
