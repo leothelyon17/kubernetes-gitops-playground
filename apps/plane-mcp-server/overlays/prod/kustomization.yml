@@ -3,3 +3,4 @@ resources:
   - service.yml
   - ingress-route.yml
   - external-secrets-plane.yml
+  - external-secrets-repo.yml
