@@ -29,7 +29,7 @@ spec:
             - name: PLANE_OAUTH_PROVIDER_CLIENT_SECRET
               value: "dummy"
             - name: PLANE_OAUTH_PROVIDER_BASE_URL
-              value: "dummy"
+              value: "https://plane-pm.home.nerdylyonsden.io"
             - name: PLANE_API_KEY
               valueFrom:
                 secretKeyRef:
