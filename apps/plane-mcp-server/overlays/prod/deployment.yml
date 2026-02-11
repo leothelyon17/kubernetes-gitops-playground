@@ -19,7 +19,7 @@ spec:
         - name: net-automation-k8s-repo-credentials
       containers:
         - name: plane-mcp-server
-          image: ghcr.io/leohthelyon17/plane-mcp-server:latest
+          image: ghcr.io/leothelyon17/plane-mcp-server:latest
           imagePullPolicy: IfNotPresent
           env:
             - name: PLANE_BASE_URL
