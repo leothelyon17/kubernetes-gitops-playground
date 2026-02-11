@@ -64,7 +64,8 @@ external_secrets:
 
 env:
 
-  # NEXT_PUBLIC_DEPLOY_URL:  ""
+  NEXT_PUBLIC_DEPLOY_URL:  "https://plane-pm.home.nerdylyonsden.io"
+  
   # REDIS
   remote_redis_url: "" #INCASE OF REMOTE REDIS ONLY
 
@@ -90,7 +91,7 @@ env:
   sentry_dsn: ""
   sentry_environment: ""
 
-  cors_allowed_origins: ""
+  cors_allowed_origins: "https://plane-pm.home.nerdylyonsden.io"
   default_cluster_domain: cluster.local
 
   api_key_rate_limit: "60/minute"
