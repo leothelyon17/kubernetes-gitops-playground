@@ -30,6 +30,20 @@ minio:
   env:
     minio_endpoint_ssl: false
 
+
+
+web:
+  image: artifacts.plane.so/makeplane/plane-frontend
+  
+space:
+  image: makeplane/plane-space
+
+admin:
+  image: makeplane/plane-admin
+
+live:
+  image: makeplane/plane-live
+
 api:
   image: makeplane/plane-backend
 
