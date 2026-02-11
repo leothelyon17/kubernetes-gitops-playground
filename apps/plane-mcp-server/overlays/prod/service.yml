@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: plane-mcp-server
+  namespace: mcp-servers-prod
+spec:
+  selector:
+    app: plane-mcp-server
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8211
+  type: ClusterIP
