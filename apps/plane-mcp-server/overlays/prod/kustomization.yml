@@ -1,5 +1,5 @@
 resources:
-  - deployment.yml
+  #- deployment.yml
   - service.yml
   - ingress-route.yml
-  - external-secrets-plane.yml
+  #- external-secrets-plane.yml
