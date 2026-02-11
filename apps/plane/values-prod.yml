@@ -30,6 +30,9 @@ minio:
   env:
     minio_endpoint_ssl: false
 
+api:
+  image: makeplane/plane-backend
+
 
 external_secrets:
   # Name of the existing Kubernetes Secret resource; see README for more details
