@@ -92,3 +92,5 @@ env:
   default_cluster_domain: cluster.local
 
   api_key_rate_limit: "60/minute"
+
+  celery_worker_concurrency: "4"
