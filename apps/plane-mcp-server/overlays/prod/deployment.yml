@@ -21,7 +21,7 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: PLANE_BASE_URL
-              value: "https://api.plane.so"
+              value: "https://plane-pm.home.nerdylyonsden.io"
             - name: PLANE_API_KEY
               valueFrom:
                 secretKeyRef:
