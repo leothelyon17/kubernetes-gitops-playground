@@ -47,6 +47,8 @@ api:
 
 worker:
   image: makeplane/plane-backend
+  memoryLimit: 2000Mi
+  memoryRequest: 256Mi
 
 beatworker:
   image: makeplane/plane-backend
