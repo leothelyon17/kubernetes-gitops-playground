@@ -16,7 +16,7 @@ spec:
     spec:
       terminationGracePeriodSeconds: 30
       imagePullSecrets:
-        - name: gitlab-regcred
+        - name: net-automation-k8s-repo-credentials
       containers:
         - name: plane-mcp-server
           image: ghcr.io/leohthelyon17/plane-mcp-server:latest
