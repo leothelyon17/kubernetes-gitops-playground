@@ -1,0 +1,65 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plane-mcp-server
+  namespace: mcp-servers-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: plane-mcp-server
+  template:
+    metadata:
+      labels:
+        app: plane-mcp-server
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: plane-mcp-server
+          image: ghcr.io/leohthelyon17/plane-mcp-server:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PLANE_BASE_URL
+              value: "https://api.plane.so"
+            - name: PLANE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: plane-mcp-credentials
+                  key: plane-api-key
+            - name: PLANE_WORKSPACE_SLUG
+              valueFrom:
+                secretKeyRef:
+                  name: plane-mcp-credentials
+                  key: plane-workspace-slug
+          ports:
+            - name: http
+              containerPort: 8211
+          startupProbe:
+            tcpSocket:
+              port: 8211
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 24
+          readinessProbe:
+            tcpSocket:
+              port: 8211
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            tcpSocket:
+              port: 8211
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
