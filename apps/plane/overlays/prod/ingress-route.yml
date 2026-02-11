@@ -1,18 +1,67 @@
 ---
-# --> (Example) Create an IngressRoute for your service...
- apiVersion: traefik.io/v1alpha1
- kind: IngressRoute
- metadata:
-   name: plane-web-ingressroute  # <-- Replace with your IngressRoute name
-   namespace: plane-prod  # <-- Replace with your namespace
- spec:
-   entryPoints:
-     - websecure
-   routes:
-     - match: Host(`plane-pm.home.nerdylyonsden.io`)  # <-- Replace with your FQDN
-       kind: Rule
-       services:
-         - name: plane-prod-web  # <-- Replace with your service name
-           port: 3000
-   tls:
-     secretName: prod-apps-certificate-secret
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: plane-ingressroute
+  namespace: plane-prod
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    # -------------------------
+    # API routes (MUST win over "/")
+    # -------------------------
+    - match: Host(`plane-pm.home.nerdylyonsden.io`) && (PathPrefix(`/api`) || PathPrefix(`/auth`) || PathPrefix(`/graphql`) || PathPrefix(`/marketplace`))
+      kind: Rule
+      priority: 100
+      services:
+        - name: plane-prod-api
+          port: 8000
+
+    # -------------------------
+    # App micro-frontends
+    # -------------------------
+    - match: Host(`plane-pm.home.nerdylyonsden.io`) && PathPrefix(`/spaces`)
+      kind: Rule
+      priority: 90
+      services:
+        - name: plane-prod-space
+          port: 3000
+
+    - match: Host(`plane-pm.home.nerdylyonsden.io`) && PathPrefix(`/god-mode`)
+      kind: Rule
+      priority: 90
+      services:
+        - name: plane-prod-admin
+          port: 3000
+
+    - match: Host(`plane-pm.home.nerdylyonsden.io`) && PathPrefix(`/live`)
+      kind: Rule
+      priority: 90
+      services:
+        - name: plane-prod-live
+          port: 3000
+
+    # -------------------------
+    # Uploads (only if you use local MinIO behind Plane)
+    # -------------------------
+    - match: Host(`plane-pm.home.nerdylyonsden.io`) && PathPrefix(`/uploads`)
+      kind: Rule
+      priority: 80
+      services:
+        - name: plane-prod-minio
+          port: 9000
+
+    # -------------------------
+    # Catch-all frontend (MUST be last / lowest priority)
+    # -------------------------
+    - match: Host(`plane-pm.home.nerdylyonsden.io`) && PathPrefix(`/`)
+      kind: Rule
+      priority: 1
+      services:
+        - name: plane-prod-web
+          port: 3000
+
+  tls:
+    secretName: prod-apps-certificate-secret
+
