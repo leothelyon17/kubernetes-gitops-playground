@@ -46,24 +46,24 @@ spec:
               value: "development"
             - name: MCP_ALLOWED_ORIGINS
               value: ""
-            - name: VAULT_ADDR
-              valueFrom:
-                secretKeyRef:
-                  name: vault-mcp-credentials
-                  key: vault-addr
-                  optional: true
-            - name: VAULT_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: vault-mcp-credentials
-                  key: vault-token
-                  optional: true
-            - name: VAULT_NAMESPACE
-              valueFrom:
-                secretKeyRef:
-                  name: vault-mcp-credentials
-                  key: vault-namespace
-                  optional: true
+            # - name: VAULT_ADDR
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: vault-mcp-credentials
+            #       key: vault-addr
+            #       optional: true
+            # - name: VAULT_TOKEN
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: vault-mcp-credentials
+            #       key: vault-token
+            #       optional: true
+            # - name: VAULT_NAMESPACE
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: vault-mcp-credentials
+            #       key: vault-namespace
+            #       optional: true
           ports:
             - name: http
               containerPort: 8080
