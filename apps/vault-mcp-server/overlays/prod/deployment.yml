@@ -29,7 +29,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: vault-mcp-server
-          image: docker.io/hashicorp/vault-mcp-server:v0.2.0
+          image: ghcr.io/leothelyon17/vault-mcp-server:latest
           imagePullPolicy: IfNotPresent
           env:
             - name: TRANSPORT_MODE
