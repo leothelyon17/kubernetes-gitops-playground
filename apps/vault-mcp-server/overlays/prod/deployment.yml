@@ -27,6 +27,8 @@ spec:
         runAsGroup: 65532
         seccompProfile:
           type: RuntimeDefault
+      imagePullSecrets:
+        - name: net-automation-k8s-repo-credentials
       containers:
         - name: vault-mcp-server
           image: ghcr.io/leothelyon17/vault-mcp-server:latest
