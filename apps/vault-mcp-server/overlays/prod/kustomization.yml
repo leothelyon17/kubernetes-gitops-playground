@@ -1,0 +1,5 @@
+resources:
+  - deployment.yml
+  - service.yml
+  - ingress-route.yml
+  - external-secrets-vault.yml

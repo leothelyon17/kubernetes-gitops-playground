@@ -1,0 +1,18 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: vault-mcp-prod-ingressroute
+  namespace: mcp-servers-prod
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - match: Host(`vault-mcp.home.nerdylyonsden.io`)
+      kind: Rule
+      services:
+        - name: vault-mcp-server
+          port: 80
+  tls:
+    secretName: prod-apps-certificate-secret

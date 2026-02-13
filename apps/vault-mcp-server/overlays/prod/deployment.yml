@@ -1,0 +1,107 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vault-mcp-server
+  namespace: mcp-servers-prod
+  labels:
+    app: vault-mcp-server
+    app.kubernetes.io/name: vault-mcp-server
+    app.kubernetes.io/part-of: mcp-servers
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vault-mcp-server
+  template:
+    metadata:
+      labels:
+        app: vault-mcp-server
+        app.kubernetes.io/name: vault-mcp-server
+        app.kubernetes.io/part-of: mcp-servers
+    spec:
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: vault-mcp-server
+          image: docker.io/hashicorp/vault-mcp-server:v0.2.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: TRANSPORT_MODE
+              value: "http"
+            - name: TRANSPORT_HOST
+              value: "0.0.0.0"
+            - name: TRANSPORT_PORT
+              value: "8080"
+            - name: MCP_ENDPOINT
+              value: "/mcp"
+            - name: MCP_CORS_MODE
+              value: "strict"
+            - name: MCP_ALLOWED_ORIGINS
+              valueFrom:
+                secretKeyRef:
+                  name: vault-mcp-credentials
+                  key: mcp-allowed-origins
+                  optional: true
+            - name: VAULT_ADDR
+              valueFrom:
+                secretKeyRef:
+                  name: vault-mcp-credentials
+                  key: vault-addr
+                  optional: true
+            - name: VAULT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: vault-mcp-credentials
+                  key: vault-token
+                  optional: true
+            - name: VAULT_NAMESPACE
+              valueFrom:
+                secretKeyRef:
+                  name: vault-mcp-credentials
+                  key: vault-namespace
+                  optional: true
+          ports:
+            - name: http
+              containerPort: 8080
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 24
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
