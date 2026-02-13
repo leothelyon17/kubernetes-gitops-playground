@@ -43,11 +43,7 @@ spec:
             - name: MCP_CORS_MODE
               value: "strict"
             - name: MCP_ALLOWED_ORIGINS
-              valueFrom:
-                secretKeyRef:
-                  name: vault-mcp-credentials
-                  key: mcp-allowed-origins
-                  optional: true
+              value: ""
             - name: VAULT_ADDR
               valueFrom:
                 secretKeyRef:
