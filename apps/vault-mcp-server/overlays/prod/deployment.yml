@@ -43,7 +43,7 @@ spec:
             - name: MCP_ENDPOINT
               value: "/mcp"
             - name: MCP_CORS_MODE
-              value: "strict"
+              value: "development"
             - name: MCP_ALLOWED_ORIGINS
               value: ""
             - name: VAULT_ADDR
