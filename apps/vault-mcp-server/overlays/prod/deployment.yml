@@ -58,12 +58,12 @@ spec:
             #       name: vault-mcp-credentials
             #       key: vault-token
             #       optional: true
-            - name: VAULT_NAMESPACE
-              valueFrom:
-                secretKeyRef:
-                  name: vault-mcp-credentials
-                  key: vault-namespace
-                  optional: true
+            # - name: VAULT_NAMESPACE
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: vault-mcp-credentials
+            #       key: vault-namespace
+            #       optional: true
           ports:
             - name: http
               containerPort: 8080
