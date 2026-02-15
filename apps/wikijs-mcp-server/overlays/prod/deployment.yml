@@ -40,7 +40,7 @@ spec:
           emptyDir: {}
       containers:
         - name: wikijs-mcp-server
-          image: ghcr.io/leothelyon17/wikijs-mcp-server:e48f1b922b11
+          image: ghcr.io/leothelyon17/wikijs-mcp-server:latest
           imagePullPolicy: IfNotPresent
           command:
             - python
@@ -75,7 +75,7 @@ spec:
             - name: FASTMCP_PORT
               value: "8080"
             - name: WIKIJS_API_URL
-              value: http://wiki-js-prod.wiki-js-prod.svc.cluster.local
+              value: http://wikijs.home.nerdylyonsden.io
             - name: WIKIJS_TOKEN
               valueFrom:
                 secretKeyRef:
