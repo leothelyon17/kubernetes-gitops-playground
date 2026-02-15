@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: wikijs-mcp-server-prod
+  namespace: argocd
+spec:
+  project: prod-home
+  destination:
+    server: https://prod-kube-vip.jjland.local:6443
+    namespace: mcp-servers-prod
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+  sources:
+    - repoURL: https://github.com/leothelyon17/kubernetes-gitops-playground.git
+      path: apps/wikijs-mcp-server/overlays/prod
+      targetRevision: HEAD
