@@ -87,12 +87,14 @@ Current MCP-related deployments and ingress hosts:
 | GitLab MCP | `apps/gitlab-mcp-server/overlays/prod` | `gitlab-mcp.home.nerdylyonsden.io` |
 | Plane MCP | `apps/plane-mcp-server/overlays/prod` | `plane-mcp.home.nerdylyonsden.io` |
 | Vault MCP | `apps/vault-mcp-server/overlays/prod` | `vault-mcp.home.nerdylyonsden.io` |
+| Wiki.js MCP | `apps/wikijs-mcp-server/overlays/prod` | `wikijs-mcp.home.nerdylyonsden.io` |
 | MCP Inspector UI | `apps/mcp-inspector/overlays/prod` | `mcp-inspector.home.nerdylyonsden.io` |
 | MCP Inspector Proxy | `apps/mcp-inspector/overlays/prod` | `mcp-inspector-proxy.home.nerdylyonsden.io` |
 
-Argo CD app manifest for Vault MCP:
+Argo CD app manifests for MCP servers:
 
 - `argocd-app-manifests/prod/vault-mcp-server.yml`
+- `argocd-app-manifests/prod/wikijs-mcp-server.yml`
 
 ## Secrets and Configuration
 
