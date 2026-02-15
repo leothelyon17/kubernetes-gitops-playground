@@ -1,0 +1,89 @@
+name: Build and Push Wiki.js MCP Server Image
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_ref:
+        description: "Branch, tag, or commit from leothelyon17/wiki-js-mcp"
+        required: true
+        default: "main"
+      image_repository:
+        description: "Target GHCR image repository (for example: ghcr.io/leothelyon17/wikijs-mcp-server)"
+        required: false
+        default: ""
+      platforms:
+        description: "Comma-separated Docker target platforms"
+        required: false
+        default: "linux/amd64"
+      push_latest:
+        description: "Also push the latest tag"
+        type: boolean
+        required: true
+        default: true
+
+jobs:
+  build-and-push:
+    name: Build and Push Wiki.js MCP Image
+    runs-on: self-hosted
+    permissions:
+      contents: read
+      packages: write
+    env:
+      DEFAULT_IMAGE_REPOSITORY: ghcr.io/${{ github.repository_owner }}/wikijs-mcp-server
+    steps:
+      - name: Checkout Wiki.js MCP source
+        uses: actions/checkout@v4
+        with:
+          repository: leothelyon17/wiki-js-mcp
+          ref: ${{ github.event.inputs.source_ref }}
+          path: .tmp/wiki-js-mcp
+          fetch-depth: 1
+
+      - name: Compute image tags
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          IMAGE_REPOSITORY="${{ github.event.inputs.image_repository }}"
+          if [ -z "$IMAGE_REPOSITORY" ]; then
+            IMAGE_REPOSITORY="${DEFAULT_IMAGE_REPOSITORY}"
+          fi
+          IMAGE_REPOSITORY="$(echo "$IMAGE_REPOSITORY" | tr '[:upper:]' '[:lower:]')"
+
+          SOURCE_REF="${{ github.event.inputs.source_ref }}"
+          SAFE_SOURCE_REF="$(echo "$SOURCE_REF" | tr '/:@ ' '-' | tr -cd 'a-zA-Z0-9._-')"
+          SOURCE_SHA="$(git -C .tmp/wiki-js-mcp rev-parse --short=12 HEAD)"
+
+          TAGS="${IMAGE_REPOSITORY}:${SOURCE_SHA},${IMAGE_REPOSITORY}:${SAFE_SOURCE_REF},${IMAGE_REPOSITORY}:${SAFE_SOURCE_REF}-${SOURCE_SHA}"
+          if [ "${{ github.event.inputs.push_latest }}" = "true" ]; then
+            TAGS="${TAGS},${IMAGE_REPOSITORY}:latest"
+          fi
+
+          echo "IMAGE_REPOSITORY=$IMAGE_REPOSITORY" >> "$GITHUB_ENV"
+          echo "SOURCE_SHA=$SOURCE_SHA" >> "$GITHUB_ENV"
+          echo "SAFE_SOURCE_REF=$SAFE_SOURCE_REF" >> "$GITHUB_ENV"
+          echo "TAGS=$TAGS" >> "$GITHUB_ENV"
+
+          echo "Publishing tags:"
+          echo "$TAGS" | tr ',' '\n'
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Wiki.js MCP image
+        uses: docker/build-push-action@v6
+        with:
+          context: .tmp/wiki-js-mcp
+          file: .tmp/wiki-js-mcp/Dockerfile
+          platforms: ${{ github.event.inputs.platforms }}
+          push: true
+          tags: ${{ env.TAGS }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
