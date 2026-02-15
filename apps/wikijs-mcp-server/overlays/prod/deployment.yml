@@ -75,7 +75,7 @@ spec:
             - name: FASTMCP_PORT
               value: "8080"
             - name: WIKIJS_API_URL
-              value: http://wikijs.home.nerdylyonsden.io
+              value: https://wikijs.home.nerdylyonsden.io
             - name: WIKIJS_TOKEN
               valueFrom:
                 secretKeyRef:
