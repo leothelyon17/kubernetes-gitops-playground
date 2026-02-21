@@ -1,5 +1,5 @@
 resources:
   - ip-address-pool.yml
   - l2-advertisement.yml
-  - ip-address-pool-pool-unbound.yml
+  - ip-address-pool-pihole-unbound.yml
   - l2-advertisment-pihole-unbound.yml
