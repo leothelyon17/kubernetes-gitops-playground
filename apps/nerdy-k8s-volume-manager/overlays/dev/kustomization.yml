@@ -1,0 +1,11 @@
+resources:
+  - pvc.yml
+  - deployment.yml
+  - service.yml
+  - cr-cluster-discovery.yml
+  - cr-runtime.yml
+  - crb.yml
+  - rb-netbox-dev.yml
+  - rb-vault-dev.yml
+  - sa.yml
+  - ingress-route.yml

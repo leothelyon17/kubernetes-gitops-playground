@@ -1,0 +1,23 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: nkvm-cluster-discovery
+  labels:
+    app.kubernetes.io/name: nerdy-k8s-volume-manager
+    app.kubernetes.io/component: discovery
+rules:
+  # Cluster preflight namespace inventory.
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    verbs: ["list"]
+  # Cluster-wide read-only inventory for PVC and pod discovery.
+  - apiGroups: [""]
+    resources: ["persistentvolumeclaims", "pods"]
+    verbs: ["list"]
+  # Read-only owner chain resolution for ReplicaSets and Jobs.
+  - apiGroups: ["apps"]
+    resources: ["replicasets"]
+    verbs: ["get"]
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
+    verbs: ["get"]

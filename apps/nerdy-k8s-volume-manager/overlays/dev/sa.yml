@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nkvm-runner
+  namespace: nerdy-k8s-volume-manager-dev
+  labels:
+    app.kubernetes.io/name: nerdy-k8s-volume-manager
+    app.kubernetes.io/component: control-plane

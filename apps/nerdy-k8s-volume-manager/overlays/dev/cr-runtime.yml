@@ -1,0 +1,27 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: nkvm-runtime
+  labels:
+    app.kubernetes.io/name: nerdy-k8s-volume-manager
+    app.kubernetes.io/component: runtime
+rules:
+  # Namespace-scoped PVC inventory for approved namespaces only.
+  - apiGroups: [""]
+    resources: ["persistentvolumeclaims"]
+    verbs: ["list"]
+  # Helper pod lifecycle and namespaced pod discovery.
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["create", "delete", "get", "list"]
+  # Tar archive execution inside helper pods.
+  - apiGroups: [""]
+    resources: ["pods/exec"]
+    verbs: ["create", "get"]
+  # Read-only owner chain resolution for pod controllers.
+  - apiGroups: ["apps"]
+    resources: ["replicasets"]
+    verbs: ["get"]
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
+    verbs: ["get"]

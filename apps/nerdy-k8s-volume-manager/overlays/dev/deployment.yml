@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nerdy-k8s-volume-manager
+  namespace: nerdy-k8s-volume-manager-dev
+  labels:
+    app.kubernetes.io/name: nerdy-k8s-volume-manager
+    app.kubernetes.io/component: control-plane
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nerdy-k8s-volume-manager
+      app.kubernetes.io/component: control-plane
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: nerdy-k8s-volume-manager
+        app.kubernetes.io/component: control-plane
+    spec:
+      serviceAccountName: nkvm-runner
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: app
+          image: ghcr.io/leothelyon17/nerdy-k8s-volume-manager:latest
+          imagePullPolicy: Always
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            capabilities:
+              drop:
+                - ALL
+          env:
+            - name: NKVM_BACKUP_DIR
+              value: /var/lib/nkvm/backups
+            - name: NKVM_METADATA_DB_PATH
+              value: /var/lib/nkvm/data/backups.db
+            - name: NKVM_DEFAULT_AUTH_MODE
+              value: in-cluster
+            - name: NKVM_HELPER_IMAGE
+              value: alpine:3.20
+            - name: NKVM_DISCOVERY_TIMEOUT_SECONDS
+              value: "20"
+            - name: NKVM_MAX_NAMESPACE_SCAN
+              value: "100"
+          ports:
+            - name: http
+              containerPort: 8501
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 30
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            timeoutSeconds: 3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          volumeMounts:
+            - name: runtime-data
+              mountPath: /var/lib/nkvm
+            - name: remote-kubeconfig
+              mountPath: /etc/nkvm/remote
+              readOnly: true
+      volumes:
+        - name: runtime-data
+          persistentVolumeClaim:
+            claimName: nkvm-runtime-data
+        - name: remote-kubeconfig
+          secret:
+            secretName: nkvm-remote-kubeconfig
+            defaultMode: 0400
+            optional: true

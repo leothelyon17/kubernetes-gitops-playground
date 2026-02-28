@@ -1,0 +1,18 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  # Replace with each allowlisted target namespace (for example: apps, data, platform).
+  namespace: vault-dev
+  # Keep one binding per namespace to preserve least-privilege scope.
+  name: vault-dev-nkvm-runtime
+  labels:
+    app.kubernetes.io/name: nerdy-k8s-volume-manager
+    app.kubernetes.io/component: runtime
+subjects:
+  - kind: ServiceAccount
+    name: nkvm-runner
+    namespace: nerdy-k8s-volume-manager-dev
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: nkvm-runtime
