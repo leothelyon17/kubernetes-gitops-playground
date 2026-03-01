@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: nerdy-k8s-volume-manager-prod-ingressroute
+  namespace: nerdy-k8s-volume-manager-prod
+  labels:
+    app.kubernetes.io/name: nerdy-k8s-volume-manager
+    app.kubernetes.io/instance: nerdy-k8s-volume-manager-prod
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - match: Host(`nkvm.home.nerdylyonsden.io`)
+      kind: Rule
+      services:
+        - name: nerdy-k8s-volume-manager
+          port: 80
+  tls:
+    secretName: prod-apps-certificate-secret

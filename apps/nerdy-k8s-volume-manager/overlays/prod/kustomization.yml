@@ -5,7 +5,7 @@ resources:
   - cr-cluster-discovery.yml
   - cr-runtime.yml
   - crb.yml
-  - rb-netbox-dev.yml
-  - rb-vault-dev.yml
+  - rb-netbox-prod.yml
+  - rb-vault-prod.yml
   - sa.yml
   - ingress-route.yml

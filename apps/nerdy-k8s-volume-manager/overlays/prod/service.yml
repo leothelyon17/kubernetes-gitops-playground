@@ -2,14 +2,16 @@ apiVersion: v1
 kind: Service
 metadata:
   name: nerdy-k8s-volume-manager
-  namespace: nerdy-k8s-volume-manager-dev
+  namespace: nerdy-k8s-volume-manager-prod
   labels:
     app.kubernetes.io/name: nerdy-k8s-volume-manager
+    app.kubernetes.io/instance: nerdy-k8s-volume-manager-prod
     app.kubernetes.io/component: control-plane
 spec:
   type: ClusterIP
   selector:
     app.kubernetes.io/name: nerdy-k8s-volume-manager
+    app.kubernetes.io/instance: nerdy-k8s-volume-manager-prod
     app.kubernetes.io/component: control-plane
   ports:
     - name: http

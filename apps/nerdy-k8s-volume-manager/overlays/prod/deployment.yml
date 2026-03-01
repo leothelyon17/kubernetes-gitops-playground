@@ -2,9 +2,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nerdy-k8s-volume-manager
-  namespace: nerdy-k8s-volume-manager-dev
+  namespace: nerdy-k8s-volume-manager-prod
   labels:
     app.kubernetes.io/name: nerdy-k8s-volume-manager
+    app.kubernetes.io/instance: nerdy-k8s-volume-manager-prod
     app.kubernetes.io/component: control-plane
 spec:
   replicas: 1
@@ -12,14 +13,17 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: nerdy-k8s-volume-manager
+      app.kubernetes.io/instance: nerdy-k8s-volume-manager-prod
       app.kubernetes.io/component: control-plane
   template:
     metadata:
       labels:
         app.kubernetes.io/name: nerdy-k8s-volume-manager
+        app.kubernetes.io/instance: nerdy-k8s-volume-manager-prod
         app.kubernetes.io/component: control-plane
     spec:
       serviceAccountName: nkvm-runner
+      terminationGracePeriodSeconds: 30
       securityContext:
         runAsNonRoot: true
         runAsUser: 10001
@@ -30,8 +34,8 @@ spec:
           type: RuntimeDefault
       containers:
         - name: app
-          image: ghcr.io/leothelyon17/nerdy-k8s-volume-manager:latest
-          imagePullPolicy: Always
+          image: ghcr.io/leothelyon17/nerdy-k8s-volume-manager:latest@sha256:cf7e61020cec71565e6913e2c5600f2eb640471c43c970969fc5a44494f506cc
+          imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
             privileged: false
@@ -46,7 +50,7 @@ spec:
             - name: NKVM_DEFAULT_AUTH_MODE
               value: in-cluster
             - name: NKVM_HELPER_IMAGE
-              value: alpine:3.20
+              value: alpine:3.20.5@sha256:31687a2fdd021f85955bf2d0c2682e9c0949827560e1db546358ea094f740f12
             - name: NKVM_DISCOVERY_TIMEOUT_SECONDS
               value: "20"
             - name: NKVM_MAX_NAMESPACE_SCAN
