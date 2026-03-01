@@ -1,7 +1,0 @@
-resources:
-  - configmap.yml
-  - secret.yml
-  - deployment.yml
-  - service.yml
-  - middleware-cors.yml
-  - ingress-route.yml
