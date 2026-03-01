@@ -2,7 +2,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   namespace: vaultwarden-prod
-  name: hashi-vault-prod-nkvm-runtime
+  name: vaultwarden-prod-nkvm-runtime
   labels:
     app.kubernetes.io/name: nerdy-k8s-volume-manager
     app.kubernetes.io/instance: nerdy-k8s-volume-manager-prod
