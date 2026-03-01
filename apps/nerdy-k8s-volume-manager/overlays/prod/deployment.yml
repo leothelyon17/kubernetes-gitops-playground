@@ -35,7 +35,7 @@ spec:
       containers:
         - name: app
           image: ghcr.io/leothelyon17/nerdy-k8s-volume-manager:latest@sha256:cf7e61020cec71565e6913e2c5600f2eb640471c43c970969fc5a44494f506cc
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           securityContext:
             allowPrivilegeEscalation: false
             privileged: false
