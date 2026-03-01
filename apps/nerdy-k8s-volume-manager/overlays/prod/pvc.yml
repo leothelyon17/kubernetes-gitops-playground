@@ -12,5 +12,5 @@ spec:
   volumeMode: Filesystem
   resources:
     requests:
-      storage: 20Gi
+      storage: 1Gi
   storageClassName: rook-cephfs-retain
