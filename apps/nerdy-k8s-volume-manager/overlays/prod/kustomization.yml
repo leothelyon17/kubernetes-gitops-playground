@@ -7,5 +7,6 @@ resources:
   - crb.yml
   - rb-netbox-prod.yml
   - rb-vault-prod.yml
+  - rb-vaultwarden-prod.yml
   - sa.yml
   - ingress-route.yml
