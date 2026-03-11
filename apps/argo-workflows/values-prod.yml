@@ -34,13 +34,6 @@ controller:
       memory: 512Mi
   pdb:
     enabled: false
-  metricsConfig:
-    enabled: true
-  serviceMonitor:
-    enabled: true
-    namespace: monitoring-prod
-    additionalLabels:
-      release: kube-prometheus-stack-prod
   workflowRestrictions:
     templateReferencing: Secure
   workflowDefaults:
