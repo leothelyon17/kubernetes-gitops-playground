@@ -42,6 +42,11 @@ repositories:
     name: "Cert Manager (Official)"
     project: "prod-home"
 
+  - url: "https://argoproj.github.io/argo-helm"
+    type: helm
+    name: "Argo Helm (Official)"
+    project: "prod-home"
+
   - url: "https://emberstack.github.io/helm-charts"
     type: helm
     name: "Emberstack"

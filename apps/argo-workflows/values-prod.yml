@@ -1,0 +1,126 @@
+images:
+  pullPolicy: IfNotPresent
+
+createAggregateRoles: false
+singleNamespace: true
+
+workflow:
+  serviceAccount:
+    create: true
+    name: argo-workflow
+  rbac:
+    create: true
+
+controller:
+  replicas: 1
+  parallelism: 6
+  namespaceParallelism: 3
+  workflowWorkers: 4
+  workflowTTLWorkers: 2
+  podCleanupWorkers: 2
+  cronWorkflowWorkers: 2
+  resourceRateLimit:
+    limit: 2
+    burst: 4
+  logging:
+    level: info
+    format: json
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  pdb:
+    enabled: false
+  workflowRestrictions:
+    templateReferencing: Secure
+  workflowDefaults:
+    spec:
+      serviceAccountName: argo-workflow
+      podGC:
+        strategy: OnWorkflowCompletion
+  retentionPolicy:
+    completed: 50
+    failed: 20
+    errored: 20
+  nodeEvents:
+    enabled: false
+  workflowEvents:
+    enabled: false
+  clusterWorkflowTemplates:
+    enabled: false
+
+  # Enable this once you have a shared PostgreSQL instance for workflow archive
+  # and offloaded node status. This repo does not currently define one for
+  # Argo Workflows, so leave it disabled until the backing service exists.
+  # persistence:
+  #   archive: true
+  #   nodeStatusOffLoad: true
+  #   postgresql:
+  #     host: postgres.example.internal
+  #     port: 5432
+  #     database: argo_workflows
+  #     tableName: argo_workflows
+  #     userNameSecret:
+  #       name: argo-workflows-postgres
+  #       key: username
+  #     passwordSecret:
+  #       name: argo-workflows-postgres
+  #       key: password
+  #     ssl: true
+  #     sslMode: require
+
+mainContainer:
+  imagePullPolicy: IfNotPresent
+
+executor:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
+
+server:
+  replicas: 1
+  secure: false
+  authModes:
+    - server
+  logging:
+    level: info
+    format: json
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
+  pdb:
+    enabled: false
+  livenessProbe:
+    enabled: true
+  ingress:
+    enabled: false
+  clusterWorkflowTemplates:
+    enabled: false
+
+# Enable this after you provision an S3-compatible object store such as Ceph RGW
+# or a shared MinIO instance. The current prod repo has CephFS for PVC-backed
+# apps, but it does not yet define an object-store endpoint for Argo artifacts.
+# useStaticCredentials: true
+# artifactRepository:
+#   archiveLogs: true
+#   s3:
+#     bucket: argo-workflows
+#     endpoint: minio.example.internal:9000
+#     insecure: false
+#     accessKeySecret:
+#       name: argo-workflows-artifacts
+#       key: accesskey
+#     secretKeySecret:
+#       name: argo-workflows-artifacts
+#       key: secretkey

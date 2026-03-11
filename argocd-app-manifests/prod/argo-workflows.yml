@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argo-workflows-prod
+  namespace: argocd
+spec:
+  project: prod-home
+  destination:
+    server: https://prod-kube-vip.jjland.local:6443
+    namespace: argo-workflows-prod
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+  sources:
+    - repoURL: https://argoproj.github.io/argo-helm
+      targetRevision: 0.47.4
+      helm:
+        valueFiles:
+          - $values/apps/argo-workflows/values-prod.yml
+      chart: argo-workflows
+    - repoURL: https://github.com/leothelyon17/kubernetes-gitops-playground.git
+      path: apps/argo-workflows/overlays/prod
+      targetRevision: HEAD
+      ref: values
