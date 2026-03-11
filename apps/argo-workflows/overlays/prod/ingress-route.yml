@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: argo-workflows-prod-ingressroute
+  namespace: argo-workflows-prod
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`workflows.home.nerdylyonsden.io`)
+      kind: Rule
+      services:
+        - name: argo-workflows-prod-server
+          port: 2746
+  tls:
+    secretName: prod-apps-certificate-secret
