@@ -16,6 +16,10 @@ ports:
     proxyProtocol:
       trustedIPs: []
       insecure: false
+
+providers:
+  kubernetesCRD:
+    allowExternalNameServices: true
       
 ingressRoute:
   dashboard:
