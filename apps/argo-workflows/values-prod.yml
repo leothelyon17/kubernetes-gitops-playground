@@ -114,7 +114,7 @@ artifactRepository:
   s3:
     bucket: argo-workflows-prod
     endpoint: rustfs-s3.home.nerdylyonsden.io
-    insecure: true
+    insecure: false
     region: us-east-1
     accessKeySecret:
       name: argo-workflows-artifacts
