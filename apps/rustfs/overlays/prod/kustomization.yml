@@ -1,0 +1,4 @@
+resources:
+  - cluster-secret-store.yml
+  - external-secrets.yml
+  - ingress-routes.yml

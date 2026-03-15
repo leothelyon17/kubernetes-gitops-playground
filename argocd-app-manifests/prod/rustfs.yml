@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rustfs-prod
+  namespace: argocd
+spec:
+  project: prod-home
+  destination:
+    server: https://prod-kube-vip.jjland.local:6443
+    namespace: rustfs-prod
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+  sources:
+    - repoURL: https://charts.rustfs.com/
+      targetRevision: 0.0.86
+      chart: rustfs
+      helm:
+        releaseName: rustfs-prod
+        valueFiles:
+          - $values/apps/rustfs/values-prod.yml
+    - repoURL: https://github.com/leothelyon17/kubernetes-gitops-playground.git
+      path: apps/rustfs/overlays/prod
+      targetRevision: HEAD
+      ref: values
