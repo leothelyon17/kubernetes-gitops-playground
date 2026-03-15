@@ -1,0 +1,71 @@
+fullnameOverride: rustfs-prod
+
+image:
+  rustfs:
+    repository: rustfs/rustfs
+    tag: "1.0.0-alpha.86"
+    pullPolicy: IfNotPresent
+  initImage:
+    repository: busybox
+    tag: "stable"
+    pullPolicy: IfNotPresent
+
+mode:
+  standalone:
+    enabled: true
+  distributed:
+    enabled: false
+
+secret:
+  existingSecret: rustfs-prod-credentials
+
+serviceAccount:
+  create: true
+  name: rustfs-prod
+  automount: true
+
+commonLabels:
+  app.kubernetes.io/part-of: rustfs
+
+config:
+  rustfs:
+    address: ":9000"
+    console_enable: "true"
+    console_address: ":9001"
+    log_level: "info"
+    region: "us-east-1"
+    obs_environment: "production"
+    obs_log_directory: "/logs"
+
+service:
+  type: ClusterIP
+  endpoint:
+    port: 9000
+  console:
+    port: 9001
+
+ingress:
+  enabled: false
+  className: "traefik"
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: "1"
+    memory: 2Gi
+
+affinity:
+  podAntiAffinity:
+    enabled: false
+    topologyKey: kubernetes.io/hostname
+  nodeAffinity: {}
+
+storageclass:
+  name: rook-cephfs-delete
+  dataStorageSize: 1Gi
+  logStorageSize: 100Mi
+
+pdb:
+  create: false

@@ -56,3 +56,8 @@ repositories:
     type: helm
     name: "Nautobot (Official)"
     project: "prod-home"
+
+  - url: "https://charts.rustfs.com/"
+    type: helm
+    name: "RustFS (Official)"
+    project: "prod-home"
