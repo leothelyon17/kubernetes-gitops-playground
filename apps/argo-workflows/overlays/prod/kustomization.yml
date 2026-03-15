@@ -1,2 +1,4 @@
 resources:
+  - secret-store.yml
+  - external-secrets-artifacts.yml
   - ingress-route.yml

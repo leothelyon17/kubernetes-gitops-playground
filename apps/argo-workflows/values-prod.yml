@@ -108,19 +108,17 @@ server:
   clusterWorkflowTemplates:
     enabled: false
 
-# Enable this after you provision an S3-compatible object store such as Ceph RGW
-# or a shared MinIO instance. The current prod repo has CephFS for PVC-backed
-# apps, but it does not yet define an object-store endpoint for Argo artifacts.
-# useStaticCredentials: true
-# artifactRepository:
-#   archiveLogs: true
-#   s3:
-#     bucket: argo-workflows
-#     endpoint: minio.example.internal:9000
-#     insecure: false
-#     accessKeySecret:
-#       name: argo-workflows-artifacts
-#       key: accesskey
-#     secretKeySecret:
-#       name: argo-workflows-artifacts
-#       key: secretkey
+useStaticCredentials: true
+artifactRepository:
+  archiveLogs: true
+  s3:
+    bucket: argo-workflows-prod
+    endpoint: rustfs-s3.home.nerdylyonsden.io
+    insecure: true
+    region: us-east-1
+    accessKeySecret:
+      name: argo-workflows-artifacts
+      key: accesskey
+    secretKeySecret:
+      name: argo-workflows-artifacts
+      key: secretkey
