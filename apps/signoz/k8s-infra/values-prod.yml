@@ -31,7 +31,10 @@ presets:
   k8sEvents:
     enabled: true                        # set to false if too noisy
   prometheus:
-    enabled: false                       # set true if scraping annotated pods
+    enabled: true
+    annotationsPrefix: signoz.io
+    scrapeInterval: 30s
+    namespaceScoped: false     # set true if scraping annotated pods
 
 otelAgent:
   # Avoid hostPort collisions if you don't need them
