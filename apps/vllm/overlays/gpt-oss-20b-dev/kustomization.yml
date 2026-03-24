@@ -1,0 +1,6 @@
+resources:
+  - namespace.yml
+  - configmap.yml
+  - pvc.yml
+  - service.yml
+  - deployment.yml

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vllm-gpt-oss-20b
+  namespace: vllm-gpt-oss-20b-dev
+  labels:
+    app.kubernetes.io/name: vllm-gpt-oss-20b
+    app.kubernetes.io/instance: gpt-oss-20b-dev
+    app.kubernetes.io/component: inference
+    app.kubernetes.io/part-of: vllm
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: vllm-gpt-oss-20b
+    app.kubernetes.io/instance: gpt-oss-20b-dev
+  ports:
+    - name: http
+      port: 8000
+      targetPort: http
+      protocol: TCP

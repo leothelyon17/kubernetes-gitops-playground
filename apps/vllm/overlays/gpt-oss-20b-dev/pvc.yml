@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vllm-gpt-oss-20b-cache
+  namespace: vllm-gpt-oss-20b-dev
+  labels:
+    app.kubernetes.io/name: vllm-gpt-oss-20b
+    app.kubernetes.io/instance: gpt-oss-20b-dev
+    app.kubernetes.io/component: inference
+    app.kubernetes.io/part-of: vllm
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: rook-cephfs-delete
