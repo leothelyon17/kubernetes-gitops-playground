@@ -12,26 +12,28 @@ data:
   blackwell.yaml: |
     host: 0.0.0.0
     port: 8000
-    max-model-len: 8192
-    max-num-batched-tokens: 2048
-    max-num-seqs: 2
-    max-cudagraph-capture-size: 1024
-    gpu-memory-utilization: 0.90
+    max-model-len: 4096
+    max-num-batched-tokens: 1024
+    max-num-seqs: 1
+    max-cudagraph-capture-size: 256
+    gpu-memory-utilization: 0.97
     stream-interval: 20
     tensor-parallel-size: 1
     no-enable-prefix-caching: true
     kv-cache-dtype: fp8
+    enforce-eager: true
   hopper-like.yaml: |
     host: 0.0.0.0
     port: 8000
-    max-model-len: 8192
-    max-num-batched-tokens: 2048
-    max-num-seqs: 2
-    max-cudagraph-capture-size: 1024
-    gpu-memory-utilization: 0.90
+    max-model-len: 4096
+    max-num-batched-tokens: 1024
+    max-num-seqs: 1
+    max-cudagraph-capture-size: 256
+    gpu-memory-utilization: 0.97
     stream-interval: 20
     tensor-parallel-size: 1
     no-enable-prefix-caching: true
+    enforce-eager: true
   launch-vllm.sh: |
     #!/usr/bin/env bash
     set -euo pipefail
