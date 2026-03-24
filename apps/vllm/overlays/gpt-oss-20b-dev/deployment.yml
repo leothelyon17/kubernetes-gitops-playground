@@ -67,6 +67,8 @@ spec:
               value: /tmp
             - name: VLLM_NO_USAGE_STATS
               value: "1"
+            - name: VLLM_SLEEP_WHEN_IDLE
+              value: "0"
             - name: PYTHONDONTWRITEBYTECODE
               value: "1"
             - name: PYTHONUNBUFFERED
