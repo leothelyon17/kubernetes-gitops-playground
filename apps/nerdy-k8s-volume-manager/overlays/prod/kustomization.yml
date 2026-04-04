@@ -9,5 +9,6 @@ resources:
   - rb-vault-prod.yml
   - rb-vaultwarden-prod.yml
   - rb-heimdall-prod.yml
+  - rb-skillserver-prod.yml
   - sa.yml
   - ingress-route.yml
