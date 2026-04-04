@@ -10,5 +10,6 @@ resources:
   - rb-vaultwarden-prod.yml
   - rb-heimdall-prod.yml
   - rb-skillserver-prod.yml
+  - rb-pihole-unbound-prod.yml
   - sa.yml
   - ingress-route.yml
