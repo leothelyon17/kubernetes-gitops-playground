@@ -11,5 +11,7 @@ resources:
   - rb-heimdall-prod.yml
   - rb-skillserver-prod.yml
   - rb-pihole-unbound-prod.yml
+  - rb-overseerr-app-prod.yml
+  - rb-openclaw-prod.yml
   - sa.yml
   - ingress-route.yml
