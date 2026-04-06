@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vllm-bge-base-en-v1-5-config
+  namespace: vllm-bge-base-en-v1-5-dev
+  labels:
+    app.kubernetes.io/name: vllm-bge-base-en-v1-5
+    app.kubernetes.io/instance: bge-base-en-v1-5-dev
+    app.kubernetes.io/component: inference
+    app.kubernetes.io/part-of: vllm
+data:
+  embed.yaml: |
+    host: 0.0.0.0
+    port: 8000
+    max-model-len: 512
+    max-num-batched-tokens: 4096
+    max-num-seqs: 32
+    gpu-memory-utilization: 0.85
+    tensor-parallel-size: 1
+    enforce-eager: true
+  launch-vllm.sh: |
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    mkdir -p "${HF_HOME:-/models/hf-cache}" /tmp/triton
+
+    exec vllm serve BAAI/bge-base-en-v1.5 \
+      --runner pooling \
+      --task embed \
+      --config /config/embed.yaml \
+      --download-dir /models/hf-cache \
+      --served-model-name bge-base-en-v1.5

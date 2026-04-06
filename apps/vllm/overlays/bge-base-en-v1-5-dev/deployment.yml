@@ -1,0 +1,137 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vllm-bge-base-en-v1-5
+  namespace: vllm-bge-base-en-v1-5-dev
+  labels:
+    app.kubernetes.io/name: vllm-bge-base-en-v1-5
+    app.kubernetes.io/instance: bge-base-en-v1-5-dev
+    app.kubernetes.io/component: inference
+    app.kubernetes.io/part-of: vllm
+    app.kubernetes.io/version: "0.18.0"
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: vllm-bge-base-en-v1-5
+      app.kubernetes.io/instance: bge-base-en-v1-5-dev
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: vllm-bge-base-en-v1-5
+        app.kubernetes.io/instance: bge-base-en-v1-5-dev
+        app.kubernetes.io/component: inference
+        app.kubernetes.io/part-of: vllm
+        app.kubernetes.io/version: "0.18.0"
+    spec:
+      automountServiceAccountToken: false
+      runtimeClassName: nvidia
+      terminationGracePeriodSeconds: 60
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      nodeSelector:
+        nvidia.com/gpu.present: "true"
+      tolerations:
+        - key: nvidia.com/gpu
+          operator: Exists
+          effect: NoSchedule
+      containers:
+        - name: vllm
+          image: vllm/vllm-openai:v0.18.0
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/bash
+            - /config/launch-vllm.sh
+          env:
+            - name: HF_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: vllm-bge-base-en-v1-5-credentials
+                  key: hf-token
+                  optional: true
+            - name: HF_HOME
+              value: /models/hf-cache
+            - name: HUGGINGFACE_HUB_CACHE
+              value: /models/hf-cache/hub
+            - name: TRITON_CACHE_DIR
+              value: /tmp/triton
+            - name: HOME
+              value: /tmp
+            - name: TMPDIR
+              value: /tmp
+            - name: VLLM_NO_USAGE_STATS
+              value: "1"
+            - name: VLLM_SLEEP_WHEN_IDLE
+              value: "0"
+            - name: PYTHONDONTWRITEBYTECODE
+              value: "1"
+            - name: PYTHONUNBUFFERED
+              value: "1"
+          ports:
+            - name: http
+              containerPort: 8000
+          volumeMounts:
+            - name: model-cache
+              mountPath: /models
+            - name: config
+              mountPath: /config
+              readOnly: true
+            - name: shm
+              mountPath: /dev/shm
+            - name: tmp
+              mountPath: /tmp
+          startupProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 120
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: "2"
+              memory: 8Gi
+              nvidia.com/gpu: 1
+            limits:
+              cpu: "4"
+              memory: 16Gi
+              nvidia.com/gpu: 1
+      volumes:
+        - name: model-cache
+          persistentVolumeClaim:
+            claimName: vllm-bge-base-en-v1-5-cache
+        - name: config
+          configMap:
+            name: vllm-bge-base-en-v1-5-config
+            defaultMode: 0555
+        - name: shm
+          emptyDir:
+            medium: Memory
+            sizeLimit: 512Mi
+        - name: tmp
+          emptyDir: {}
