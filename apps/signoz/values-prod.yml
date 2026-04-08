@@ -6,12 +6,12 @@ clickhouse:
   zookeeper:
     persistence:
       storageClass: rook-cephfs-retain
-      size: 2Gi
+      size: 5Gi
   persistence:
     storageClass: rook-cephfs-retain
-    size: 5Gi
+    size: 10Gi
 
 signoz:
   persistence:
     storageClass: rook-cephfs-retain
-    size: 1Gi
+    size: 2Gi
