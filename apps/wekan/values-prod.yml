@@ -1,6 +1,4 @@
-env:
-  - name: "MONGO_URL"
-    value: "mongodb://wekan-prod-mongodb:27017"
+env: []
 
 endpoint: wekan.home.nerdylyonsden.io
 
@@ -48,7 +46,7 @@ sharedDataFolder:
 
 # ------------------------------------------------------------------------------
 # MongoDB:
-# ref: https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
+# ref: https://github.com/groundhog2k/helm-charts/tree/master/charts/mongodb
 # ------------------------------------------------------------------------------
 
 mongodb:
@@ -59,6 +57,34 @@ mongodb:
     tag: 7.0.23
   auth:
     enabled: false
+  # CephFS-backed recovery and health checks are slower than the chart defaults.
+  # Give MongoDB a resource floor and more probe slack so it does not restart
+  # itself during routine recovery or short I/O stalls.
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+  startupProbe:
+    initialDelaySeconds: 10
+    timeoutSeconds: 10
+    failureThreshold: 30
+    successThreshold: 1
+    periodSeconds: 10
+  livenessProbe:
+    initialDelaySeconds: 60
+    timeoutSeconds: 10
+    failureThreshold: 6
+    successThreshold: 1
+    periodSeconds: 15
+  readinessProbe:
+    initialDelaySeconds: 60
+    timeoutSeconds: 10
+    failureThreshold: 6
+    successThreshold: 1
+    periodSeconds: 15
   # Optional specify an existing PVC
   storage:
     persistentVolumeClaimName: wekan-mongodb-pvc
