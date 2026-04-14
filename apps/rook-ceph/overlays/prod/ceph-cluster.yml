@@ -36,7 +36,7 @@ spec:
           limits:
             memory: "3072Mi"
         devices:
-          - name: "nvme0n1p6"
+          - name: "nvme0n1p3"
       - name: fedora-prod-node3
         resources:
           limits:
