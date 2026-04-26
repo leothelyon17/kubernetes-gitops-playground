@@ -25,7 +25,7 @@ spec:
     useAllNodes: false
     useAllDevices: false
     nodes:
-      - name: rocky9-prod-node1
+      - name: fedora-prod-node1
         resources:
           limits:
             memory: "3072Mi"
