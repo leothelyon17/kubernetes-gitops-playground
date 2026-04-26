@@ -109,8 +109,8 @@ jobs:
         working-directory: ./kubespray
         run: |
           source venv/bin/activate
-          ansible-playbook -i inventory/${CHANGED_CLUSTER}/hosts.yml upgrade_cluster.yml -e kube_version=v1.35.4 \
-            --become --become-user=root -e "ansible_password=${{ secrets.SSH_PASS }}" -e "ansible_become_pass=${{ secrets.SSH_PASS }}" -e "reset_confirmation=yes"
+          ansible-playbook -i inventory/${CHANGED_CLUSTER}/hosts.yml upgrade_cluster.yml \
+            --become --become-user=root -e "ansible_password=${{ secrets.SSH_PASS }}" -e "ansible_become_pass=${{ secrets.SSH_PASS }}" -e "reset_confirmation=yes" -e kube_version=1.35.4
           # ansible-playbook -i inventory/${CHANGED_CLUSTER}/hosts.yml scale.yml --limit fedora-prod-node5-un \
           #   --become --become-user=root -e "ansible_password=${{ secrets.SSH_PASS }}" -e "ansible_become_pass=${{ secrets.SSH_PASS }}" -e "reset_confirmation=yes"
           # ansible-playbook -i inventory/${CHANGED_CLUSTER}/hosts.yml cluster.yml \
