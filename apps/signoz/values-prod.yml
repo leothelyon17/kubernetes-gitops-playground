@@ -9,7 +9,7 @@ clickhouse:
       size: 5Gi
   persistence:
     storageClass: rook-cephfs-retain
-    size: 10Gi
+    size: 18Gi
 
 signoz:
   persistence:
