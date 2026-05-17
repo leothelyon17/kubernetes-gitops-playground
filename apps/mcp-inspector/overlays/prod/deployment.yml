@@ -20,7 +20,7 @@ spec:
         runAsGroup: 10001
       containers:
         - name: inspector
-          image: ghcr.io/modelcontextprotocol/inspector:0.17.2
+          image: ghcr.io/modelcontextprotocol/inspector:0.21.2
           imagePullPolicy: IfNotPresent
           env:
             - name: HOST
