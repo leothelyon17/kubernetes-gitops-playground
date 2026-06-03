@@ -180,7 +180,19 @@ nodelocaldns_health_port: 9254
 nodelocaldns_second_health_port: 9256
 nodelocaldns_bind_metrics_host_ip: false
 nodelocaldns_secondary_skew_seconds: 5
-# nodelocaldns_external_zones:
+nodelocaldns_external_zones:
+  - zones:
+      - jjland.local
+    nameservers:
+      - 192.168.104.18
+      - 192.168.104.8
+    cache: 30
+  - zones:
+      - home.nerdylyonsden.io
+    nameservers:
+      - 192.168.104.18
+      - 192.168.104.8
+    cache: 30
 # - zones:
 #   - example.com
 #   - example.io:1053

@@ -35,9 +35,9 @@ loadbalancer_apiserver_healthcheck_port: 8081
 # disable_host_nameservers: false
 
 ## Upstream dns servers
-# upstream_dns_servers:
-#   - 8.8.8.8
-#   - 8.8.4.4
+upstream_dns_servers:
+  - 192.168.104.18
+  - 192.168.104.8
 
 ## There are some changes specific to the cloud providers
 ## for instance we need to encapsulate packets with some network plugins
