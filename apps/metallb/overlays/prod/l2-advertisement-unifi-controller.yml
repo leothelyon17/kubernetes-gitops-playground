@@ -1,0 +1,9 @@
+# INIT-001/SPEC-002 — L2 advertise UniFi VIP on 101-capable nodes (no vlan104 pin).
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: unifi-controller-adv
+  namespace: metallb-prod
+spec:
+  ipAddressPools:
+    - unifi-controller-pool

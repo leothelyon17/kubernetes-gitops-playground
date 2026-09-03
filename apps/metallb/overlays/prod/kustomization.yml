@@ -3,3 +3,5 @@ resources:
   - l2-advertisement.yml
   - ip-address-pool-pihole-unbound.yml
   - l2-advertisement-pihole-unbound.yml
+  - ip-address-pool-unifi-controller.yml
+  - l2-advertisement-unifi-controller.yml
