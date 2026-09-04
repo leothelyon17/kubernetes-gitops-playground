@@ -1,4 +1,7 @@
-# INIT-001/SPEC-002 — L2 advertise UniFi VIP on 101-capable nodes (no vlan104 pin).
+# INIT-001/SPEC-002 — L2 advertise UniFi VIP on VLAN-101 interfaces only.
+# node4 holds 192.168.101.167 on enp129s0.1 (not parent enp129s0). Advertising on
+# the wrong iface left on-link ARP answering from other nodes while Local ETP
+# blackholed inform. Pin to the real 101 NICs.
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
 metadata:
@@ -7,3 +10,6 @@ metadata:
 spec:
   ipAddressPools:
     - unifi-controller-pool
+  interfaces:
+    - eno1
+    - enp129s0.1
