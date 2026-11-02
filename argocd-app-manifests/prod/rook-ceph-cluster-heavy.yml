@@ -9,7 +9,7 @@ spec:
   project: prod-home
   destination:
     server: https://prod-kube-vip.jjland.local:6443
-    namespace: rook-ceph-node6
+    namespace: rook-ceph-heavy
   syncPolicy:
     syncOptions:
       - CreateNamespace=true

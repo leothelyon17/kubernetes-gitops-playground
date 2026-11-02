@@ -2,8 +2,8 @@
 apiVersion: ceph.rook.io/v1
 kind: CephFilesystem
 metadata:
-  name: k8s-ceph-node6-fs
-  namespace: rook-ceph-node6
+  name: k8s-ceph-heavy-fs
+  namespace: rook-ceph-heavy
 spec:
   metadataPool:
     failureDomain: host

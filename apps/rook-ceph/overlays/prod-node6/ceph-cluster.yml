@@ -5,12 +5,12 @@
 apiVersion: ceph.rook.io/v1
 kind: CephCluster
 metadata:
-  name: rook-ceph-node6
-  namespace: rook-ceph-node6
+  name: rook-ceph-heavy
+  namespace: rook-ceph-heavy
 spec:
   cephVersion:
     image: quay.io/ceph/ceph:v19.2.3
-  dataDirHostPath: /var/lib/rook-ceph-node6
+  dataDirHostPath: /var/lib/rook-ceph-heavy
   mon:
     count: 1
     allowMultiplePerNode: false
