@@ -1,0 +1,64 @@
+# INIT-003/SPEC-004: second Ceph cluster on fedora-prod-node6-sm only.
+# Do not apply from this spec. Loss of node6 or this NVMe loses the cluster;
+# the OSD shares the OS disk (nvme0n1). OS partitions p1, p2, and p3 are not Ceph devices.
+# dataDirHostPath must stay distinct from the live cluster path /etc/k8s-ceph-share.
+apiVersion: ceph.rook.io/v1
+kind: CephCluster
+metadata:
+  name: rook-ceph-node6
+  namespace: rook-ceph-node6
+spec:
+  cephVersion:
+    image: quay.io/ceph/ceph:v19.2.3
+  dataDirHostPath: /var/lib/rook-ceph-node6
+  mon:
+    count: 1
+    allowMultiplePerNode: false
+  dashboard:
+    enabled: false
+  crashCollector:
+    disable: true
+  mgr:
+    count: 1
+  placement:
+    all:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - fedora-prod-node6-sm
+    crashcollector:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - fedora-prod-node6-sm
+    exporter:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - fedora-prod-node6-sm
+  storage:
+    config:
+      osd_memory_target: "3221225472"
+    useAllNodes: false
+    useAllDevices: false
+    nodes:
+      - name: fedora-prod-node6-sm
+        resources:
+          limits:
+            memory: "3072Mi"
+        devices:
+          # 858992410624 bytes, xfs, not mounted, UUID f4404d1b-2f97-436a-b6b2-34d06356c8e7
+          # disk serial 2102357DWVN0RA186553. Formatting is a later gated action.
+          - name: "nvme0n1p4"

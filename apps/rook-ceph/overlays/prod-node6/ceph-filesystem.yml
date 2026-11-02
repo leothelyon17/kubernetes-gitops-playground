@@ -1,0 +1,35 @@
+# INIT-003/SPEC-004: size 1 / min_size 1. Loss of node6 or this NVMe loses the filesystem.
+apiVersion: ceph.rook.io/v1
+kind: CephFilesystem
+metadata:
+  name: k8s-ceph-node6-fs
+  namespace: rook-ceph-node6
+spec:
+  metadataPool:
+    failureDomain: host
+    replicated:
+      size: 1
+      requireSafeReplicaSize: false
+    parameters:
+      min_size: "1"
+  dataPools:
+    - name: replicated
+      failureDomain: host
+      replicated:
+        size: 1
+        requireSafeReplicaSize: false
+      parameters:
+        min_size: "1"
+  preserveFilesystemOnDelete: true
+  metadataServer:
+    activeCount: 1
+    activeStandby: false
+    placement:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - fedora-prod-node6-sm

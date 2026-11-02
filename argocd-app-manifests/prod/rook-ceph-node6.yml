@@ -1,0 +1,19 @@
+# INIT-003/SPEC-004: separate Application for overlays/prod-node6 only.
+# Does not replace rook-ceph-operator-prod. Automated sync is off. Prune is off.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rook-ceph-node6
+  namespace: argocd
+spec:
+  project: prod-home
+  destination:
+    server: https://prod-kube-vip.jjland.local:6443
+    namespace: rook-ceph-node6
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+  source:
+    repoURL: https://github.com/leothelyon17/kubernetes-gitops-playground.git
+    path: apps/rook-ceph/overlays/prod-node6
+    targetRevision: ceph-node6-cluster

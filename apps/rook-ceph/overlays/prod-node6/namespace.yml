@@ -1,0 +1,5 @@
+# INIT-003/SPEC-004
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: rook-ceph-node6

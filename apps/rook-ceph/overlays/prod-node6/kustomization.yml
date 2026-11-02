@@ -1,0 +1,10 @@
+# INIT-003/SPEC-004: node6 overlay only. Do not list overlays/prod.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - namespace.yml
+  - common-second-cluster.yml
+  - ceph-cluster.yml
+  - ceph-filesystem.yml
+  - ceph-storageclass-delete.yml
+  - ceph-storageclass-retain.yml
