@@ -9,7 +9,9 @@ config:
 
 # Check https://kube-vip.io/docs/installation/flags/
 env:
-  vip_interface: "eno1"
+  # Empty so each control-plane pod binds the default-route NIC:
+  # eno1 on node2 and node3, enp1s0 on node6.
+  vip_interface: ""
   vip_arp: "true"
   lb_enable: "true"
   lb_port: "6443"
