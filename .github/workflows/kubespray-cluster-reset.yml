@@ -104,6 +104,8 @@ jobs:
           ansible-playbook -i inventory/prod/hosts.yml remove-node.yml \
             -e node=fedora-prod-node1 \
             -e reset_confirmation=yes \
+            -e '{"ignore_assert_errors": true}' \
+            -e '{"skip_confirmation": true}' \
             --become --become-user=root
           # ansible-playbook -i inventory/${CHANGED_CLUSTER}/hosts.yml reset.yml \
           #   --become --become-user=root -e "ansible_password=${{ secrets.SSH_PASS }}" -e "ansible_become_pass=${{ secrets.SSH_PASS }}" -e "reset_confirmation=yes"
