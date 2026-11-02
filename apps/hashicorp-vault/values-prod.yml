@@ -12,6 +12,65 @@ server:
     # Access Mode of the storage device being used for the PVC
     accessMode: ReadWriteOnce
 
+  # File backend writes core/_master with truncate-in-place. A crash or
+  # unclean CephFS unmount leaves a 0-byte file and Vault reports
+  # "not initialized". Keep sibling copies and restore them before Vault starts.
+  # Never copy a 0-byte _master over a good guard file.
+  extraInitContainers:
+    - name: restore-keyring-guard
+      image: hashicorp/vault:2.0.2
+      securityContext:
+        allowPrivilegeEscalation: false
+        runAsNonRoot: true
+        runAsUser: 100
+        runAsGroup: 1000
+      command:
+        - /bin/sh
+        - -ec
+        - |
+          GUARD=/vault/data/.keyring-guard
+          CORE=/vault/data/core
+          mkdir -p "$GUARD"
+          for f in _master _keyring _shamir-kek _seal-config; do
+            if [ ! -s "$CORE/$f" ] && [ -s "$GUARD/$f" ]; then
+              cp "$GUARD/$f" "$CORE/$f.tmp"
+              mv "$CORE/$f.tmp" "$CORE/$f"
+              echo "restored $CORE/$f from keyring-guard"
+            fi
+          done
+      volumeMounts:
+        - name: data
+          mountPath: /vault/data
+  extraContainers:
+    - name: keyring-guard
+      image: hashicorp/vault:2.0.2
+      securityContext:
+        allowPrivilegeEscalation: false
+        runAsNonRoot: true
+        runAsUser: 100
+        runAsGroup: 1000
+      command:
+        - /bin/sh
+        - -ec
+        - |
+          GUARD=/vault/data/.keyring-guard
+          CORE=/vault/data/core
+          mkdir -p "$GUARD"
+          while true; do
+            for f in _master _keyring _shamir-kek _seal-config; do
+              if [ -s "$CORE/$f" ]; then
+                if [ ! -s "$GUARD/$f" ] || ! cmp -s "$CORE/$f" "$GUARD/$f"; then
+                  cp "$CORE/$f" "$GUARD/$f.tmp"
+                  mv "$GUARD/$f.tmp" "$GUARD/$f"
+                fi
+              fi
+            done
+            sleep 60
+          done
+      volumeMounts:
+        - name: data
+          mountPath: /vault/data
+
 # Vault UI
 ui:
   # True if you want to create a Service entry for the Vault UI.

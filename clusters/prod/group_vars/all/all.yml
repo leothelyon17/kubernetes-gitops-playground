@@ -10,10 +10,12 @@ bin_dir: /usr/local/bin
 # access_ip: 1.1.1.1
 
 
-## External LB example config
-loadbalancer_apiserver:
-  address: 192.168.101.160
-  port: 6443
+## API server endpoints. Kubespray 2.33 removed loadbalancer_apiserver,
+## apiserver_loadbalancer_domain_name, and kubeadm_config_api_fqdn.
+## Defining either endpoint disables the localhost load balancer.
+## The VIP and prod-kube-vip.jjland.local stay in supplementary_addresses_in_ssl_keys.
+kube_apiserver_endpoint: "https://192.168.101.160:6443"
+kube_apiserver_cluster_internal_endpoint: "https://192.168.101.160:6443"
 
 ## Internal loadbalancers for apiservers
 # loadbalancer_apiserver_localhost: true
