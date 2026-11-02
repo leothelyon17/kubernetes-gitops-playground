@@ -1,7 +1,8 @@
 # INIT-001/SPEC-002 — L2 advertise UniFi VIP on VLAN-101 interfaces only.
-# node4 holds 192.168.101.167 on enp129s0.1 (not parent enp129s0). Advertising on
-# the wrong iface left on-link ARP answering from other nodes while Local ETP
-# blackholed inform. Pin to the real 101 NICs.
+# node4 holds 192.168.101.167 on enp129s0.1 (not parent enp129s0). node6 holds
+# 192.168.101.156 on enp1s0. The interface list does not affect leader election,
+# so the node selector keeps VLAN 104 (node5, also enp1s0) from winning and
+# then failing to announce.
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
 metadata:
@@ -12,4 +13,16 @@ spec:
     - unifi-controller-pool
   interfaces:
     - eno1
+    - enp1s0
     - enp129s0.1
+  nodeSelectors:
+    - matchLabels:
+        kubernetes.io/hostname: fedora-prod-node1
+    - matchLabels:
+        kubernetes.io/hostname: fedora-prod-node2
+    - matchLabels:
+        kubernetes.io/hostname: fedora-prod-node3
+    - matchLabels:
+        kubernetes.io/hostname: rocky9-prod-node4-sc
+    - matchLabels:
+        kubernetes.io/hostname: fedora-prod-node6-sm
