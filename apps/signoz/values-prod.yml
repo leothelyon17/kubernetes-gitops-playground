@@ -5,13 +5,13 @@ global:
 clickhouse:
   zookeeper:
     persistence:
-      storageClass: rook-cephfs-heavy-retain
+      storageClass: rook-cephfs-heavy-delete
       size: 5Gi
   persistence:
-    storageClass: rook-cephfs-heavy-retain
+    storageClass: rook-cephfs-heavy-delete
     size: 18Gi
 
 signoz:
   persistence:
-    storageClass: rook-cephfs-heavy-retain
+    storageClass: rook-cephfs-heavy-delete
     size: 2Gi
