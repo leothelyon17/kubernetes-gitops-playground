@@ -1,0 +1,18 @@
+# OTLP/HTTP for clients outside the cluster. Traefik terminates TLS and
+# forwards /v1/traces, /v1/metrics, and /v1/logs to the collector.
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: signoz-prod-otlp-ingressroute
+  namespace: signoz-prod
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`signoz-otlp.home.nerdylyonsden.io`)
+      kind: Rule
+      services:
+        - name: signoz-prod-otel-collector
+          port: 4318
+  tls:
+    secretName: prod-apps-certificate-secret

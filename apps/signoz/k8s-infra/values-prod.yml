@@ -3,8 +3,9 @@ global:
   deploymentEnvironment: "prod"          # or "homelab", etc.
   cloud: "other"
 
-# Send to your SigNoz collector (same cluster)
-otelCollectorEndpoint: "signoz-prod-otel-collector.signoz-prod.svc.cluster.local:4317"
+# In-cluster agents use OTLP/HTTP. External clients use
+# https://signoz-otlp.home.nerdylyonsden.io
+otelCollectorEndpoint: "http://signoz-prod-otel-collector.signoz-prod.svc.cluster.local:4318"
 otelInsecure: true                       # set false if you enable TLS on the collector
 insecureSkipVerify: false                # true only for self-signed TLS
 

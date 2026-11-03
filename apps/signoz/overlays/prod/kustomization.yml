@@ -1,2 +1,3 @@
 resources:
   - ingress-route.yml
+  - otlp-ingress-route.yml
